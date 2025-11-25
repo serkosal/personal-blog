@@ -13,9 +13,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-#editorjs {
-  border: 1px solid #213547;
-}
 
 a {
   font-weight: 500;
@@ -43,15 +40,6 @@ h1 {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
 
 button {

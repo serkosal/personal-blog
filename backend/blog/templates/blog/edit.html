@@ -1,10 +1,13 @@
 {% extends "blog/base.html" %}
+{% load static %} 
 
 {% block content %}
     {% if post %}
         <h1> Editing {{ post.title }} </h1>
 
-        <div id="app"></div>
-        <script type="module" src="editor.js"></script>
+        <div id="editorjs"></div>
+
+        <script type="module" src="{% static 'assets/scripts/editor.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'assets/styles/editor.css' %}">
     {% endif %}
 {% endblock %}
