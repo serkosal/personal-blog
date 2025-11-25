@@ -1,0 +1,10 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+    {% if post %}
+        <h1> Editing {{ post.title }} </h1>
+
+        <div id="app"></div>
+        <script type="module" src="editor.js"></script>
+    {% endif %}
+{% endblock %}
