@@ -6,6 +6,11 @@
         <h1> Editing {{ post.title }} </h1>
 
         <div id="editorjs"></div>
+        <form>
+            {% csrf_token %}
+
+            <input id="editorjs-save" type="submit" value="Save">
+        </form>
 
         <script type="module" src="{% static 'assets/scripts/editor.js' %}"></script>
         <link rel="stylesheet" href="{% static 'assets/styles/editor.css' %}">

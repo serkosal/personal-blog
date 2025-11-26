@@ -17,48 +17,64 @@ import Warning from '@editorjs/warning';
 // const Paragraph = (await import('@editorjs/paragraph')).default
 
 
-
 const editor = new EditorJS({
 
-  /**
-   * Id of Element that should contain Editor instance
-   */
-  holder: 'editorjs',
-  autofocus: true,
-  placeholder: 'Let`s write an awesome story!',
+    /**
+     * Id of Element that should contain Editor instance
+     */
+    holder: 'editorjs',
+    autofocus: true,
+    placeholder: 'Let`s write an awesome story!',
 
-  tools: { 
-    header: {
-      class: Header as unknown as BlockToolConstructable, 
-      inlineToolbar: true 
-    }, 
-    list: { 
-      class: List, 
-      inlineToolbar: true 
+    tools: {
+        header: {
+            class: Header as unknown as BlockToolConstructable,
+            inlineToolbar: true
+        },
+        list: {
+            class: List,
+            inlineToolbar: true
+        },
+        quote: {
+            class: Quote,
+            inlineToolbar: true
+        },
+        warning: {
+            class: Warning,
+            inlineToolbar: true,
+            config: {
+                titlePlaceholder: 'Warning title',
+                messagePlaceholder: 'warning message warning',
+            },
+        },
+        paragraph: {
+            class: Paragraph as unknown as BlockToolConstructable,
+            inlineToolbar: true
+        }
     },
-    quote: {
-      class: Quote,
-      inlineToolbar: true
-    },
-    warning: {
-      class: Warning,
-      inlineToolbar: true,
-      config: {
-        titlePlaceholder: 'Warning title',
-        messagePlaceholder: 'warning message warning',
-      },
-    },
-    paragraph: {
-      class: Paragraph as unknown as BlockToolConstructable,
-      inlineToolbar: true
-    }
-  }, 
 });
 
+
+let submit_form = document.getElementById("editorjs-save")?.parentElement;
+submit_form?.addEventListener('submit', function (ev) {
+    ev.preventDefault();
+
+    let csrfInput = submit_form?.querySelector<HTMLInputElement>('input[name="csrfmiddlewaretoken"]');
+    let csrfStr = csrfInput?.value;
+
+    editor.save().then((outputData) => {
+        console.log('CSRF token: ', csrfStr);
+        console.log('Article data: ', outputData);
+    }).catch((error) => {
+        console.log('Saving failed: ', error);
+    })
+});
+
+
 try {
-  await editor.isReady;
-  console.log('Editor.js is ready to work!')
-  /** Do anything you need after editor initialization */
+    await editor.isReady;
+    console.log('Editor.js is ready to work!')
+    /** Do anything you need after editor initialization */
 } catch (reason) {
-  console.log(`Editor.js initialization failed because of ${reason}`)
+    console.log(`Editor.js initialization failed because of ${reason}`)
 }
