@@ -2,7 +2,7 @@
 
 shopt -s nullglob # this makes *.js/*.css expand to nothing if no match
 
-DJANGO_STATIC_BASE="../backend/blog/static/assets"
+DJANGO_STATIC_BASE="../backend/blog/static/blog/assets"
 SCRIPTS_DEST="${DJANGO_STATIC_BASE}/scripts"
 STYLES_DEST="${DJANGO_STATIC_BASE}/styles"
 
