@@ -1,0 +1,18 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+
+    {% if form.errors %}
+        <p>{{form.errors}}</p>
+    {% endif %}
+
+    <!-- action=" url " -->
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form }}
+
+        <button type="submit">Register</button>
+    </form>
+    
+{% endblock %}

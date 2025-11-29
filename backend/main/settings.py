@@ -33,8 +33,9 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     
     # my own apps
-    'main.apps.MainConfig',
-    'blog.apps.BlogConfig',
+    'users',
+    'main',
+    'blog',
     
     # django built in
     'django.contrib.admin',
@@ -103,6 +104,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+LOGOUT_REDIRECT_URL = '/'
 
 
 # Internationalization

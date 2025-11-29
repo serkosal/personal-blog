@@ -21,9 +21,8 @@ from .views import index
 
 app_name = "main"
 urlpatterns = [
+    path("accounts/", include("users.urls")),
     path("blog/", include("blog.urls")),
     path('', index, name="index"),
-    
-    path('admin/', admin.site.urls),
-
+    path('admin/', admin.site.urls)
 ]

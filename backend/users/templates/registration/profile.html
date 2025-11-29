@@ -1,0 +1,11 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+        {{ user }}
+    {% else %}
+        You're not authenticated! Try login to view this page!
+    {% endif %}
+    
+{% endblock %}
