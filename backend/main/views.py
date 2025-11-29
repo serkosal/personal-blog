@@ -1,5 +1,7 @@
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render
 
 
 def index(req: HttpRequest) -> HttpResponse:
-    return HttpResponse("index page!")
+    
+    return render(req, "main/index.html", {"title": "Main page"})

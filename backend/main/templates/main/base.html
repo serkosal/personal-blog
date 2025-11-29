@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="{% static 'blog/assets/styles/main.css' %}">
+    <link rel="stylesheet" href="{% static 'main/assets/styles/main.css' %}">
 
     <title>
         {% if title%}
@@ -20,11 +20,20 @@
   </head>
   <body>
 
+    <header>
+      <a>Login</a>
+    </header>
+
     <main>
       {% block content %}
           <h1>Base template</h1>
           <p>Base template</p>
       {% endblock %}
     </main>
+
+    <footer>
+      Footer
+    </footer>
+
   </body>
 </html>

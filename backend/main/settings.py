@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     
     # my own apps
+    'main.apps.MainConfig',
     'blog.apps.BlogConfig',
     
     # django built in

@@ -19,6 +19,7 @@ from django.urls import path, include
 
 from .views import index
 
+app_name = "main"
 urlpatterns = [
     path("blog/", include("blog.urls")),
     path('', index, name="index"),
