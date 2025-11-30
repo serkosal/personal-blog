@@ -2,7 +2,7 @@ import './editor-style.css'
 
 import EditorJS from '@editorjs/editorjs';
 
-import type { BlockToolConstructable } from '@editorjs/editorjs';
+import type { BlockToolConstructable, EditorConfig } from '@editorjs/editorjs';
 
 import Paragraph from '@editorjs/paragraph';
 import Header from '@editorjs/header';
@@ -16,8 +16,7 @@ import Warning from '@editorjs/warning';
 // const Warning = (await import('@editorjs/warning')).default
 // const Paragraph = (await import('@editorjs/paragraph')).default
 
-
-const editor = new EditorJS({
+let editorConfig: EditorConfig = {
 
     /**
      * Id of Element that should contain Editor instance
@@ -52,7 +51,8 @@ const editor = new EditorJS({
             inlineToolbar: true
         }
     },
-});
+};
+const editor = new EditorJS(editorConfig);
 
 
 let submit_form = document.getElementById("editorjs-save")?.parentElement;

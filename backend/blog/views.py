@@ -29,7 +29,8 @@ def detail(req: HttpRequest, post_id: int) -> HttpResponse:
     
     context = {
         "post": post,
-        "title": post.title
+        "title": post.title,
+        "can_edit": post.can_edit(req.user)
     }
     
     return render(req, "blog/detail.html", context=context)

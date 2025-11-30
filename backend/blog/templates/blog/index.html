@@ -6,11 +6,16 @@
         <ul>
         {% for post in latest_posts %}
             <li>
-                <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a>
+                <p>
+                    <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a>
+                    Author: {{ post.author }}
+                </p>
+                
                 <div>
                     {{ post.content }}
                 </div>
             </li>
+            <hr>
         {% endfor %}
         </ul>
     {% else %}

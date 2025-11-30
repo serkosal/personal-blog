@@ -21,11 +21,15 @@ class Post(models.Model):
     
     is_published = models.BooleanField() 
     
+    
     class Meta:
         permissions = (
             ("blog.see_others_unpublished", "Users could see other user's unpublished post"),
             ("blog.edit_others", "Users could edit other user's post")
         )
+    
+    def __str__(self) -> str:
+        return f'Post author: {self.author} title: {self.title}'
     
     
     def can_see(self, user: AbstractUser) -> bool:

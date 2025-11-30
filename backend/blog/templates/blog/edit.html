@@ -4,8 +4,11 @@
 {% block content %}
     {% if post %}
         <h1> Editing {{ post.title }} </h1>
+        <p>Author: {{ post.author }}</p>
+        <hr>
 
         <div id="editorjs"></div>
+
         <form>
             {% csrf_token %}
 

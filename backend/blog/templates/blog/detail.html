@@ -4,6 +4,13 @@
     {% if post %}
         <h1> {{ post.title }} </h1>
         <p>
+            {{ post.author }}
+
+            {% if can_edit %}
+                <a href="{% url 'blog:edit' post_id=post.id %}">Edit post</a>
+            {% endif %}
+        </p>
+        <p>
             {{ post.content }}
         </p>
     {% endif %}
