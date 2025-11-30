@@ -10,11 +10,14 @@ import List from '@editorjs/list';
 import Quote from '@editorjs/quote';
 import Warning from '@editorjs/warning';
 
+import edjsHTML from "editorjs-html";
+
 // const Header = (await import('@editorjs/header')).default
 // const List = (await import('@editorjs/list')).default
 // const Quote = (await import('@editorjs/quote')).default
 // const Warning = (await import('@editorjs/warning')).default
 // const Paragraph = (await import('@editorjs/paragraph')).default
+
 
 let editorConfig: EditorConfig = {
 
@@ -54,6 +57,7 @@ let editorConfig: EditorConfig = {
 };
 const editor = new EditorJS(editorConfig);
 
+const edjsParser = edjsHTML();
 
 let submit_form = document.getElementById("editorjs-save")?.parentElement;
 submit_form?.addEventListener('submit', function (ev) {
@@ -63,8 +67,10 @@ submit_form?.addEventListener('submit', function (ev) {
     let csrfStr = csrfInput?.value;
 
     editor.save().then((outputData) => {
+        const outputHTML = edjsParser.parse(outputData);
+
         console.log('CSRF token: ', csrfStr);
-        console.log('Article data: ', outputData);
+        console.log('Article data: ', outputHTML);
     }).catch((error) => {
         console.log('Saving failed: ', error);
     })
