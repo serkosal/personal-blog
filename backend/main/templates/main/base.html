@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'main/assets/styles/main.css' %}">
 
     <title>
-        {% if title%}
+        {% if title %}
             {{ title }}
         {% else %}
             Title
@@ -20,21 +20,7 @@
   </head>
   <body>
 
-    <header>
-      <a href="{% url 'blog:index' %}">Blog</a>
-
-      {% if user and user.is_authenticated %}
-        <a>{{ user.username }}</a>
-        <form action="{% url 'users:logout' %}" method="post">
-          {% csrf_token %}
-          <button type="submit">Log Out</button>
-        </form>
-      {% else %}
-        <a href="{% url 'users:login' %}">Log in</a>
-        <a href="{% url 'users:register' %}">Register</a>
-      {% endif %}
-      
-    </header>
+    {% include 'main/header.html' %}
 
     <main>
       {% block content %}
@@ -43,9 +29,7 @@
       {% endblock %}
     </main>
 
-    <footer>
-      Footer
-    </footer>
+    {% include 'main/footer.html' %}
 
   </body>
 </html>
