@@ -1,8 +1,11 @@
-from django.http import HttpRequest, HttpResponse
 from django.core.exceptions import PermissionDenied
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.parsers import JSONParser
 
 from .models import Post
+from .serializers import PostSerializer
 
 def index(req: HttpRequest) -> HttpResponse:
     
@@ -48,3 +51,43 @@ def edit(req: HttpRequest, post_id: int) -> HttpRequest:
     }
     
     return render(req, "blog/edit.html", context=context)
+
+
+@csrf_exempt # remove this decorator!
+def api_root(req: HttpRequest) -> JsonResponse:
+    
+    if req.method == "GET":
+        posts = Post.objects.all()
+        serializer = PostSerializer(posts, many=True)
+        return JsonResponse(serializer.data, safe=False)
+    
+    # add csrf token check
+    elif req.method == "POST":
+        
+        if not req.user.is_authenticated:
+            return JsonResponse(
+                {"error": "you should be authorized before create any posts!"},
+                status=401
+            )
+        
+        data = JSONParser().parse(req)
+        
+        serializer = PostSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=201)
+        else:
+            return JsonResponse(serializer.errors, status=400)
+        
+    else:
+        return JsonResponse(
+                {"error": f"{req.method} is not allowed!"},
+                status=405
+            )
+
+
+    
+# def api_detail(req: HttpRequest) -> JsonResponse:
+    
+#     if req.method == "GET":
+#         req.content_params

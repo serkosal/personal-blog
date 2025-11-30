@@ -11,7 +11,7 @@
             {% endif %}
         </p>
         <p>
-            {{ post.content }}
+            {{ post.content|safe }}
         </p>
     {% endif %}
 {% endblock %}
