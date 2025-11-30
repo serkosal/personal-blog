@@ -12,14 +12,16 @@ class Post(models.Model):
         null=True
     )
     
-    title = models.CharField(max_length=100)
-    content = models.TextField()
+    title = models.CharField(max_length=100, null=False, blank=True, default="Title")
     
-    started_at = models.DateTimeField()
-    last_edited = models.DateTimeField()
-    published_at = models.DateTimeField()
+    # change to JSON field
+    content = models.TextField(null=False, blank=False, default="Blog content")
     
-    is_published = models.BooleanField() 
+    started_at = models.DateTimeField(null=False, blank=False, auto_now_add=True)
+    last_edited = models.DateTimeField(null=True, blank=False, auto_now=True)
+    published_at = models.DateTimeField(null=True, blank=False)
+    
+    is_published = models.BooleanField(default=False) 
     
     
     class Meta:
