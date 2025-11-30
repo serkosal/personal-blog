@@ -53,13 +53,12 @@ def edit(req: HttpRequest, post_id: int) -> HttpRequest:
     return render(req, "blog/edit.html", context=context)
 
 
-@csrf_exempt # remove this decorator!
 def api_root(req: HttpRequest) -> JsonResponse:
     
     if req.method == "GET":
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return JsonResponse({"posts": serializer.data})
     
     # add csrf token check
     elif req.method == "POST":
@@ -86,8 +85,56 @@ def api_root(req: HttpRequest) -> JsonResponse:
             )
 
 
+def api_detail(req: HttpRequest, post_id: int) -> JsonResponse:
     
-# def api_detail(req: HttpRequest) -> JsonResponse:
+    post: Post
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse(
+            {"error": f"Requested post with id={post_id} does not exist!"},
+            status=404
+        )
+
+    if req.method == "GET":
+        
+        if not post.can_see(req.user):
+            return JsonResponse(
+            {"error": "You do not have permissions to see this post!"},
+            status=403
+        )
+        
+        serializer = PostSerializer(post)
+        return JsonResponse(serializer.data)
     
-#     if req.method == "GET":
-#         req.content_params
+    if not req.user.is_authenticated:
+        return JsonResponse(
+            {"error": "You should be authorized before edit any posts!"},
+            status=401
+        )
+        
+    if not post.can_edit(req.user):
+        return JsonResponse(
+            {"error": "You do not have permissions to edit this post!"},
+            status=403
+        )
+    
+    if req.method == "DELETE":
+        res = post.delete()
+        return JsonResponse({"deleted": res[0]}, status=200)
+    
+    elif req.method == "PATCH":
+        data = JSONParser().parse(req)
+        
+        serializer = PostSerializer(post, data=data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(serializer.data, status=200)
+        return JsonResponse(serializer.errors, status=400)
+    
+    else:
+        return JsonResponse(
+                {"error": f"{req.method} is not allowed!"},
+                status=405
+            )
+
