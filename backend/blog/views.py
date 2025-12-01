@@ -57,7 +57,7 @@ def api_root(req: HttpRequest) -> JsonResponse:
     
     if req.method == "GET":
         posts = Post.objects.all()
-        serializer = PostSerializer(posts, many=True)
+        serializer = PostSerializer(posts, many=True, context={'request': req})
         return JsonResponse({"posts": serializer.data})
     
     # add csrf token check
