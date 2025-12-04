@@ -22,6 +22,9 @@ class PostManager(models.Manager):
     def editable_to(self, user: AbstractUser):
         posts = self.get_queryset()
         
+        if user.is_anonymous:
+            return posts.none()
+        
         if user.has_perm("blog.edit_others"):
             return posts
         
@@ -62,7 +65,7 @@ class Post(models.Model):
 
     def can_edit(self, user: AbstractUser) -> bool:
         
-        return user.is_authenticated and (
+        return user.is_authenticated and user.is_active and (
             user == self.author or
             user.has_perm("blog.edit_others")
         )

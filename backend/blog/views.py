@@ -1,4 +1,5 @@
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import AbstractUser
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404
@@ -62,23 +63,58 @@ class PostDelete(DeleteView):
     def get_queryset(self):
         user = self.request.user
         
-        return Post.posts.visible_to(user)
+        return Post.posts.editable_to(user)
+
+
+class PostCreate(CreateView):
+    model = Post
+    fields = ["title", "is_published"]
+    template_name = "blog/post_create.html"
+    
+    def form_valid(self, form):
+        post: Post = form.instance
+        user: AbstractUser = self.request.user
+        
+        if user.is_anonymous or not user.is_active:
+            return False
+        
+        post.author = user
+        return super().form_valid(form)
+
+    
+    def get_success_url(self):
+        post: Post = self.object
+        return reverse_lazy("blog:edit", kwargs={"pk": post.pk})
 
 
 # renders title, is_published fields through standart django forms
 # renders content field through editor.js plugin
-def edit(req: HttpRequest, pk: int) -> HttpRequest:
-    post = get_object_or_404(Post, pk=pk)
+class PostUpdate(UpdateView):
+    model = Post
+    fields = ["title", "is_published"]
+    template_name = "blog/post_update.html"
     
-    if not post.can_edit(req.user):
-        raise PermissionDenied("You don't have permissions to edit this Post.")
+    def get_queryset(self):
+        user = self.request.user
+        
+        self.posts = Post.posts.editable_to(user)
+        
+        return self.posts 
     
-    context = {
-        "post": post,
-        "title": f"editing {post.title}"
-    }
+    def form_valid(self, form):
+        post: Post = form.instance
+        user: AbstractUser = self.request.user
+        
+        if not post.can_edit(user):
+            form.add_error(None, "You don't have permission to edit this post.")
+            return self.form_invalid(form)
+        
+        return super().form_valid(form)
     
-    return render(req, "blog/edit.html", context=context)
+    
+    def get_success_url(self):
+        post: Post = self.object
+        return reverse_lazy("blog:edit", kwargs={"pk": post.pk})
 
 
 def api_root(req: HttpRequest) -> JsonResponse:
