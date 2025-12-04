@@ -1,44 +1,47 @@
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
-from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import (
+    DetailView, DeleteView, ListView
+)
 from rest_framework.parsers import JSONParser
 
 from .models import Post
 from .serializers import PostSerializer
 
-def index(req: HttpRequest) -> HttpResponse:
+class PostList(ListView):
+    model = Post
+    template_name = "blog/list.html"
+    context_object_name = "posts_list"
+
+    def get_queryset(self):
+        user = self.request.user
+        
+        posts = Post.posts.visible_to(user).order_by("-published_at")
+
+        return posts
     
-    latest_posts = Post.objects.order_by("-published_at")
     
-    # dynamically add filter
-    if not req.user.has_perm("blog.see_others_unpublished"):
-        latest_posts = latest_posts.filter(is_published=True) 
-    
-    context = {
-        "latest_posts": latest_posts[:5],
-        "title": "Latest posts"
-    }
-    
-    return render(req, "blog/index.html", context=context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Latest posts"
+        
+        return context
 
 
-def detail(req: HttpRequest, post_id: int) -> HttpResponse:
+class PostDetail(DetailView):
+    model = Post
+    template_name = "blog/detail.html"
+    context_object_name = "post"    
     
-    post = get_object_or_404(Post, pk=post_id)
-    
-    if not post.can_see(req.user):
-        raise PermissionDenied("You don't have permissions to see this Post.")
-    
-    context = {
-        "post": post,
-        "title": post.title,
-        "can_edit": post.can_edit(req.user)
-    }
-    
-    return render(req, "blog/detail.html", context=context)
+    def get_queryset(self):
+        user = self.request.user
+        
+        return Post.posts.visible_to(user)
 
 
+# renders title, is_published fields through standart django forms
+# renders content field through editor.js plugin
 def edit(req: HttpRequest, post_id: int) -> HttpRequest:
     post = get_object_or_404(Post, pk=post_id)
     
@@ -104,7 +107,7 @@ def api_detail(req: HttpRequest, post_id: int) -> JsonResponse:
             status=403
         )
         
-        serializer = PostSerializer(post)
+        serializer = PostSerializer(post, context={'request': req})
         return JsonResponse(serializer.data)
     
     if not req.user.is_authenticated:

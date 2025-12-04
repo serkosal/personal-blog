@@ -1,8 +1,33 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import Q
 
-# Create your models here.
+
+
+# custom model manager
+class PostManager(models.Manager):
+    
+    def visible_to(self, user: AbstractUser):
+        posts = self.get_queryset()
+        
+        if user.is_authenticated:
+            if user.has_perm("blog.see_others_unpublished"):
+                return posts
+            else:
+                return posts.filter(Q(author = user) | Q(is_published=True))
+        
+        return posts.filter(is_published=True)
+    
+    def editable_to(self, user: AbstractUser):
+        posts = self.get_queryset()
+        
+        if user.has_perm("blog.edit_others"):
+            return posts
+        
+        return posts.filter(Q(author = user) | Q(is_published=True))
+
+
 class Post(models.Model):
     
     # author field
@@ -21,8 +46,9 @@ class Post(models.Model):
     last_edited = models.DateTimeField(null=True, blank=False, auto_now=True)
     published_at = models.DateTimeField(null=True, blank=False)
     
-    is_published = models.BooleanField(default=False) 
+    is_published = models.BooleanField(default=False)
     
+    posts = PostManager()
     
     class Meta:
         permissions = (
@@ -32,16 +58,6 @@ class Post(models.Model):
     
     def __str__(self) -> str:
         return f'Post author: {self.author} title: {self.title}'
-    
-    
-    def can_see(self, user: AbstractUser) -> bool:
-        
-        return self.is_published or (
-            user.is_authenticated and (
-                user == self.author or
-                user.has_perm("blog.see_others_unpublished")
-            )
-        )
 
 
     def can_edit(self, user: AbstractUser) -> bool:

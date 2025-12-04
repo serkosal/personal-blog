@@ -2,9 +2,9 @@
 
 {% block content %}
 
-    {% if latest_posts %}
+    {% if posts_list %}
         <ul>
-        {% for post in latest_posts %}
+        {% for post in posts_list %}
             <li>
                 <p>
                     <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a>
