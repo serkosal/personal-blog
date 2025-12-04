@@ -1,8 +1,9 @@
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.urls import reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import (
-    DetailView, DeleteView, ListView
+    ListView, DetailView, DeleteView, UpdateView, CreateView
 )
 from rest_framework.parsers import JSONParser
 
@@ -37,13 +38,37 @@ class PostDetail(DetailView):
     def get_queryset(self):
         user = self.request.user
         
+        self.posts = Post.posts.visible_to(user)
+        
+        return self.posts
+    
+    
+    def get_context_data(self, **kwargs):
+        post: Post = self.get_object()
+        user = self.request.user
+        
+        context = super().get_context_data(**kwargs)
+        context["can_edit"] = post.can_edit(user)
+        
+        return context
+
+
+class PostDelete(DeleteView):
+    model = Post
+    success_url = reverse_lazy("blog:index")
+    template_name = "blog/confirm_delete.html"
+    context_object_name = "post"
+    
+    def get_queryset(self):
+        user = self.request.user
+        
         return Post.posts.visible_to(user)
 
 
 # renders title, is_published fields through standart django forms
 # renders content field through editor.js plugin
-def edit(req: HttpRequest, post_id: int) -> HttpRequest:
-    post = get_object_or_404(Post, pk=post_id)
+def edit(req: HttpRequest, pk: int) -> HttpRequest:
+    post = get_object_or_404(Post, pk=pk)
     
     if not post.can_edit(req.user):
         raise PermissionDenied("You don't have permissions to edit this Post.")

@@ -6,7 +6,8 @@ app_name = "blog"
 urlpatterns = [
     path('',          views.PostList.as_view(),  name="index"),
     path('<int:pk>/', views.PostDetail.as_view(), name="detail"),
-    path('<int:post_id>/e/', views.edit,   name="edit"),
+    path('<int:pk>/del/', views.PostDelete.as_view(), name="delete"),
+    path('<int:pk>/e/', views.edit,   name="edit"),
     
     path('api/posts/', views.api_root, name="api-root"), # GET, POST
     
