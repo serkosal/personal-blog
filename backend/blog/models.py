@@ -33,7 +33,6 @@ class PostManager(models.Manager):
 
 class Post(models.Model):
     
-    # author field
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
         on_delete=models.SET_NULL, 
@@ -42,8 +41,10 @@ class Post(models.Model):
     
     title = models.CharField(max_length=100, null=False, blank=True, default="Title")
     
-    # change to JSON field
-    content = models.TextField(null=False, blank=False, default="Blog content")
+    # rewrite to a custom json Field
+    def content_default():
+        return {"content": {}}
+    content = models.JSONField(null=False, blank=False, default=content_default)
     
     started_at = models.DateTimeField(null=False, blank=False, auto_now_add=True)
     last_edited = models.DateTimeField(null=True, blank=False, auto_now=True)
@@ -61,7 +62,6 @@ class Post(models.Model):
     
     def __str__(self) -> str:
         return f'Post author: {self.author} title: {self.title}'
-
 
     def can_edit(self, user: AbstractUser) -> bool:
         

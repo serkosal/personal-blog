@@ -1,8 +1,6 @@
-from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import AbstractUser
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, JsonResponse
 from django.urls import reverse_lazy
-from django.shortcuts import render, get_object_or_404
 from django.views.generic import (
     ListView, DetailView, DeleteView, UpdateView, CreateView
 )
@@ -13,7 +11,6 @@ from .serializers import PostSerializer
 
 class PostList(ListView):
     model = Post
-    template_name = "blog/list.html"
     context_object_name = "posts_list"
 
     def get_queryset(self):
@@ -33,8 +30,7 @@ class PostList(ListView):
 
 class PostDetail(DetailView):
     model = Post
-    template_name = "blog/detail.html"
-    context_object_name = "post"    
+    context_object_name = "post"
     
     def get_queryset(self):
         user = self.request.user
@@ -57,7 +53,6 @@ class PostDetail(DetailView):
 class PostDelete(DeleteView):
     model = Post
     success_url = reverse_lazy("blog:index")
-    template_name = "blog/confirm_delete.html"
     context_object_name = "post"
     
     def get_queryset(self):
@@ -68,7 +63,7 @@ class PostDelete(DeleteView):
 
 class PostCreate(CreateView):
     model = Post
-    fields = ["title", "is_published"]
+    fields = ["title", "content", "is_published"]
     template_name = "blog/post_create.html"
     
     def form_valid(self, form):
@@ -91,7 +86,7 @@ class PostCreate(CreateView):
 # renders content field through editor.js plugin
 class PostUpdate(UpdateView):
     model = Post
-    fields = ["title", "is_published"]
+    fields = ["title", "content", "is_published"]
     template_name = "blog/post_update.html"
     
     def get_queryset(self):
