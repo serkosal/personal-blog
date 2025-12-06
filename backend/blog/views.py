@@ -6,6 +6,7 @@ from django.views.generic import (
 )
 from rest_framework.parsers import JSONParser
 
+from .forms.forms import PostForm
 from .models import Post
 from .serializers import PostSerializer
 
@@ -62,9 +63,8 @@ class PostDelete(DeleteView):
 
 
 class PostCreate(CreateView):
-    model = Post
-    fields = ["title", "content", "is_published"]
     template_name = "blog/post_create.html"
+    form_class = PostForm
     
     def form_valid(self, form):
         post: Post = form.instance
@@ -86,8 +86,8 @@ class PostCreate(CreateView):
 # renders content field through editor.js plugin
 class PostUpdate(UpdateView):
     model = Post
-    fields = ["title", "content", "is_published"]
     template_name = "blog/post_update.html"
+    form_class = PostForm
     
     def get_queryset(self):
         user = self.request.user
@@ -110,6 +110,8 @@ class PostUpdate(UpdateView):
     def get_success_url(self):
         post: Post = self.object
         return reverse_lazy("blog:edit", kwargs={"pk": post.pk})
+
+
 
 
 def api_root(req: HttpRequest) -> JsonResponse:

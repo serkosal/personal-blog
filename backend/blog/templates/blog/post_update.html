@@ -1,14 +1,23 @@
 {% extends "main/base.html" %}
 
+{% load static %}
+
 {% block content %}
 
 <h1>Edit post</h1>
+{{ form.errors}}
 <form method="post">
     {% csrf_token %}
 
-    {{ form.as_div }}
+    {{ form }}
 
-    <button type="submit">Edit</button>
+    <button type="submit" id="editorjs-save">Edit</button>
 </form>
 
+{% endblock %}
+
+
+{% block bodyend %}
+    <script type="module" src="{% static 'blog/assets/scripts/editor.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'blog/assets/styles/editor.css' %}">
 {% endblock %}

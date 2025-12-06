@@ -2,7 +2,7 @@ import './editor-style.css'
 
 import EditorJS from '@editorjs/editorjs';
 
-import type { BlockToolConstructable, EditorConfig } from '@editorjs/editorjs';
+import type { BlockToolConstructable, EditorConfig, OutputData } from '@editorjs/editorjs';
 
 import Paragraph from '@editorjs/paragraph';
 import Header from '@editorjs/header';
@@ -10,13 +10,12 @@ import List from '@editorjs/list';
 import Quote from '@editorjs/quote';
 import Warning from '@editorjs/warning';
 
-import edjsHTML from "editorjs-html";
-
 // const Header = (await import('@editorjs/header')).default
 // const List = (await import('@editorjs/list')).default
 // const Quote = (await import('@editorjs/quote')).default
 // const Warning = (await import('@editorjs/warning')).default
 // const Paragraph = (await import('@editorjs/paragraph')).default
+
 
 
 let editorConfig: EditorConfig = {
@@ -55,22 +54,53 @@ let editorConfig: EditorConfig = {
         }
     },
 };
+
+/*
+ retrieve initial value from initial-id_content
+*/
+const initialContent = 
+    document.getElementById("initial-id_content") as (HTMLInputElement | null);
+
+if (initialContent) {
+    try {
+        const initialData: OutputData = JSON.parse(initialContent.value);
+        editorConfig.data = initialData;
+    }
+    catch (error)
+    {
+        console.log(error)
+    }
+}
+
 const editor = new EditorJS(editorConfig);
 
-const edjsParser = edjsHTML();
+let submit_form  = <HTMLFormElement>document.getElementById("editorjs-save")?.parentElement;
+submit_form?.addEventListener('submit', async function (ev) {
 
-let submit_form = document.getElementById("editorjs-save")?.parentElement;
-submit_form?.addEventListener('submit', function (ev) {
     ev.preventDefault();
 
-    let csrfInput = submit_form?.querySelector<HTMLInputElement>('input[name="csrfmiddlewaretoken"]');
-    let csrfStr = csrfInput?.value;
+    // let csrfInput = submit_form?.querySelector<HTMLInputElement>('input[name="csrfmiddlewaretoken"]');
+    // let csrfStr = csrfInput?.value;
 
-    editor.save().then((outputData) => {
-        const outputHTML = edjsParser.parse(outputData);
+    editor.save().then(async (outputData) =>  {
+        const contentJSON = JSON.stringify(outputData);
 
-        console.log('CSRF token: ', csrfStr);
-        console.log('Article data: ', outputHTML);
+        const formData = new FormData(submit_form);
+        formData.append('content', contentJSON);
+
+        const response = await fetch(submit_form.action, {
+            method: 'POST',
+            body: formData,
+            // if you want custom headers
+            // headers: {
+            // },
+        });
+
+        const result = await response.text();
+        console.log(result);
+
+        // console.log('CSRF token: ', csrfStr);
+        // console.log('Article data: ', contentJSON);
     }).catch((error) => {
         console.log('Saving failed: ', error);
     })
