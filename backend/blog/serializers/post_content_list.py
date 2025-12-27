@@ -1,7 +1,7 @@
-from typing import List, Self
+from typing import List, Self, Union
 from enum import StrEnum
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 # StrEnums
 
@@ -24,28 +24,39 @@ class CounterTypes(StrEnum):
 # META
 
 class ItemMetaChecklist(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    
     checked: bool = Field(default=False)
 
 
 class ItemMetaOrdered(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    
     start: int = Field(default=1)
     counterType: CounterTypes = Field(default=CounterTypes.numeric)
 
 
 class ItemMetaUnordered(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    
     pass
 
 
-ItemMeta = ItemMetaChecklist | ItemMetaOrdered | ItemMetaUnordered
+ItemMeta = Union[ItemMetaChecklist, ItemMetaOrdered, ItemMetaUnordered]
 
 # MAIN
 
 class Item(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    
     content: str = Field(default="")
     meta: ItemMeta
     items: List[Self]
  
 
-class PostListSerializer(BaseModel):    
+class DataPostList(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    
     style: PostListStyles  = PostListStyles.ordered
+    meta: ItemMeta
     items : List[Item]

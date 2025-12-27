@@ -6,8 +6,11 @@ from django.views.generic import (
 )
 from rest_framework.parsers import JSONParser
 
-from .forms.forms import PostForm
+from .forms.forms import PostCreateForm, PostEditForm
 from .models import Post
+
+from .serializers.post import PostSerializer
+from .serializers.post_content import PostContentSchema
 
 class PostList(ListView):
     model = Post
@@ -63,7 +66,7 @@ class PostDelete(DeleteView):
 
 class PostCreate(CreateView):
     template_name = "blog/post_create.html"
-    form_class = PostForm
+    form_class = PostCreateForm
     
     def form_valid(self, form):
         post: Post = form.instance
@@ -86,7 +89,7 @@ class PostCreate(CreateView):
 class PostUpdate(UpdateView):
     model = Post
     template_name = "blog/post_update.html"
-    form_class = PostForm
+    form_class = PostEditForm
     
     def get_queryset(self):
         user = self.request.user
@@ -116,9 +119,17 @@ class PostUpdate(UpdateView):
 def api_root(req: HttpRequest) -> JsonResponse:
     
     if req.method == "GET":
-        posts = Post.objects.all()
+        user = req.user
+        
+        posts = Post.posts.visible_to(user)
+        
+        for post in posts:
+            PostContentSchema.model_validate(post.content)
+        
         serializer = PostSerializer(posts, many=True, context={'request': req})
+
         return JsonResponse({"posts": serializer.data})
+        
     
     # add csrf token check
     elif req.method == "POST":
