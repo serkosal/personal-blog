@@ -8,7 +8,6 @@ from rest_framework.parsers import JSONParser
 
 from .forms.forms import PostForm
 from .models import Post
-from .serializers import PostSerializer
 
 class PostList(ListView):
     model = Post
