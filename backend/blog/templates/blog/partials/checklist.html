@@ -1,0 +1,12 @@
+{% if el.items %}
+    <ul>
+    {% for el in el.items %}
+
+        <li>
+            {{el.content}}
+            {% include "blog/partials/checklist.html" with el=el %}
+        </li>
+
+    {% endfor %}
+    </ul>
+{% endif %}

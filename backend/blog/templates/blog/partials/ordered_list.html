@@ -1,0 +1,12 @@
+{% if el.items %}
+    <ol>
+    {% for el in el.items %}
+
+        <li>
+            {{el.content}}
+            {% include "blog/partials/ordered_list.html" with el=el %}
+        </li>
+
+    {% endfor %}
+    </ol>
+{% endif %}
