@@ -9,13 +9,7 @@ import Header from '@editorjs/header';
 import List from '@editorjs/list';
 import Quote from '@editorjs/quote';
 import Warning from '@editorjs/warning';
-
-// const Header = (await import('@editorjs/header')).default
-// const List = (await import('@editorjs/list')).default
-// const Quote = (await import('@editorjs/quote')).default
-// const Warning = (await import('@editorjs/warning')).default
-// const Paragraph = (await import('@editorjs/paragraph')).default
-
+import Table from '@editorjs/table'
 
 
 let editorConfig: EditorConfig = {
@@ -51,6 +45,16 @@ let editorConfig: EditorConfig = {
         paragraph: {
             class: Paragraph as unknown as BlockToolConstructable,
             inlineToolbar: true
+        },
+        table: {
+            class: Table as unknown as BlockToolConstructable,
+            inlineToolbar: true,
+            config: {
+                rows: 2,
+                cols: 3,
+                maxRows: 5,
+                maxCols: 5,
+            },
         }
     },
 };
@@ -79,9 +83,6 @@ submit_form?.addEventListener('submit', async function (ev) {
 
     ev.preventDefault();
 
-    // let csrfInput = submit_form?.querySelector<HTMLInputElement>('input[name="csrfmiddlewaretoken"]');
-    // let csrfStr = csrfInput?.value;
-
     editor.save().then(async (outputData) =>  {
         const contentJSON = JSON.stringify(outputData);
 
@@ -91,16 +92,11 @@ submit_form?.addEventListener('submit', async function (ev) {
         const response = await fetch(submit_form.action, {
             method: 'POST',
             body: formData,
-            // if you want custom headers
-            // headers: {
-            // },
         });
 
         const result = await response.text();
         console.log(result);
 
-        // console.log('CSRF token: ', csrfStr);
-        // console.log('Article data: ', contentJSON);
     }).catch((error) => {
         console.log('Saving failed: ', error);
     })
@@ -110,7 +106,6 @@ submit_form?.addEventListener('submit', async function (ev) {
 try {
     await editor.isReady;
     console.log('Editor.js is ready to work!')
-    /** Do anything you need after editor initialization */
 } catch (reason) {
     console.log(`Editor.js initialization failed because of ${reason}`)
 }
