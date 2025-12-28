@@ -15,31 +15,7 @@
             {% if post.content.blocks %}
 
                 {% for block in post.content.blocks %}
-                    <div>
-                        {% if block.type == 'header' %}
-                            <h{{block.data.level}}> 
-                                {{block.data.text}} 
-                            </h{{block.data.level}}>
-                        {% elif block.type == 'paragraph' %}
-                            <p>{{block.data.text}}</p>
-                        {% elif block.type == 'quote' %}
-                            <div class="quote" style="border: 1px solid white;">
-                                <p>{{block.data.text}}</p><br>
-                                <p>{{block.data.caption}}</p>
-                            </div>
-                        {% elif block.type == 'list' %}
-                            {% if block.data.style == 'checklist' %}
-                                <!-- checklist:<br> -->
-                                {% include "blog/partials/checklist.html" with el=block.data %}
-                            {% elif block.data.style == 'ordered' %}
-                                {% include "blog/partials/ordered_list.html" with el=block.data %}
-                            {% elif block.data.style == 'unordered' %}
-                                {% include "blog/partials/unordered_list.html" with el=block.data %}
-                            {% endif %}
-                        {% else %}
-                            {{ block }}
-                        {% endif %}
-                    </div>
+                    {% include "blog/partials/block.html" with el=block.data %}
                 {% endfor %}
 
             {% endif %}

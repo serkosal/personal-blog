@@ -16,7 +16,11 @@
                 </p>
                 
                 <div>
-                    {{ post.content }}
+                    {% if post.content.blocks %}
+                        {% for block in post.content.blocks|slice:":3" %}
+                            {% include "blog/partials/block.html" with el=block.data %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </li>
             <hr>
