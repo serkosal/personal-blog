@@ -20,4 +20,6 @@ services:
     ports:
       - "8000:8000"
     container_name: site_container
-    command: "uv run python -m gunicorn main.asgi:application -b 0.0.0.0:8000 -k uvicorn_worker.UvicornWorker"
+    command: sh -c ".venv/bin/python manage.py collectstatic &&
+            .venv/bin/python manage.py migrate &&
+            .venv/bin/gunicorn main.asgi:application -b 0.0.0.0:8000 -k uvicorn_worker.UvicornWorker"
