@@ -1,0 +1,14 @@
+# PYTHON 
+.venv
+__pycache__
+
+# GIT FILES
+.git
+.gitignore
+
+# DB
+*.sqlite3
+
+# MISC
+*.md
+TODO
