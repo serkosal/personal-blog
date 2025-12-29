@@ -13,8 +13,9 @@ services:
     networks:
       - dbnet
     volumes:
-      - ./staticfiles:./staticfiles
-      - ./media:./media
+      - ./staticfiles:/usr/src/site/staticfiles
+      - ./media:/usr/src/site/media
     ports:
       - "8000:8000"
     container_name: site_container
+    command: "uv run python -m gunicorn main.asgi:application -b 0.0.0.0:8000 -k uvicorn_worker.UvicornWorker"
