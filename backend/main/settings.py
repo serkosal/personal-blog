@@ -30,9 +30,12 @@ ALLOWED_HOSTS = [
     'www.serkosal.org',
     'serkosal.org',
     '63.250.47.103',
-    'https://serkosal.org',
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://serkosal.org",
+    "https://www.serkosal.org",
+]
 
 # Application definition
 
