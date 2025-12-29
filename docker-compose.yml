@@ -7,6 +7,8 @@ services:
     build:
       context: blog/backend
       dockerfile: Dockerfile
+    depends_on:
+      - db
     image: site:latest
     env_file:
       - .env

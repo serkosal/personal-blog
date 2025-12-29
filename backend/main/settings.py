@@ -29,6 +29,7 @@ DEBUG = os.environ.get("DEBUG_ENABLED", True)
 ALLOWED_HOSTS = [
     'www.serkosal.org',
     'serkosal.org',
+    '63.250.47.103',
 ]
 
 

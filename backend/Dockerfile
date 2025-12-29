@@ -7,5 +7,6 @@ WORKDIR /usr/src/site
 COPY . /usr/src/site/
 
 RUN uv sync
-RUN .venv/bin/python manage.py migrate
 RUN .venv/bin/python manage.py collectstatic
+RUN .venv/bin/python manage.py makemigrations
+RUN .venv/bin/python manage.py migrate
