@@ -26,16 +26,19 @@ SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-6q1i4p+c!z^lrg_qh4hg%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG_ENABLED", "1").lower() in ("1", "true")
 
-ALLOWED_HOSTS = [
-    'www.serkosal.org',
-    'serkosal.org',
-    '63.250.47.103',
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://serkosal.org",
-    "https://www.serkosal.org",
-]
+if not DEBUG:
+    ALLOWED_HOSTS = [
+        'www.serkosal.org',
+        'serkosal.org',
+        '63.250.47.103',
+    ]
+    
+    CSRF_TRUSTED_ORIGINS = [
+        "https://serkosal.org",
+        "https://www.serkosal.org",
+    ]
+else:
+    ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -88,16 +91,24 @@ WSGI_APPLICATION = 'main.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB"),
-        "USER": os.getenv("POSTGRES_USER"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_HOST"),
-        "PORT": os.getenv("POSTGRES_PORT"),
+if not DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB"),
+            "USER": os.getenv("POSTGRES_USER"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+            "HOST": os.getenv("POSTGRES_HOST"),
+            "PORT": os.getenv("POSTGRES_PORT"),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
