@@ -6,6 +6,33 @@
 
 {% block content %}
 
-    Content
+    <h1>Welcome to the serkosal.org</h1>
+
+    <h2>About me</h2>
+    <p>
+        Hello, My name is Sergey Kosykh a.k.a. Serkosal.<br>
+        I'm freelancer developer.<br>
+        I know python, django (this site is built upon these),
+        JavaScript, C++, OpenGL, Calculus, Psysics, etc.<br><br>
+        I'm emigrant, a political one, I was born in Russia, but was forced to leave country after
+        2022 invasion of Ukraine.<br>Currently living in Armenia.
+        <br><br>
+    </p>
+
+    <h2>My projects</h2>
+    <ol>
+        <li>This site :D and <a href="{% url 'blog:index' %}">blog</a></li>
+        <li>
+            OpenGL Ray-tracing lost code 
+            <a href="">but have a video of it :D</a>
+        </li>
+        <li><a href="https://github.com/serkosal/intfl">
+            INTeractive File Listing utitility
+        </a></li>
+        <li><a href="https://github.com/serkosal/react-task-manager">
+            React task manager
+        </a></li>
+        <li>My attempts of doing courses from learnopengl.com</li>
+    </ol>
     
 {% endblock %}

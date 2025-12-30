@@ -53,6 +53,7 @@ h1, h2, h3, h4, h5, h6 {
   font: inherit;
   padding: 0px;
   margin: 0px;
+  cursor: pointer;
 }
 
 .flex-row {
@@ -64,6 +65,14 @@ h1, h2, h3, h4, h5, h6 {
 .flex-col {
   display: flex;
   flex-direction: column;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.justify-between {
+  justify-content: space-between;
 }
 
 .btn {

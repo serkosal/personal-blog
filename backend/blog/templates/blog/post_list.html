@@ -11,25 +11,26 @@
     {% endif %}
 
     {% if posts_list %}
-        <ul>
         {% for post in posts_list %}
-            <li>
-                <p>
-                    <a href="{% url 'blog:detail' post.id %}">{{ post.title }}</a>
-                    Author: {{ post.author }}
-                </p>
-                
+
+            <div class="flex-row justify-between">
+                <a href="{% url 'blog:detail' post.id %}">
+                    {{ post.title }}
+                </a>
                 <div>
-                    {% if post.content.blocks %}
-                        {% for block in post.content.blocks|slice:":3" %}
-                            {% include "blog/partials/block.html" with el=block.data %}
-                        {% endfor %}
-                    {% endif %}
+                    Author: {{ post.author }}
                 </div>
-            </li>
+            </div>
+                
+            <div>
+                {% if post.content.blocks %}
+                    {% for block in post.content.blocks|slice:":3" %}
+                        {% include "blog/partials/block.html" with el=block.data %}
+                    {% endfor %}
+                {% endif %}
+            </div>
             <hr>
         {% endfor %}
-        </ul>
     {% else %}
         <p>No posts are available.</p>
     {% endif %}

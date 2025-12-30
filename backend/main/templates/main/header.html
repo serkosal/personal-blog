@@ -6,7 +6,7 @@
         {% if user and user.is_authenticated %}
 
             <div>
-                <a>{{ user.username }}</a>
+                <a href="{% url 'users:profile'%}">{{ user.username }}</a>
             </div>
 
             <div>

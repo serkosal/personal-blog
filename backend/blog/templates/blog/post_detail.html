@@ -6,15 +6,22 @@
 
 {% block content %}
     {% if post %}
+        
         <h1> {{ post.title }} </h1>
-        <p>
-            {{ post.author }}
 
+        <div class="flex-row justify-between">
+        
+            <div>
             {% if can_edit %}
                 <a href="{% url 'blog:edit' pk=post.id %}">Edit post</a>
                 <a href="{% url 'blog:delete' pk=post.id %}">Delete post</a>
             {% endif %}
-        </p>
+            </div>
+
+            <div>
+                Author: {{ post.author }}
+            </div>
+        </div>
         <p>
             {% if post.content.blocks %}
 
@@ -24,5 +31,6 @@
 
             {% endif %}
         </p>
+        
     {% endif %}
 {% endblock %}
