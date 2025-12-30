@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /blog/api/
+Disallow: /blog/c/
+Disallow: /blog/*/e/
+Disallow: /blog/*/del/
+
+User-agent: GPTBot
+Disallow: /

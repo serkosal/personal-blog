@@ -1,5 +1,9 @@
 {% extends "main/base.html" %}
 
+{% block head %}
+    <meta name="robots" content="index">
+{% endblock %}
+
 {% block content %}
     {% if post %}
         <h1> {{ post.title }} </h1>
