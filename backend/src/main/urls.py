@@ -31,6 +31,14 @@ urlpatterns = [
         )
     ),
     
+    path(
+        "google79b3c578f8f2f335.html", 
+        TemplateView.as_view(
+            template_name="main/google79b3c578f8f2f335.html", 
+            content_type="text/plain"
+        )
+    ),
+    
     path("accounts/", include("users.urls")),
     path("blog/", include("blog.urls")),
     path('', index, name="index"),
