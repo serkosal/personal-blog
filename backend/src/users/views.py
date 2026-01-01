@@ -19,7 +19,19 @@ class RegisterView(CreateView):
 
 def profile(req: HttpRequest) -> HttpResponse:
 
-    return render(req, "registration/profile.html", {"title": "homepage"})
+    return render(req, "registration/profile.html", {"title": "homepage", "render_user": req.user})
+
+
+def detail(req: HttpRequest, profile_id: int) -> HttpResponse:
+
+    user_model = get_user_model()
+    
+    other_user = get_object_or_404(user_model, pk=profile_id)
+
+    return render(req, "registration/profile.html", {
+        "title": "homepage", 
+        "render_user": other_user
+    })
 
 
 def api_detail(req: HttpRequest, profile_id: int) -> HttpResponse:

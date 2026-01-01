@@ -17,8 +17,13 @@
                 <a href="{% url 'blog:detail' post.id %}">
                     {{ post.title }}
                 </a>
-                <div>
-                    Author: {{ post.author }}
+                <div class="flex-row" style="align-items: center;">
+                    <div>
+                        Author: {{ post.author }}
+                    </div>
+                    {% if post.author.profile.avatar %}
+                        <img src="{{post.author.profile.avatar.url}}" height="50px" width="50px" style="border-radius: 100%;">
+                    {% endif %}
                 </div>
             </div>
                 

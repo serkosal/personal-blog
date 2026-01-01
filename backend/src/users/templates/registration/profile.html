@@ -2,10 +2,19 @@
 
 {% block content %}
 
-    {% if user.is_authenticated %}
-        {{ user }}
-    {% else %}
-        You're not authenticated! Try login to view this page!
+    {% if render_user %}
+
+        <div class="flex-row" style="align-items: center;">
+            {% if render_user.profile.avatar %}
+                <img src="{{render_user.profile.avatar.url}}" height="50px" width="50px" style="border-radius: 100%;">
+            {% endif %}
+            <div>
+                Username: {{ render_user.username }}
+            </div>
+        </div>
+
+        Is staff: {{ render_user.is_staff }} <br>
+        Date joined: {{render_user.date_joined}} <br>
     {% endif %}
     
 {% endblock %}
