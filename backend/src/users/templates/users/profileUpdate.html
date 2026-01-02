@@ -1,0 +1,16 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+
+    <h1>User profile</h1>
+    {% if form %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_div }}
+
+        <button type="submit">Update</button>
+    </form>    
+    {% endif %}
+    
+{% endblock %}

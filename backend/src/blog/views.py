@@ -111,7 +111,7 @@ class PostUpdate(UpdateView):
     
     def get_success_url(self):
         post: Post = self.object
-        return reverse_lazy("blog:edit", kwargs={"pk": post.pk})
+        return reverse_lazy("blog:detail", kwargs={"pk": post.pk})
 
 
 

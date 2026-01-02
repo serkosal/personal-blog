@@ -5,17 +5,25 @@
     <h1>User profile</h1>
     {% if render_user %}
 
-        <div class="flex-row" style="align-items: center;">
-            {% if render_user.profile.avatar %}
-                <img src="{{render_user.profile.avatar.url}}" height="50px" width="50px" style="border-radius: 100%;">
-            {% endif %}
-            <div>
-                Username: {{ render_user.username }}
+        {% if render_user.is_authenticated %}
+            <div class="flex-row" style="align-items: center;">
+                {% if render_user.profile.avatar %}
+                    <img src="{{render_user.profile.avatar.url}}" height="50px" width="50px" style="border-radius: 100%;">
+                {% endif %}
+                <div>
+                    Username: {{ render_user.username }}
+                </div>
             </div>
-        </div>
 
-        Is staff: {{ render_user.is_staff }} <br>
-        Date joined: {{render_user.date_joined}} <br>
+            {% if can_edit %}
+                <a href="{% url 'users:edit' render_user.pk%}">edit</a> <br>
+            {% endif %}
+
+            Is staff: {{ render_user.is_staff }} <br>
+            Date joined: {{render_user.date_joined}} <br>
+        {% else %}
+            <h2>You are not logged into your account!</h2>
+        {% endif %}
     {% endif %}
     
 {% endblock %}
