@@ -9,6 +9,7 @@
         
         <h1> {{ post.title }} </h1>
 
+        {# post header #}
         <div class="flex-row justify-between">
         
             <div>
@@ -18,12 +19,17 @@
             {% endif %}
             </div>
 
+            {# author section with avatar and username #}
             <div class="flex-row" style="align-items: center;">
                 <div>
-                    Author: {{ post.author }}
+                    Author: <a href="{% url 'users:detail' post.author.pk %}">
+                        {{ post.author }}
+                    </a>
                 </div>
                 {% if post.author.profile.avatar %}
-                    <img src="{{post.author.profile.avatar.url}}" height="50px" width="50px" style="border-radius: 100%;">
+                    <a href="{% url 'users:detail' post.author.pk %}">
+                        <img src="{{post.author.profile.avatar.url}}" height="50px" width="50px" style="border-radius: 100%;">
+                    </a>
                 {% endif %}
             </div>
         </div>
