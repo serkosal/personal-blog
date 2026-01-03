@@ -29,6 +29,16 @@ class Profile(models.Model):
         default=False
     )
     
+    followers = models.ManyToManyField(
+        "self",
+        through="Follow",
+        through_fields=("followee", "follower"),
+        related_name="following",
+        symmetrical=False,
+        blank=True
+    )
+    
+    
     class Meta:
         permissions = (
             ("users.see_private", "Users can see other user's profiles"),
@@ -38,15 +48,63 @@ class Profile(models.Model):
     def __str__(self) -> str:
         return f'Profile (username: {self.user}, user id: {self.user.pk})'
 
-    def can_see(self, user: AbstractUser):
+
+    def can_be_seen(self, by: AbstractUser | Profile):
         
-        return not self.is_private or user.is_authenticated and (
-            user == self.user or
-            user.is_active and user.has_perm("users.see_private")
+        if isinstance(by, AbstractUser):
+            by_user = by
+        elif isinstance(by, Profile):
+            by_user = by.user
+        else:
+            raise ValueError(
+                "'by' must be instance of 'AbstractUser' or 'Profile'!"
+            )
+        
+        return not self.is_private or by_user.is_authenticated and (
+            by_user == self.user or
+            by_user.is_active and by_user.has_perm("users.see_private")
         )
     
-    def can_edit(self, user: AbstractUser) -> bool:
-        return user.is_authenticated and user.is_active and (
-            user == self.user or
-            user.has_perm("users.edit_others")
+    
+    def can_be_edited(self, by: AbstractUser | Profile) -> bool:
+        
+        if isinstance(by, AbstractUser):
+            by_user = by
+        elif isinstance(by, Profile):
+            by_user = by.user
+        else:
+            raise ValueError(
+                "'by' must be instance of 'AbstractUser' or 'Profile'!"
+            )
+        
+        return by_user.is_authenticated and by_user.is_active and (
+            by_user == self.user or
+            by_user.has_perm("users.edit_others")
         )
+    
+    
+    def is_following(self, target: Profile):
+        return Follow.objects.filter(follower=self, followee=target).exists()
+    
+    
+    def is_followed(self, by: Profile):
+        return Follow.objects.filter(follower=by, followee=self).exists()
+    
+    
+    def follow(self, target: Profile):
+        if self != target:
+            Follow.objects.create(followee=target, follower=self)
+    
+    
+    def unfollow(self, target: Profile):
+        Follow.objects.filter(followee=target, follower=self).delete()
+
+
+class Follow(models.Model):
+    followee = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="follower_relations")
+    follower = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="following_relations")
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ("followee", "follower")

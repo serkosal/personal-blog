@@ -19,6 +19,42 @@
                 <a href="{% url 'users:edit' render_user.pk%}">edit</a> <br>
             {% endif %}
 
+            {% if can_follow %}
+                {% if is_followed %}
+                    <a href="{% url 'users:toggle_follow' render_user.pk %}">
+                        Unfollow
+                    </a>
+                {% else %}
+                    <a href="{% url 'users:toggle_follow' render_user.pk %}">
+                        Follow
+                    </a>
+                {% endif %}
+                <br>
+            {% endif %}
+
+            {% if followers %}
+                Followers:
+                <ul>
+                {% for follower in followers %}
+                    <li><a href="{% url 'users:detail' follower.user.pk %}">
+                        {{follower.user.username}}
+                    </a></li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if following %}
+                This user follows:
+                <ul>
+                {% for followee in following %}
+                    <li><a href="{% url 'users:detail' followee.user.pk %}">
+                        {{followee.user.username}}
+                    </a></li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+
+
             Is staff: {{ render_user.is_staff }} <br>
             Date joined: {{render_user.date_joined}} <br>
         {% else %}
