@@ -4,7 +4,7 @@ networks:
 
 # base component for all services
 x-base: &base
-  env_file: .env
+  env_file: .dev-env
   restart: "on-failure:5"
   networks: 
     - appnet
@@ -28,25 +28,22 @@ services:
   db:
     <<: *base
     image: postgres:14
-
   rabbitmq:
     <<: *base
     image: "rabbitmq:4.2"
-
 
   django:
     <<: *base-backend
     depends_on:
       - rabbitmq
       - db
-      # - nginx 
     volumes:
       - ./staticfiles:/app/staticfiles
       - ./media:/app/media
     ports:
       - "8000:8000"
     entrypoint: /app/django-entrypoint.sh
-    command: sh -c "uv run gunicorn main.asgi:application -b 0.0.0.0:8000 -k uvicorn_worker.UvicornWorker"
+    command: sh -c "uv run python manage.py runserver 0.0.0.0:8000"
 
   celery:
     <<: *base-backend

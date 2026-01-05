@@ -9,9 +9,15 @@ from django.http import HttpRequest, HttpResponse, JsonResponse, Http404
 
 from .models import Profile, Follow
 from .forms import ProfileChangeForm
-from .serializers import UserSerializer
+from .tasks import add_task
 
 # Create your views here.
+
+def test_task(req: HttpRequest, x: int, y: int):
+    result = add_task.delay(x, y)
+    
+    return JsonResponse({"result": result.get(timeout=10)})
+    
 
 class RegisterView(CreateView):
     form_class = UserCreationForm

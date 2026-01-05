@@ -25,6 +25,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-6q1i4p+c!z^lrg_qh4hg%
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG_ENABLED", "1").lower() in ("1", "true")
+DEBUG_USE_SQLITE = os.environ.get("DEBUG_USE_SQLITE", "1").lower() in ("1", "true")
 
 if not DEBUG:
     ALLOWED_HOSTS = [
@@ -113,7 +114,14 @@ LOGGING = {
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if not DEBUG:
+if DEBUG and DEBUG_USE_SQLITE:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -122,13 +130,6 @@ if not DEBUG:
             "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
             "HOST": os.getenv("POSTGRES_HOST"),
             "PORT": os.getenv("POSTGRES_PORT"),
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
@@ -164,6 +165,16 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
+
+
+# CELERY
+CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
+CELERY_RESULT_BACKEND = 'rpc://'
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
 
 
 # Static files (CSS, JavaScript, Images)
