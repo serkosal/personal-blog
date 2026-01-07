@@ -31,6 +31,8 @@
                         <img src="{{post.author.profile.avatar.url}}" height="50px" width="50px" style="border-radius: 100%;">
                     </a>
                 {% endif %}
+
+                {% include "users/partials/avatar.html" with profile=post.author.profile %}
             </div>
         </div>
         <p>

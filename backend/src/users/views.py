@@ -1,5 +1,5 @@
+from celery.result import AsyncResult 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
@@ -9,14 +9,9 @@ from django.http import HttpRequest, HttpResponse, JsonResponse, Http404
 
 from .models import Profile, Follow
 from .forms import ProfileChangeForm
-from .tasks import add_task
+from .tasks import process_avatar
 
 # Create your views here.
-
-def test_task(req: HttpRequest, x: int, y: int):
-    result = add_task.delay(x, y)
-    
-    return JsonResponse({"result": result.get(timeout=10)})
     
 
 class RegisterView(CreateView):
@@ -43,6 +38,8 @@ class ProfileUpdate(UpdateView):
     form_class = ProfileChangeForm
     template_name = 'users/profileUpdate.html'
     
+    object: Profile | None
+    
     def get_object(self, queryset = None):
         user_id: int = self.kwargs["user_id"]
         
@@ -57,11 +54,15 @@ class ProfileUpdate(UpdateView):
             raise Http404
     
     
-    def form_valid(self, form: ProfileChangeForm):
-        profile: Profile = form.instance
-        user = self.request.user
+    def form_valid(self: ProfileUpdate, form: ProfileChangeForm):
         
-        return profile.can_be_edited(user) and super().form_valid(form)
+        response = super().form_valid(form)
+        
+        profile = self.object
+        
+        result: AsyncResult[bool] = process_avatar.delay(profile.pk)
+        
+        return response
     
     
     def get_success_url(self):

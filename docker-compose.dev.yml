@@ -13,6 +13,9 @@ x-base-backend: &base-backend
   <<: *base
   build: ./backend
   image: backend:latest
+  volumes:
+    - ./staticfiles:/app/staticfiles
+    - ./media:/app/media
 
 services:
   # nginx:
@@ -37,9 +40,7 @@ services:
     depends_on:
       - rabbitmq
       - db
-    volumes:
-      - ./staticfiles:/app/staticfiles
-      - ./media:/app/media
+
     ports:
       - "8000:8000"
     entrypoint: /app/django-entrypoint.sh

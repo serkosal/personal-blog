@@ -1,5 +1,8 @@
-from django.contrib.auth.models import AbstractUser
+from pathlib import Path
 
+# from django.core.files.storage import default_storage
+# from django.contrib.staticfiles.storage import staticfiles_storage
+from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.db import models
 
@@ -8,20 +11,59 @@ from django.db import models
 # Create your models here.
 class Profile(models.Model):
     
-    def user_directory_path(profile: Profile, filename: str) -> str:
-        return f'users/{profile.user.pk}/avatars/{filename}'
-    
     user: AbstractUser = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         null=False
     )
     
+    AVATAR_SIZES = (1024, 512, 256, 128, 64)
+    
+    def user_directory_path(profile: Profile, filename: str) -> str:
+        return f'users/{profile.user.pk}/avatars/{filename}'
+    
+    @property
+    def processed_avatar_pathes(self) -> list[Path]:
+        return [
+            Profile.user_directory_path(self, f'{size}.webp') 
+            for size in Profile.AVATAR_SIZES
+        ]
+        
+    @property 
+    def avatar_img_attrs(self) -> str:
+        
+        src:str
+        base_path: str
+        alt = f"{self.user.username}'s avatar"
+        if self.avatar_is_set:
+            base_path = f'/media/users/{self.user.pk}/avatars/'
+            src = base_path + f'64.webp'
+        else:
+            base_path = f'/static/users/avatars/'
+            src = base_path + f'default_avatar_64.webp'
+        
+        srcset_list = [
+            base_path + f'{sz}.webp' if self.avatar_is_set 
+            else base_path + f'default_avatar_{sz}.webp' 
+            for sz in Profile.AVATAR_SIZES
+        ]
+        
+        srcset = ", ".join(srcset_list)
+            
+        return f'''
+            src="{src}" 
+            srcset="{srcset}"
+            alt="{alt}" 
+            style="border-radius: 100%;"
+        '''
+    
     avatar = models.ImageField(
         null=True,
-        default='users/default_avatar.png',
-        upload_to=user_directory_path,
+        upload_to=user_directory_path
     )
+    # if avatar is set, then avatar should be null (file deleted),
+    # and different sized avatar's files are already created and is ok
+    avatar_is_set = models.BooleanField(null=False, default=False)
     
     bio = models.TextField(max_length=200, null=False, blank=True, default="")
     

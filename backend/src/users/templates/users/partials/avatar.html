@@ -1,0 +1,19 @@
+{% if profile %}
+
+    {% load static %}
+
+    {% if not no_userlink %}
+        <a href="{% url 'users:detail' user.pk %}">
+    {% endif %}
+
+    <img
+        {{profile.avatar_img_attrs|safe}}
+        width="64px"
+        height="64px"
+    >
+
+    {% if not no_userlink %}
+        </a>
+    {% endif %}
+
+{% endif %}

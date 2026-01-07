@@ -22,11 +22,8 @@
                     <div>
                         Author: <a href="{% url 'users:detail' post.author.pk %}">{{ post.author }}</a>
                     </div>
-                    {% if post.author.profile.avatar %}
-                        <a href="{% url 'users:detail' post.author.pk %}">
-                            <img src="{{post.author.profile.avatar.url}}" height="50px" width="50px" style="border-radius: 100%;">
-                        </a>
-                    {% endif %}
+                    
+                    {% include "users/partials/avatar.html" with profile=post.author.profile %}
                 </div>
             </div>
                 
