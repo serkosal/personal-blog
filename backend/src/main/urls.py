@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
-from .views import index
+from .views import index, attributions
 
 from django.views.generic.base import TemplateView
 
@@ -42,6 +42,7 @@ urlpatterns = [
         )
     ),
     
+    path("attributions/", attributions, name="attributions"),
     path("accounts/", include("users.urls")),
     path("blog/", include("blog.urls")),
     path('', index, name="index"),
