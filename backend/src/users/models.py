@@ -37,10 +37,10 @@ class Profile(models.Model):
         alt = f"{self.user.username}'s avatar"
         if self.avatar_is_set:
             base_path = f'/media/users/{self.user.pk}/avatars/'
-            src = base_path + f'64.webp'
+            src = base_path + '64.webp'
         else:
-            base_path = f'/static/users/avatars/'
-            src = base_path + f'default_avatar_64.webp'
+            base_path = '/static/users/avatars/'
+            src = base_path + 'default_avatar_64.webp'
         
         srcset_list = [
             base_path + f'{sz}.webp' if self.avatar_is_set 

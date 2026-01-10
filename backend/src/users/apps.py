@@ -7,7 +7,7 @@ class UsersConfig(AppConfig):
     
     def ready(self) -> None:
         from .signals import (
-            create_user_profile, 
+            create_user_profile, # noqa: F401
             create_profiles_for_existing_users
         )
         

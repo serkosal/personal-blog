@@ -1,11 +1,11 @@
-from celery.result import AsyncResult 
+# from celery.result import AsyncResult 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import CreateView, UpdateView
 from django.urls import reverse_lazy
-from django.http import HttpRequest, HttpResponse, JsonResponse, Http404
+from django.http import HttpRequest, HttpResponse, Http404
 
 from .models import Profile, Follow
 from .forms import ProfileChangeForm
@@ -60,7 +60,8 @@ class ProfileUpdate(UpdateView):
         
         profile = self.object
         
-        result: AsyncResult[bool] = process_avatar.delay(profile.pk)
+        # result: AsyncResult[bool] = process_avatar.delay(profile.pk)
+        process_avatar.delay(profile.pk)
         
         return response
     

@@ -1,8 +1,8 @@
-from typing import Literal, List, Union, Annotated
+from typing import Literal, List, Union
 from datetime import datetime
 
 from pydantic import (
-    BaseModel, ConfigDict, Field, model_validator
+    BaseModel, ConfigDict, Field
 )
 
 from .post_content_list import DataPostList
