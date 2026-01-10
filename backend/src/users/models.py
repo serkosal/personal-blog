@@ -36,7 +36,7 @@ class Profile(models.Model):
         """Return path where avatar will be stored.
 
         Args:
-            self (Profile): instanse of Profile
+            self (Profile): instance of Profile
             filename (str): avatar's filename
 
         Returns:
@@ -135,7 +135,7 @@ class Profile(models.Model):
             this profile is checked.
 
         Raises:
-            ValueError: raised when 'by' is not an instanse of AbstractUser 
+            ValueError: raised when 'by' is not an instance of AbstractUser 
             or Profile.
 
         Returns:
@@ -168,7 +168,7 @@ class Profile(models.Model):
             by: the user whose ability to edit this profile is being checked.
 
         Raises:
-            ValueError: raised when 'by' is not an instanse of AbstractUser 
+            ValueError: raised when 'by' is not an instance of AbstractUser 
             or Profile
 
         Returns:

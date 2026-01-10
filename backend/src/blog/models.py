@@ -1,12 +1,25 @@
+"""file with URL patterns for 'blog' Django app."""
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import Q
 
 
-# custom model manager
 class PostManager(models.Manager):
+    """Custom Profile's model manager."""
+    
     def visible_to(self, user: AbstractUser):
+        """Check if user can see the post.
+
+        Args:
+            self (PostManager): instance of PostManager.
+            user (AbstractUser): user is checked for post visibility.
+
+        Returns:
+            bool: True if user can see the post.
+
+        """
         posts = self.get_queryset()
 
         if user.is_authenticated:
@@ -18,6 +31,16 @@ class PostManager(models.Manager):
         return posts.filter(is_published=True)
 
     def editable_to(self, user: AbstractUser):
+        """Check if user can edit the post.
+        
+        Args:
+            self (PostManager): instance of PostManager.
+            user (AbstractUser): user is checked for post visibility.
+
+        Returns:
+            bool: True if user can edit the post.
+
+        """
         posts = self.get_queryset()
 
         if user.is_anonymous:
@@ -30,6 +53,20 @@ class PostManager(models.Manager):
 
 
 class Post(models.Model):
+    """Django model for posts.
+    
+    Attributes:
+        author: user who wrote the post.
+        title: title of the post.
+        content: JSON formated post content returned by EditorJs library.
+        started_at: datetime when post was created. 
+        last_edited: datetime when post was edited last time.
+        published_at: datetime when post was first published.
+        is_published: Has post been published?
+        posts: PostManager acts like objects, but also has additional methods.
+
+    """
+    
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
     )
@@ -39,7 +76,13 @@ class Post(models.Model):
     )
 
     # rewrite to a custom json Field
-    def content_default():
+    def content_default(self: Post):
+        """Get post's default content data.
+        
+        Args:
+            self: instance of the Post model.
+        
+        """
         return {'content': {}}
 
     content = models.JSONField(null=False, blank=False, default=content_default)
@@ -55,6 +98,8 @@ class Post(models.Model):
     posts = PostManager()
 
     class Meta:
+        """Permissions for Post model."""
+        
         permissions = (
             (
                 'blog.see_others_unpublished',
@@ -64,9 +109,22 @@ class Post(models.Model):
         )
 
     def __str__(self) -> str:
+        """Return string representation of the post.
+        
+        Args:
+            self (Post): Post instance.
+
+        """
         return f'Post author: {self.author} title: {self.title}'
 
     def can_edit(self, user: AbstractUser) -> bool:
+        """Check if user can edit the post.
+        
+        Args:
+            self (Post): Post instance.
+            user (AbstractUser): user is checked for ability to edit a post.
+        
+        """
         return (
             user.is_authenticated
             and user.is_active

@@ -1,3 +1,5 @@
+"""File with views for 'blog' Django app."""
+
 from django.contrib.auth.models import AbstractUser
 from django.http import HttpRequest, JsonResponse
 from django.urls import reverse_lazy
@@ -17,10 +19,18 @@ from .serializers.post_content import PostContentSchema
 
 
 class PostList(ListView):
+    """Render a page with the list of posts."""
+    
     model = Post
     context_object_name = 'posts_list'
 
     def get_queryset(self):
+        """Get the list of posts.
+        
+        Args:
+            self (PostList): instance of the PostList class.
+        
+        """
         user = self.request.user
 
         posts = Post.posts.visible_to(user).order_by('-published_at')
@@ -28,6 +38,13 @@ class PostList(ListView):
         return posts
 
     def get_context_data(self, **kwargs):
+        """Get the context data.
+        
+        Args:
+            self (PostList): instance of the PostList class.
+            **kwargs: Arbitrary keyword arguments.
+        
+        """
         context = super().get_context_data(**kwargs)
         context['title'] = 'Latest posts'
 
@@ -35,10 +52,18 @@ class PostList(ListView):
 
 
 class PostDetail(DetailView):
+    """Render the required post."""
+    
     model = Post
     context_object_name = 'post'
 
     def get_queryset(self):
+        """Get the required post.
+        
+        Args:
+            self (PostDetail): instance of the PostDetail class.
+        
+        """
         user = self.request.user
 
         self.posts = Post.posts.visible_to(user)
@@ -46,6 +71,13 @@ class PostDetail(DetailView):
         return self.posts
 
     def get_context_data(self, **kwargs):
+        """Get the context data.
+        
+        Args:
+            self (PostDetail): instance of the PostDetail class.
+            **kwargs: Arbitrary keyword arguments.
+
+        """
         post: Post = self.get_object()
         user = self.request.user
 
@@ -56,21 +88,40 @@ class PostDetail(DetailView):
 
 
 class PostDelete(DeleteView):
+    """Deletes the required post."""
+    
     model = Post
     success_url = reverse_lazy('blog:index')
     context_object_name = 'post'
 
     def get_queryset(self):
+        """Get the required post.
+        
+        Args:
+            self (PostDelete): instance of the PostDelete class.
+        
+        """
         user = self.request.user
 
         return Post.posts.editable_to(user)
 
 
 class PostCreate(CreateView):
+    """Creates a new post."""
+    
     template_name = 'blog/post_create.html'
     form_class = PostCreateForm
+    
+    object: Post | None
 
     def form_valid(self, form):
+        """Create a new post.
+        
+        Args:
+            self (PostCreate): instance of the PostCreate class.
+            form (BaseModelForm): instance of a validated form.
+        
+        """
         post: Post = form.instance
         user: AbstractUser = self.request.user
 
@@ -80,19 +131,33 @@ class PostCreate(CreateView):
         post.author = user
         return super().form_valid(form)
 
+
     def get_success_url(self):
-        post: Post = self.object
-        return reverse_lazy('blog:edit', kwargs={'pk': post.pk})
+        """Get the link to a newly created post.
+        
+        Args:
+            self (PostCreate): instance of the PostCreate class.
+        
+        """
+        return reverse_lazy('blog:edit', kwargs={'pk': self.object.pk})
 
 
 # renders title, is_published fields through standart django forms
 # renders content field through editor.js plugin
 class PostUpdate(UpdateView):
+    """Updates the required post."""
+    
     model = Post
     template_name = 'blog/post_update.html'
     form_class = PostEditForm
 
     def get_queryset(self):
+        """Get the required post.
+        
+        Args:
+            self (PostUpdate): instance of the PostUpdate class.
+        
+        """
         user = self.request.user
 
         self.posts = Post.posts.editable_to(user)
@@ -100,6 +165,13 @@ class PostUpdate(UpdateView):
         return self.posts
 
     def form_valid(self, form):
+        """Execute after successfully validate form.
+
+        Args:
+            self (PostUpdate): instance of the PostUpdate class.
+            form (BaseModelForm): instance of a validated form.
+
+        """
         post: Post = form.instance
         user: AbstractUser = self.request.user
 
@@ -110,11 +182,26 @@ class PostUpdate(UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
+        """Get the link to a newly created post.
+        
+        Args:
+            self (PostUpdate): instance of the PostUpdate class.
+
+        """
         post: Post = self.object
         return reverse_lazy('blog:detail', kwargs={'pk': post.pk})
 
 
 def api_root(req: HttpRequest) -> JsonResponse:
+    """Get the posts list in JSON format.
+
+    Args:
+        req (HttpRequest): HTTP request from the client.
+
+    Returns:
+        JsonResponse: JSON response to the client.
+
+    """
     if req.method == 'GET':
         user = req.user
 
@@ -151,6 +238,16 @@ def api_root(req: HttpRequest) -> JsonResponse:
 
 
 def api_detail(req: HttpRequest, post_id: int) -> JsonResponse:  # noqa: PLR0911
+    """Get the posts list in JSON format.
+
+    Args:
+        req (HttpRequest): HTTP request from the client.
+        post_id (int): Post's id.
+
+    Returns:
+        JsonResponse: JSON response to the client.
+    
+    """
     post: Post
     try:
         post = Post.objects.get(pk=post_id)

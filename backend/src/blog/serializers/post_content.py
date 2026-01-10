@@ -1,3 +1,5 @@
+"""file with Pydantic schemas to validate EditorJS JSON."""
+
 from datetime import datetime
 from typing import Literal
 
@@ -7,6 +9,8 @@ from .post_content_list import DataPostList
 
 
 class DataWarning(BaseModel):
+    """EditorJS Warning data of the post content."""
+    
     model_config = ConfigDict(extra='forbid')
 
     title: str
@@ -14,6 +18,8 @@ class DataWarning(BaseModel):
 
 
 class DataQuote(BaseModel):
+    """EditorJS Quote data of the post content."""
+    
     model_config = ConfigDict(extra='forbid')
 
     text: str
@@ -22,6 +28,8 @@ class DataQuote(BaseModel):
 
 
 class DataHeader(BaseModel):
+    """EditorJS Header data of the post content."""
+    
     model_config = ConfigDict(extra='forbid')
 
     text: str
@@ -29,6 +37,8 @@ class DataHeader(BaseModel):
 
 
 class DataParagraph(BaseModel):
+    """EditorJS Paragraph data of the post content."""
+    
     model_config = ConfigDict(extra='forbid')
 
     text: str
@@ -49,6 +59,8 @@ BlockDataMapping = {
 
 
 class ContentBlock(BaseModel):
+    """EditorJS Block data of the post content."""
+    
     model_config = ConfigDict(extra='forbid')
 
     id: str
@@ -63,6 +75,8 @@ class ContentBlock(BaseModel):
 
 
 class PostContentSchema(BaseModel):
+    """Pydantic schema of the post content."""
+    
     model_config = ConfigDict(extra='forbid')
 
     time: datetime

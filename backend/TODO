@@ -1,5 +1,7 @@
-add celery's tasks for avatar's image processing
-add email sending & related tasks
+add tests
+
+blog.views.PostDetail possible bug in the method get_queryset
+fix PostCreate.form_valid method
 
 update readme files:
   - environment variables for dev, prod
@@ -8,10 +10,14 @@ update readme files:
   - architecture
   - project structure
 
-add docstrings
-add tests
+add email sending & related tasks
+
+
+
+
+
 add ci/cd pipelines
 
 add slug field to Post model
-add nofollow relation to create, update, delete links
-add blog post caching
+add nofollow relation to create, update, delete html links
+add blog posts caching

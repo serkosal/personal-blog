@@ -1,0 +1,1 @@
+"""init file for 'blog' module."""

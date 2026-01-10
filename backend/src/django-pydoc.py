@@ -1,8 +1,9 @@
-"""file which prepares django to work with Pydoc."""
+"""File which prepares django to work with Pydoc."""
 
 import os
-import django
 import pydoc
+
+import django
 
 os.environ.get('DJANGO_SETTINGS_MODULE', 'main.settings')
 

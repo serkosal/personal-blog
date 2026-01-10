@@ -59,7 +59,7 @@ class ProfileUpdate(UpdateView):
     Attributes:
         form_class: Django form is displayed on the page.
         template_name: Django template is used for rendering page.
-        object: instanse of the updated Profile.
+        object: instance of the updated Profile.
         
     """
 
@@ -69,7 +69,7 @@ class ProfileUpdate(UpdateView):
     object: Profile | None
 
     def get_object(self, queryset=None):
-        """Retrieve Profile instanse from the DB.
+        """Retrieve Profile instance from the DB.
 
         Args:
             queryset (_type_, optional): _description_. Defaults to None.
@@ -78,7 +78,7 @@ class ProfileUpdate(UpdateView):
             Http404: Profile couldn't be found or current user is unauthorized.
 
         Returns:
-            Profile: Returns found profile instanse.
+            Profile: Returns found profile instance.
 
         """
         user_id: int = self.kwargs['user_id']
@@ -97,7 +97,7 @@ class ProfileUpdate(UpdateView):
         """Schedule avatar processing task on form validation success.
 
         Args:
-            self (ProfileUpdate): instanse of ProfileUpdate.
+            self (ProfileUpdate): instance of ProfileUpdate.
             form (ProfileChangeForm): form with validated data.
 
         Returns:

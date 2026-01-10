@@ -15,7 +15,7 @@ def create_user_profile(
 ) -> None:
     """Create profiles for newly created User's instances.
     
-    This method is registered to be called when new user's instanses are saved 
+    This method is registered to be called when new user's instances are saved 
     in the database.
     
     Args:
