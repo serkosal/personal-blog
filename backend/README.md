@@ -17,6 +17,11 @@ use `ruff check`, for see linting errors
 `ruff check --select I001,E501 --fix`
 `ruff check --ignore E501`
 
+
+# documentation 
+`cd src`
+`uv run python django-pydoc.py -p 7000`
+
 # files and dir
 
 - src - has entire django's project sources, so it could be effectevely cached
