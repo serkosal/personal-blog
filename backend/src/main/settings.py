@@ -21,11 +21,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY", 'django-insecure-6q1i4p+c!z^lrg_qh4hg%=c44m6_30xrz56bw8$)j!w*8rn7vo')
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-6q1i4p+c!z^lrg_qh4hg%=c44m6_30xrz56bw8$)j!w*8rn7vo',
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG_ENABLED", "1").lower() in ("1", "true")
-DEBUG_USE_SQLITE = os.environ.get("DEBUG_USE_SQLITE", "1").lower() in ("1", "true")
+DEBUG = os.environ.get('DEBUG_ENABLED', '1').lower() in ('1', 'true')
+DEBUG_USE_SQLITE = os.environ.get('DEBUG_USE_SQLITE', '1').lower() in (
+    '1',
+    'true',
+)
 
 if not DEBUG:
     ALLOWED_HOSTS = [
@@ -33,10 +39,10 @@ if not DEBUG:
         'serkosal.org',
         '63.250.47.103',
     ]
-    
+
     CSRF_TRUSTED_ORIGINS = [
-        "https://serkosal.org",
-        "https://www.serkosal.org",
+        'https://serkosal.org',
+        'https://www.serkosal.org',
     ]
 else:
     ALLOWED_HOSTS = []
@@ -44,12 +50,10 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
-    
     # my own apps
     'users',
     'main',
     'blog',
-    
     # django built in
     'django.contrib.admin',
     'django.contrib.auth',
@@ -92,22 +96,22 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 # logging
 LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
         },
     },
-    "root": {
-        "handlers": ["console"],
-        "level": "INFO",
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
     },
-    "loggers": {
-        "django": {
-            "handlers": ["console"],
-            "level": "ERROR",
-            "propagate": True,
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
         },
     },
 }
@@ -124,13 +128,13 @@ if DEBUG and DEBUG_USE_SQLITE:
     }
 else:
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("POSTGRES_DB"),
-            "USER": os.getenv("POSTGRES_USER"),
-            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
-            "HOST": os.getenv("POSTGRES_HOST"),
-            "PORT": os.getenv("POSTGRES_PORT"),
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRES_DB'),
+            'USER': os.getenv('POSTGRES_USER'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+            'HOST': os.getenv('POSTGRES_HOST'),
+            'PORT': os.getenv('POSTGRES_PORT'),
         }
     }
 
@@ -181,7 +185,7 @@ CELERY_TIMEZONE = 'UTC'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_ROOT =  BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_URL = 'static/'

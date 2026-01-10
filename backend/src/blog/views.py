@@ -2,7 +2,11 @@ from django.contrib.auth.models import AbstractUser
 from django.http import HttpRequest, JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import (
-    ListView, DetailView, DeleteView, UpdateView, CreateView
+    ListView,
+    DetailView,
+    DeleteView,
+    UpdateView,
+    CreateView,
 )
 from rest_framework.parsers import JSONParser
 
@@ -12,200 +16,189 @@ from .models import Post
 from .serializers.post import PostSerializer
 from .serializers.post_content import PostContentSchema
 
+
 class PostList(ListView):
     model = Post
-    context_object_name = "posts_list"
+    context_object_name = 'posts_list'
 
     def get_queryset(self):
         user = self.request.user
-        
-        posts = Post.posts.visible_to(user).order_by("-published_at")
+
+        posts = Post.posts.visible_to(user).order_by('-published_at')
 
         return posts
-    
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = "Latest posts"
-        
+        context['title'] = 'Latest posts'
+
         return context
 
 
 class PostDetail(DetailView):
     model = Post
-    context_object_name = "post"
-    
+    context_object_name = 'post'
+
     def get_queryset(self):
         user = self.request.user
-        
+
         self.posts = Post.posts.visible_to(user)
-        
+
         return self.posts
-    
-    
+
     def get_context_data(self, **kwargs):
         post: Post = self.get_object()
         user = self.request.user
-        
+
         context = super().get_context_data(**kwargs)
-        context["can_edit"] = post.can_edit(user)
-        
+        context['can_edit'] = post.can_edit(user)
+
         return context
 
 
 class PostDelete(DeleteView):
     model = Post
-    success_url = reverse_lazy("blog:index")
-    context_object_name = "post"
-    
+    success_url = reverse_lazy('blog:index')
+    context_object_name = 'post'
+
     def get_queryset(self):
         user = self.request.user
-        
+
         return Post.posts.editable_to(user)
 
 
 class PostCreate(CreateView):
-    template_name = "blog/post_create.html"
+    template_name = 'blog/post_create.html'
     form_class = PostCreateForm
-    
+
     def form_valid(self, form):
         post: Post = form.instance
         user: AbstractUser = self.request.user
-        
+
         if user.is_anonymous or not user.is_active:
             return False
-        
+
         post.author = user
         return super().form_valid(form)
 
-    
     def get_success_url(self):
         post: Post = self.object
-        return reverse_lazy("blog:edit", kwargs={"pk": post.pk})
+        return reverse_lazy('blog:edit', kwargs={'pk': post.pk})
 
 
 # renders title, is_published fields through standart django forms
 # renders content field through editor.js plugin
 class PostUpdate(UpdateView):
     model = Post
-    template_name = "blog/post_update.html"
+    template_name = 'blog/post_update.html'
     form_class = PostEditForm
-    
+
     def get_queryset(self):
         user = self.request.user
-        
+
         self.posts = Post.posts.editable_to(user)
-        
-        return self.posts 
-    
+
+        return self.posts
+
     def form_valid(self, form):
         post: Post = form.instance
         user: AbstractUser = self.request.user
-        
+
         if not post.can_edit(user):
-            form.add_error(None, "You don't have permission to edit this post.")
+            form.add_error(
+                None, "You don't have permission to edit this post."
+            )
             return self.form_invalid(form)
-        
+
         return super().form_valid(form)
-    
-    
+
     def get_success_url(self):
         post: Post = self.object
-        return reverse_lazy("blog:detail", kwargs={"pk": post.pk})
-
-
+        return reverse_lazy('blog:detail', kwargs={'pk': post.pk})
 
 
 def api_root(req: HttpRequest) -> JsonResponse:
-    
-    if req.method == "GET":
+    if req.method == 'GET':
         user = req.user
-        
+
         posts = Post.posts.visible_to(user)
-        
+
         for post in posts:
             PostContentSchema.model_validate(post.content)
-        
+
         serializer = PostSerializer(posts, many=True, context={'request': req})
 
-        return JsonResponse({"posts": serializer.data})
-        
-    
+        return JsonResponse({'posts': serializer.data})
+
     # add csrf token check
-    elif req.method == "POST":
-        
+    elif req.method == 'POST':
         if not req.user.is_authenticated:
             return JsonResponse(
-                {"error": "you should be authorized before create any posts!"},
-                status=401
+                {'error': 'you should be authorized before create any posts!'},
+                status=401,
             )
-        
+
         data = JSONParser().parse(req)
-        
+
         serializer = PostSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=201)
         else:
             return JsonResponse(serializer.errors, status=400)
-        
+
     else:
         return JsonResponse(
-                {"error": f"{req.method} is not allowed!"},
-                status=405
-            )
+            {'error': f'{req.method} is not allowed!'}, status=405
+        )
 
 
 def api_detail(req: HttpRequest, post_id: int) -> JsonResponse:
-    
     post: Post
     try:
         post = Post.objects.get(pk=post_id)
     except Post.DoesNotExist:
         return JsonResponse(
-            {"error": f"Requested post with id={post_id} does not exist!"},
-            status=404
+            {'error': f'Requested post with id={post_id} does not exist!'},
+            status=404,
         )
 
-    if req.method == "GET":
-        
+    if req.method == 'GET':
         if not post.can_see(req.user):
             return JsonResponse(
-            {"error": "You do not have permissions to see this post!"},
-            status=403
-        )
-        
+                {'error': 'You do not have permissions to see this post!'},
+                status=403,
+            )
+
         serializer = PostSerializer(post, context={'request': req})
         return JsonResponse(serializer.data)
-    
+
     if not req.user.is_authenticated:
         return JsonResponse(
-            {"error": "You should be authorized before edit any posts!"},
-            status=401
+            {'error': 'You should be authorized before edit any posts!'},
+            status=401,
         )
-        
+
     if not post.can_edit(req.user):
         return JsonResponse(
-            {"error": "You do not have permissions to edit this post!"},
-            status=403
+            {'error': 'You do not have permissions to edit this post!'},
+            status=403,
         )
-    
-    if req.method == "DELETE":
+
+    if req.method == 'DELETE':
         res = post.delete()
-        return JsonResponse({"deleted": res[0]}, status=200)
-    
-    elif req.method == "PATCH":
+        return JsonResponse({'deleted': res[0]}, status=200)
+
+    elif req.method == 'PATCH':
         data = JSONParser().parse(req)
-        
+
         serializer = PostSerializer(post, data=data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=200)
         return JsonResponse(serializer.errors, status=400)
-    
+
     else:
         return JsonResponse(
-                {"error": f"{req.method} is not allowed!"},
-                status=405
-            )
-
+            {'error': f'{req.method} is not allowed!'}, status=405
+        )
