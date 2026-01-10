@@ -1,3 +1,5 @@
+"""file with views for 'users' Django app."""
+
 # from celery.result import AsyncResult
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -15,12 +17,30 @@ from .tasks import process_avatar
 
 
 class RegisterView(CreateView):
+    """Class is being responsible for user registration.
+    
+    Attributes:
+        form_class: Django form is displayed on the page.
+        success_url: Page's URL where the client will be redirected on success.
+        template_name: Django template is used for rendering page.
+
+    """
+    
     form_class = UserCreationForm
     success_url = reverse_lazy('users:login')
     template_name = 'registration/register.html'
 
 
 def profile(req: HttpRequest) -> HttpResponse:
+    """Render the current user's personal page.
+    
+    Args:
+        req (HttpRequest): HTTP request from client's browser.
+        
+    Returns:
+        HttpResponse: HTTP response to the client with rendered HTML page.
+
+    """
     context = {'title': 'homepage', 'render_user': req.user}
 
     if hasattr(req.user, 'profile') and req.user.profile:
@@ -34,12 +54,33 @@ def profile(req: HttpRequest) -> HttpResponse:
 
 
 class ProfileUpdate(UpdateView):
+    """Handles profile editing.
+
+    Attributes:
+        form_class: Django form is displayed on the page.
+        template_name: Django template is used for rendering page.
+        object: instanse of the updated Profile.
+        
+    """
+
     form_class = ProfileChangeForm
     template_name = 'users/profileUpdate.html'
 
     object: Profile | None
 
     def get_object(self, queryset=None):
+        """Retrieve Profile instanse from the DB.
+
+        Args:
+            queryset (_type_, optional): _description_. Defaults to None.
+
+        Raises:
+            Http404: Profile couldn't be found or current user is unauthorized.
+
+        Returns:
+            Profile: Returns found profile instanse.
+
+        """
         user_id: int = self.kwargs['user_id']
 
         User = get_user_model()
@@ -53,6 +94,16 @@ class ProfileUpdate(UpdateView):
             raise Http404
 
     def form_valid(self: ProfileUpdate, form: ProfileChangeForm):
+        """Schedule avatar processing task on form validation success.
+
+        Args:
+            self (ProfileUpdate): instanse of ProfileUpdate.
+            form (ProfileChangeForm): form with validated data.
+
+        Returns:
+            HttpResponse: HTTP response redirects the client on success page.
+
+        """
         response = super().form_valid(form)
 
         profile = self.object
@@ -63,10 +114,29 @@ class ProfileUpdate(UpdateView):
         return response
 
     def get_success_url(self):
+        """Get success url for client redirection.
+
+        Returns:
+            _type_: URL where the client will be redirected.
+
+        """
         return reverse_lazy('users:profile')
 
 
 def detail(req: HttpRequest, user_id: int) -> HttpResponse:
+    """Render user's profile if the current one is unauthorized.
+
+    Args:
+        req (HttpRequest): HTTP request from client's browser.
+        user_id (int): ID of the user will be shown.
+
+    Raises:
+        Http404: Profile couldn't be found or current user is unauthorized.
+
+    Returns:
+        HttpResponse: HTTP response to the client with rendered HTML page.
+
+    """    
     user_model = get_user_model()
     other_user = get_object_or_404(user_model, pk=user_id)
 
@@ -91,6 +161,19 @@ def detail(req: HttpRequest, user_id: int) -> HttpResponse:
 
 @login_required
 def toggle_follow(req: HttpRequest, user_id: int):
+    """Switch user following relation.
+
+    Args:
+        req (HttpRequest): HTTP request from client's browser.
+        user_id (int): ID of the user will be followed/unfollowed.
+
+    Raises:
+        Http404: Profile couldn't be found or current user is unauthorized.
+
+    Returns:
+        HttpResponse: HTTP response redirects the client to the target profile.
+
+    """
     user_model = get_user_model()
     user_target = get_object_or_404(user_model, pk=user_id)
 

@@ -1,3 +1,5 @@
+"""file with URL patterns for 'users' Django app."""
+
 from django.urls import include, path
 
 from .views import (

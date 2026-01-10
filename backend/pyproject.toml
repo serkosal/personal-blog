@@ -24,7 +24,7 @@ dev = [
 
 [tool.ruff]
 line-length = 80
-lint.select = ["E", "F", "B", "I", "UP", "SIM", "PL"]
+lint.select = ["E", "F", "B", "I", "UP", "SIM", "PL", "D"]
 exclude = [
   "*/migrations/",
   "static/",

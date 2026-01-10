@@ -1,3 +1,5 @@
+"""file with celery tasks for 'users' Django's app."""
+
 from io import BytesIO
 
 from celery import Task, shared_task
@@ -10,6 +12,16 @@ from .models import Profile
 
 @shared_task(bind=True)
 def process_avatar(self: Task, profile_id: int) -> bool:
+    """Create different sized thumbnail images for avatar.
+
+    Args:
+        self (Task): Task object is returned by Celery.
+        profile_id (int): ID of the Profile avatar is processed.
+
+    Returns:
+        bool: True if avatar is processed successfully. 
+
+    """
     profile = Profile.objects.filter(pk=profile_id).first()
 
     if not profile or not profile.avatar:

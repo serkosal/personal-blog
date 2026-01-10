@@ -1,3 +1,5 @@
+"""file with signals for 'users' Django's app."""
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
@@ -11,31 +13,32 @@ from .models import Profile
 def create_user_profile(
     sender: type[AbstractUser], instance: AbstractUser, created: bool, **kwargs
 ) -> None:
-    """
-    This method is registered to automatically created profiles when new User's
-    instances created
+    """Create profiles for newly created User's instances.
+    
+    This method is registered to be called when new user's instanses are saved 
+    in the database.
+    
+    Args:
+        sender: Signal sender.
+        instance (AbstractUser): instance of the saved User's model.
+        created (bool): Was the model saved successfully?
+        **kwargs: keyword arguments.
 
-    :param sender: Signal sender
-    :type sender: type[AbstractUser]
-    :param instance: instance of the saved model. In our case it's User model
-    :type instance: AbstractUser
-    :param created: Is model successfully saved or not
-    :type created: bool
-    :param kwargs: Description
     """
     if created:
         Profile.objects.create(user=instance)
 
 
 def create_profiles_for_existing_users(sender, **kwargs) -> None:
-    """
-    This method is registered to automatically created profiles for existing
-    users without profiles
+    """Create profiles for users without profiles.
+    
+    This method is registered to be called when manage.py migrate is executed.
 
-    :param sender: Signal sender
-    :param kwargs: Other key-value arguments
-    """
+    Args:
+        sender: Signal sender.
+        **kwargs: Arbitrary keyword arguments.
 
+    """
     User: AbstractUser = get_user_model()
 
     for user in User.objects.all():

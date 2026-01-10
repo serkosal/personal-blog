@@ -1,3 +1,5 @@
+"""file for 'users' application models registration in Django admin panel."""
+
 from django.contrib import admin
 
 from .models import Follow, Profile
