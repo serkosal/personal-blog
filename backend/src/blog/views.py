@@ -2,17 +2,16 @@ from django.contrib.auth.models import AbstractUser
 from django.http import HttpRequest, JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import (
-    ListView,
-    DetailView,
-    DeleteView,
-    UpdateView,
     CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
 )
 from rest_framework.parsers import JSONParser
 
 from .forms.forms import PostCreateForm, PostEditForm
 from .models import Post
-
 from .serializers.post import PostSerializer
 from .serializers.post_content import PostContentSchema
 
@@ -105,9 +104,7 @@ class PostUpdate(UpdateView):
         user: AbstractUser = self.request.user
 
         if not post.can_edit(user):
-            form.add_error(
-                None, "You don't have permission to edit this post."
-            )
+            form.add_error(None, "You don't have permission to edit this post.")
             return self.form_invalid(form)
 
         return super().form_valid(form)
@@ -153,7 +150,7 @@ def api_root(req: HttpRequest) -> JsonResponse:
         )
 
 
-def api_detail(req: HttpRequest, post_id: int) -> JsonResponse:
+def api_detail(req: HttpRequest, post_id: int) -> JsonResponse:  # noqa: PLR0911
     post: Post
     try:
         post = Post.objects.get(pk=post_id)

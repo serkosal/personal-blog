@@ -1,6 +1,6 @@
 from pydantic import ValidationError
-
 from rest_framework import serializers
+
 from ..models import Post
 from .post_content import PostContentSchema
 
@@ -25,7 +25,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         try:
             validated = PostContentSchema.model_validate(value, mode='python')
         except ValidationError as err:
-            raise serializers.ValidationError(err.errors())
+            raise serializers.ValidationError(err.errors()) from err
 
         return validated.model_dump()
 

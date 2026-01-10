@@ -1,7 +1,7 @@
 from django import forms
 
-
 from blog.models import Post
+
 from .widgets import PostContentWidget
 
 

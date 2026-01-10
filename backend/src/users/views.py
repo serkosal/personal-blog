@@ -1,14 +1,14 @@
 # from celery.result import AsyncResult
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import CreateView, UpdateView
+from django.contrib.auth.forms import UserCreationForm
+from django.http import Http404, HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.http import HttpRequest, HttpResponse, Http404
+from django.views.generic import CreateView, UpdateView
 
-from .models import Profile, Follow
 from .forms import ProfileChangeForm
+from .models import Follow, Profile
 from .tasks import process_avatar
 
 # Create your views here.

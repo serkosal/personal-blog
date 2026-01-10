@@ -1,5 +1,5 @@
-from typing import List, Self, Union
 from enum import StrEnum
+from typing import Self
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -44,7 +44,7 @@ class ItemMetaUnordered(BaseModel):
     pass
 
 
-ItemMeta = Union[ItemMetaChecklist, ItemMetaOrdered, ItemMetaUnordered]
+ItemMeta = ItemMetaChecklist | ItemMetaOrdered | ItemMetaUnordered
 
 # MAIN
 
@@ -54,7 +54,7 @@ class Item(BaseModel):
 
     content: str = Field(default='')
     meta: ItemMeta
-    items: List[Self]
+    items: list[Self]
 
 
 class DataPostList(BaseModel):
@@ -62,4 +62,4 @@ class DataPostList(BaseModel):
 
     style: PostListStyles = PostListStyles.ordered
     meta: ItemMeta
-    items: List[Item]
+    items: list[Item]

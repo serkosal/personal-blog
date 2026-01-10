@@ -1,9 +1,10 @@
 from pathlib import Path
 
+from django.conf import settings
+
 # from django.core.files.storage import default_storage
 # from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.auth.models import AbstractUser
-from django.conf import settings
 from django.db import models
 
 

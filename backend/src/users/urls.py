@@ -1,10 +1,10 @@
-from django.urls import path, include
+from django.urls import include, path
 
 from .views import (
-    profile,
-    detail,
-    RegisterView,
     ProfileUpdate,
+    RegisterView,
+    detail,
+    profile,
     toggle_follow,
 )
 

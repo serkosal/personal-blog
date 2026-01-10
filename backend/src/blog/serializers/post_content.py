@@ -1,5 +1,5 @@
-from typing import Literal, List, Union
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -34,9 +34,9 @@ class DataParagraph(BaseModel):
     text: str
 
 
-BaseDataBlock = Union[
-    DataWarning, DataQuote, DataHeader, DataParagraph, DataPostList
-]
+BaseDataBlock = (
+    DataWarning | DataQuote | DataHeader | DataParagraph | DataPostList
+)
 
 
 BlockDataMapping = {
@@ -52,13 +52,13 @@ class ContentBlock(BaseModel):
     model_config = ConfigDict(extra='forbid')
 
     id: str
-    type: Union[
-        Literal['warning'],
-        Literal['paragraph'],
-        Literal['quote'],
-        Literal['header'],
-        Literal['list'],
-    ]
+    type: (
+        Literal['warning']
+        | Literal['paragraph']
+        | Literal['quote']
+        | Literal['header']
+        | Literal['list']
+    )
     data: BaseDataBlock
 
 
@@ -66,5 +66,5 @@ class PostContentSchema(BaseModel):
     model_config = ConfigDict(extra='forbid')
 
     time: datetime
-    blocks: List[ContentBlock]
+    blocks: list[ContentBlock]
     version: str

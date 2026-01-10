@@ -23,7 +23,14 @@ dev = [
 ]
 
 [tool.ruff]
-line-length = 79
+line-length = 80
+lint.select = ["E", "F", "B", "I", "UP", "SIM", "PL"]
+exclude = [
+  "*/migrations/",
+  "static/",
+  "media/",
+  "manage.py"
+]
 
 [tool.ruff.format]
 quote-style = "single"

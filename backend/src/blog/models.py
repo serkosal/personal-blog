@@ -42,9 +42,7 @@ class Post(models.Model):
     def content_default():
         return {'content': {}}
 
-    content = models.JSONField(
-        null=False, blank=False, default=content_default
-    )
+    content = models.JSONField(null=False, blank=False, default=content_default)
 
     started_at = models.DateTimeField(
         null=False, blank=False, auto_now_add=True

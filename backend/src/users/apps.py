@@ -7,9 +7,9 @@ class UsersConfig(AppConfig):
     name = 'users'
 
     def ready(self) -> None:
-        from .signals import (
-            create_user_profile,  # noqa: F401
+        from .signals import (  # noqa: PLC0415
             create_profiles_for_existing_users,
+            create_user_profile,  # noqa: F401
         )
 
         post_migrate.connect(create_profiles_for_existing_users, sender=self)
