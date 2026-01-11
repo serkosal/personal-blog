@@ -35,3 +35,6 @@ exclude = [
 [tool.ruff.format]
 quote-style = "single"
 docstring-code-format = true
+
+[tool.ruff.pydocstyle]
+convention = "google"
