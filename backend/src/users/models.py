@@ -6,20 +6,22 @@ from django.conf import settings
 
 # from django.core.files.storage import default_storage
 # from django.contrib.staticfiles.storage import staticfiles_storage
-from django.contrib.auth.models import AbstractUser, AbstractBaseUser
+from django.contrib.auth.models import (
+    AbstractUser, AbstractBaseUser, AnonymousUser
+)
 from django.db import models
 
 
 # Create your models here.
 class Profile(models.Model):
-    """Extends django's default User class.
+    """Extends django's default `User` class.
     
     Attributes:
-        user: primary key to User's model with OneToOne relationship.
+        user: primary key to `User` model with `OneToOne` relationship.
         avatar: stores path to the the original unprocessed avatar.
         AVATAR_SIZES: specifies avatar's sizes.
         avatar_is_set: specifies if avatar was already processed.
-        bio: user's description of themself.
+        bio: users' descriptions of themselves.
         is_private:
             specifies if profile could be seen by other unauthorized users.
         followers: users that following this one.
@@ -34,7 +36,7 @@ class Profile(models.Model):
     AVATAR_SIZES = (1024, 512, 256, 128, 64)
 
     def user_avatar_path(self: Profile, filename: str) -> str:
-        """Return path where avatar will be stored.
+        """Return `str` with path where avatar will be stored.
 
         Args:
             self (Profile): instance of Profile
@@ -48,7 +50,7 @@ class Profile(models.Model):
 
     @property
     def processed_avatar_pathes(self) -> list[Path]:
-        """Return list of pathes with processed avatar's images.
+        """Return `list` of pathes with processed avatar's images.
 
         Returns:
             list[Path]: list of pathes with processed avatar's images
@@ -112,7 +114,7 @@ class Profile(models.Model):
     )
 
     class Meta:
-        """Stores permissions for the Profile model."""
+        """Stores permissions for the `Profile` model."""
         
         permissions = (
             ('users.see_private', "Users can see other user's profiles"),
@@ -120,98 +122,129 @@ class Profile(models.Model):
         )
 
     def __str__(self) -> str:
-        """Represent the Profile class as a string.
+        """Represent the `Profile` class as a `str`.
 
         Returns:
-            str: Profile representation with user's nickname and id. 
+            str: `Profile` representation with user's nickname and pk. 
 
         """
         return f'Profile (username: {self.user}, user id: {self.user.pk})'
 
-    def can_be_seen(self, by: AbstractBaseUser | Profile) -> bool:
-        """Return True if the given profile can see this one.
+    def can_be_seen(
+        self, by: AbstractBaseUser | Profile | AnonymousUser
+    ) -> bool:
+        """Return True if `by` can see profile for which this method is 
+        called.
         
         Args:
-            by (AbstractBaseUser | Profile): the user whose ability to see 
-            this profile is checked.
+            self: is equal to the profile, for which this method was called. 
+            i.e. for `profile1.can_be_seen(user2)` an argument `self` will be 
+            equal to the `profile1`. 
+            Parameter `self` is passed by Python implicitly and must be named 
+            that way by conventions.   
+            
+            by: is the user who is checked for an ability to see a profile for 
+            which this method is called.
 
-        Raises:
-            ValueError: raised when 'by' is not an instance of AbstractBaseUser 
-            or Profile.
+        Raises: 
+          ValueError: is raised when: 
+            - `by` is not a subclass of the `AbstractBaseUser` or 
+            - `by` is not an instance of the `AnonymousUser` or the `Profile`.
 
         Returns:
-            bool: True if this profile can be seen.
+            bool: `True` if `by` can see the profile, for which this method was 
+            called.
 
         """
-        if isinstance(by, AbstractBaseUser):
-            by_user = by
-        elif isinstance(by, Profile):
-            by_user = by.user
-        else:
+        res = (not self.is_private) and self.user.is_active
+        
+        if isinstance(by, AbstractBaseUser) or isinstance(by, Profile):
+            by_user = by.user if isinstance(by, Profile) else by
+            
+            if not by_user.is_authenticated or not by_user.is_active:
+                return res
+            
+            if self.user.pk == by_user.pk:
+                return True
+    
+            if isinstance(by_user, AbstractUser) and by_user.has_perm('users.see_private'): 
+                return True
+                
+        
+        elif not isinstance(by, AnonymousUser):
+            raise ValueError(
+                "'by' must be a subclass of the AbstractBaseUser or an instance"
+                "of the AnonymousUser or the Profile."
+            )
+        
+        return res
+
+    def can_be_edited(self, by: AbstractBaseUser | Profile | AnonymousUser) -> bool:
+        """Return `True` if `by` can edit profile for which this method is 
+        called.
+        
+        Args:
+            self: is equal to the profile, for which this method is called. 
+            i.e. for `profile1.can_be_edited(user2)` an argument `self` will be 
+            equal to the `profile1`. 
+            Parameter `self` is passed by Python implicitly and must be named 
+            that way by conventions.
+            
+            by: is the user who is checked for an ability to edit a profile for 
+            which this method is called.
+
+        Raises:
+            ValueError: is raised when: 
+            - `by` is not a subclass of the `AbstractBaseUser` or 
+            - `by` is not an instance of the `AnonymousUser` or the `Profile`.
+
+        Returns:
+            bool: `True` if `by` can edit the profile, for which this method was 
+            called.
+
+        """        
+        if isinstance(by, AbstractBaseUser) or isinstance(by, Profile):
+            by_user = by.user if isinstance(by, Profile) else by
+            
+            if not by_user.is_authenticated or not by_user.is_active:
+                return False
+            
+            if self.user.pk == by_user.pk:
+                return True
+    
+            if isinstance(by_user, AbstractUser) and by_user.has_perm('users.edit_others'): 
+                return True
+                
+        
+        elif not isinstance(by, AnonymousUser):
             raise ValueError("'by' must be a subclass of 'AbstractBaseUser' or "
                 "an instance of 'Profile'!"
             )
-
-        return (
-            not self.is_private
-            or by_user.is_authenticated
-            and (
-                by_user == self.user
-                or by_user.is_active
-                and by_user.has_perm('users.see_private')
-            )
-        )
-
-    def can_be_edited(self, by: AbstractBaseUser | Profile) -> bool:
-        """Return True if the given user can edit this one.
         
-        Args:
-            by: the user whose ability to edit this profile is being checked.
+        return False
 
-        Raises:
-            ValueError: raised when 'by' is not an instance of AbstractBaseUser 
-            or Profile
-
-        Returns:
-            bool: True if this profile can be edited
-
-        """
-        if isinstance(by, AbstractBaseUser):
-            by_user = by
-        elif isinstance(by, Profile):
-            by_user = by.user
-        else:
-            raise ValueError("'by' must be a subclass of 'AbstractBaseUser' or "
-                "an instance of 'Profile'!"
-            )
-
-        return (
-            by_user.is_authenticated
-            and by_user.is_active
-            and (by_user == self.user or by_user.has_perm('users.edit_others'))
-        )
 
     def is_following(self, target: Profile) -> bool:
-        """Check whether this user follows the target.
+        """Check whether this user follows the `target`.
         
         Args:
-            target (Profile): the user who's checked for following this profile.
+            target: the user who's checked for following this profile.
 
         Returns:
-            bool: True if target is following
+            bool: `True` if target is following
 
         """
         return Follow.objects.filter(follower=self, followee=target).exists()
 
     def is_followed(self, by: Profile) -> bool:
-        """Check whether the given profile follows this one.
+        """Check whether `by` follows this profile.
         
         Args:
-            self (Profile): this user. 
-            by (Profile): the user whose following to this profile is checked.
+            self: this user. 
+            by: the user whose following to this profile is checked.
 
         Returns:
-            bool: True if 'by' follows this one.
+            bool: `True` if `by` follows this one.
 
         """
         return Follow.objects.filter(follower=by, followee=self).exists()
@@ -220,7 +253,7 @@ class Profile(models.Model):
         """Follow the given user.
         
         Args:
-            target (Profile): the user who will be followed by this profile.
+            target: the user who will be followed by this profile.
         
         """
         if self != target:
@@ -230,7 +263,7 @@ class Profile(models.Model):
         """Unfollow the given user.
         
         Args:
-            target (Profile): the user who will be unfollowed by this profile.
+            target: the user who will be unfollowed by this profile.
         
         """
         Follow.objects.filter(followee=target, follower=self).delete()
@@ -240,7 +273,7 @@ class Follow(models.Model):
     """Represents follow relationship.
     
     Attributes:
-        followee: the user that's FOLLOWED BY OTHER user(s).
+        followee: the user that is FOLLOWED BY OTHER user(s).
         follower: the user that is FOLLOWING other user.
     
         created_at: datetime when the relation was created.
@@ -257,6 +290,6 @@ class Follow(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        """Specifies unique constraints for the 'Follow' relationships."""
+        """Specifies unique constraints for the `Follow` relationships."""
         
         unique_together = ('followee', 'follower')
