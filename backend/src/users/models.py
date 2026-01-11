@@ -6,7 +6,7 @@ from django.conf import settings
 
 # from django.core.files.storage import default_storage
 # from django.contrib.staticfiles.storage import staticfiles_storage
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, AbstractBaseUser
 from django.db import models
 
 
@@ -27,7 +27,8 @@ class Profile(models.Model):
     """
     
     user: AbstractUser = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=False
+        settings.AUTH_USER_MODEL, related_name='profile', 
+        on_delete=models.CASCADE, null=False
     )
 
     AVATAR_SIZES = (1024, 512, 256, 128, 64)
@@ -127,28 +128,28 @@ class Profile(models.Model):
         """
         return f'Profile (username: {self.user}, user id: {self.user.pk})'
 
-    def can_be_seen(self, by: AbstractUser | Profile) -> bool:
+    def can_be_seen(self, by: AbstractBaseUser | Profile) -> bool:
         """Return True if the given profile can see this one.
         
         Args:
-            by (AbstractUser | Profile): the user whose ability to see 
+            by (AbstractBaseUser | Profile): the user whose ability to see 
             this profile is checked.
 
         Raises:
-            ValueError: raised when 'by' is not an instance of AbstractUser 
+            ValueError: raised when 'by' is not an instance of AbstractBaseUser 
             or Profile.
 
         Returns:
             bool: True if this profile can be seen.
 
         """
-        if isinstance(by, AbstractUser):
+        if isinstance(by, AbstractBaseUser):
             by_user = by
         elif isinstance(by, Profile):
             by_user = by.user
         else:
-            raise ValueError(
-                "'by' must be instance of 'AbstractUser' or 'Profile'!"
+            raise ValueError("'by' must be a subclass of 'AbstractBaseUser' or "
+                "an instance of 'Profile'!"
             )
 
         return (
@@ -161,27 +162,27 @@ class Profile(models.Model):
             )
         )
 
-    def can_be_edited(self, by: AbstractUser | Profile) -> bool:
+    def can_be_edited(self, by: AbstractBaseUser | Profile) -> bool:
         """Return True if the given user can edit this one.
         
         Args:
             by: the user whose ability to edit this profile is being checked.
 
         Raises:
-            ValueError: raised when 'by' is not an instance of AbstractUser 
+            ValueError: raised when 'by' is not an instance of AbstractBaseUser 
             or Profile
 
         Returns:
             bool: True if this profile can be edited
 
         """
-        if isinstance(by, AbstractUser):
+        if isinstance(by, AbstractBaseUser):
             by_user = by
         elif isinstance(by, Profile):
             by_user = by.user
         else:
-            raise ValueError(
-                "'by' must be instance of 'AbstractUser' or 'Profile'!"
+            raise ValueError("'by' must be a subclass of 'AbstractBaseUser' or "
+                "an instance of 'Profile'!"
             )
 
         return (

@@ -1,4 +1,4 @@
-{% if profile %}
+{% if user and user.is_authenticated %}
 
     {% load static %}
 
@@ -7,12 +7,12 @@
     {% endif %}
 
     <img
-        {{profile.avatar_img_attrs|safe}}
+        {{user.profile.avatar_img_attrs|safe}}
         width="64px"
         height="64px"
     >
 
-    {% if not no_userlink %}
+    {% if not no_userlink%}
         </a>
     {% endif %}
 

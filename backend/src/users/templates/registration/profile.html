@@ -7,7 +7,7 @@
 
         {% if render_user.is_authenticated %}
             <div class="flex-row" style="align-items: center;">
-                {% include "users/partials/avatar.html" with profile=render_user.profile %}
+                {% include "users/partials/avatar.html" with user=render_user %}
                 <div>
                     Username: {{ render_user.username }}
                 </div>

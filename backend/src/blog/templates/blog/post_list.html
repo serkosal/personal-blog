@@ -23,7 +23,7 @@
                         Author: <a href="{% url 'users:detail' post.author.pk %}">{{ post.author }}</a>
                     </div>
                     
-                    {% include "users/partials/avatar.html" with profile=post.author.profile %}
+                    {% include "users/partials/avatar.html" with user=post.author %}
                 </div>
             </div>
                 
