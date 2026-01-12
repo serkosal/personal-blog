@@ -5,54 +5,49 @@ from users.models import Profile
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 
-# Create your tests here.
-
-# registration test
-# login test 
-# password change test
-# check authentification rights
-
 # region Base test classes
 
-class BaseProfilePermissionsTests(TestCase):
+class BaseTests(TestCase):
     
-    def setUp(self):
-        self.user_model = get_user_model()
-        self.usernames = (
+    # this method is faster than SetUp, because it's created just once for class
+    @classmethod
+    def setUpTestData(cls):
+        cls.user_model = get_user_model()
+        cls.usernames = (
             "pub1", "pub2", "priv", "admin",
             "deact", "anon", "deact_admin"
         )
         
-        self.users = {
-            username: self.user_model(username=username, password="test") 
-            for username in self.usernames
+        cls.users = {
+            username: cls.user_model(username=username, password="test") 
+            for username in cls.usernames
             if username != "anon"
         }
 
-        self.users["admin"].is_superuser = True
-        self.users["deact"].is_active = False
-        self.users["deact_admin"].is_superuser = True
-        self.users["deact_admin"].is_active = False
+        cls.users["admin"].is_superuser = True
+        cls.users["deact"].is_active = False
+        cls.users["deact_admin"].is_superuser = True
+        cls.users["deact_admin"].is_active = False
         
-        for value in self.users.values(): 
+        for value in cls.users.values(): 
             value.save()
         
-        self.users["anon"] = AnonymousUser()
+        cls.users["anon"] = AnonymousUser()
         
 
-        self.pub1: Profile  = self.users["pub1"].profile
-        self.pub2: Profile  = self.users["pub2"].profile
-        self.priv: Profile  = self.users["priv"].profile
-        self.admin: Profile = self.users["admin"].profile
-        self.deact: Profile = self.users["deact"].profile
-        self.deact_admin: Profile = self.users["deact_admin"].profile
+        cls.pub1: Profile  = cls.users["pub1"].profile
+        cls.pub2: Profile  = cls.users["pub2"].profile
+        cls.priv: Profile  = cls.users["priv"].profile
+        cls.admin: Profile = cls.users["admin"].profile
+        cls.deact: Profile = cls.users["deact"].profile
+        cls.deact_admin: Profile = cls.users["deact_admin"].profile
         
-        self.priv.is_private = True
-        self.priv.save()
+        cls.priv.is_private = True
+        cls.priv.save()
 
 # endregion
 
-class ProfileTests(TestCase):
+class Creation(TestCase):
     
     def setUp(self):
         self.user_model = get_user_model()
@@ -76,7 +71,7 @@ class ProfileTests(TestCase):
 
 # region permissions tests
 
-class ProfileCanSeeTests(BaseProfilePermissionsTests):
+class CanSee(BaseTests):
     
     # users' ability to see themselves
     def test_public_can_see_itself(self):
@@ -132,7 +127,7 @@ class ProfileCanSeeTests(BaseProfilePermissionsTests):
     def test_users_with_perms_can_see_deact(self):
         self.assertTrue(self.deact.can_be_seen(by=self.admin))    
 
-class ProfileCanEditTests(BaseProfilePermissionsTests):
+class CanEdit(BaseTests):
     
     # users' ability to edit themselves
     def test_public_can_edit_itself(self):
