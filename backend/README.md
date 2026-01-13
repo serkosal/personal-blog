@@ -17,6 +17,20 @@ use `ruff check`, for see linting errors
 `ruff check --select I001,E501 --fix`
 `ruff check --ignore E501`
 
+# testing 
+`cd backend`
+activate venv
+`python manage.py test`
+
+## tests coverages
+```shell
+cd src
+coverage run manage.py test
+coverage report
+```
+
+html report: `coverage html -d ../tests_coverage`
+
 
 # documentation
 
@@ -30,7 +44,11 @@ use `ruff check`, for see linting errors
   - src/main - is the django's project folder. But it's also has the main router in it
     and also global-wide template files.
   - src/blog, src/users - django's app dirs.
-  - src/manage.py - is used by django for executing commands.
+  - src/manage.py - is used by django for executing commands.\
+
+- docs documentation folder
+  - build 
+  - source
 
 - proproject.toml, uv.lock, .python-version - UV related files.
 - Dockerfile, django-entrypoint.sh, .dockerignore - Docker related files.

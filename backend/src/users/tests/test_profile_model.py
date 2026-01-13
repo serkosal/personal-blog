@@ -49,7 +49,8 @@ class BaseTests(TestCase):
 
 class Creation(TestCase):
     
-    def setUp(self):
+    @classmethod
+    def setUpTestData(self):
         self.user_model = get_user_model()
     
     def test_user_creation(self):
@@ -171,6 +172,5 @@ class CanEdit(BaseTests):
             
             edited_profile: Profile = edited.profile
             self.assertFalse(edited_profile.can_be_edited(by=self.deact_admin))
-        
-        
+
 # endregion
