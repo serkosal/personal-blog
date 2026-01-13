@@ -94,9 +94,13 @@ submit_form?.addEventListener('submit', async function (ev) {
             body: formData,
         });
 
-        const result = await response.text();
-        console.log(result);
 
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else {
+            const result = await response.text();
+            console.log(result);
+        }
     }).catch((error) => {
         console.log('Saving failed: ', error);
     })

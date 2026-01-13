@@ -76,13 +76,8 @@ class Post(models.Model):
     )
 
     # rewrite to a custom json Field
-    def content_default(self: Post):
-        """Get post's default content data.
-        
-        Args:
-            self: instance of the Post model.
-        
-        """
+    def content_default():
+        """Get post's default content data."""
         return {'content': {}}
 
     content = models.JSONField(null=False, blank=False, default=content_default)

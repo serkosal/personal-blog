@@ -1,8 +1,8 @@
 """File with views for 'blog' Django app."""
 
 from django.contrib.auth.models import AbstractUser
-from django.http import HttpRequest, JsonResponse
-from django.urls import reverse_lazy
+from django.http import HttpRequest, JsonResponse, HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -139,7 +139,7 @@ class PostCreate(CreateView):
             self (PostCreate): instance of the PostCreate class.
         
         """
-        return reverse_lazy('blog:edit', kwargs={'pk': self.object.pk})
+        return reverse('blog:edit', kwargs={'pk': self.object.pk})
 
 
 # renders title, is_published fields through standart django forms
@@ -178,7 +178,7 @@ class PostUpdate(UpdateView):
         if not post.can_edit(user):
             form.add_error(None, "You don't have permission to edit this post.")
             return self.form_invalid(form)
-
+        
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -189,7 +189,7 @@ class PostUpdate(UpdateView):
 
         """
         post: Post = self.object
-        return reverse_lazy('blog:detail', kwargs={'pk': post.pk})
+        return reverse('blog:detail', kwargs={'pk': post.pk})
 
 
 def api_root(req: HttpRequest) -> JsonResponse:
