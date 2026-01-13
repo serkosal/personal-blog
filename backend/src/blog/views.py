@@ -42,7 +42,7 @@ class PostList(ListView):
         
         Args:
             self (PostList): instance of the PostList class.
-            **kwargs: Arbitrary keyword arguments.
+            `**kwargs`: Arbitrary keyword arguments.
         
         """
         context = super().get_context_data(**kwargs)
@@ -75,7 +75,7 @@ class PostDetail(DetailView):
         
         Args:
             self (PostDetail): instance of the PostDetail class.
-            **kwargs: Arbitrary keyword arguments.
+            `**kwargs`: Arbitrary keyword arguments.
 
         """
         post: Post = self.get_object()

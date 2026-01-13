@@ -4,11 +4,6 @@ blog package
 Subpackages
 -----------
 
-.. toctree::
-   :maxdepth: 4
-
-   blog.migrations
-
 Submodules
 ----------
 

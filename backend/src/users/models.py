@@ -27,7 +27,6 @@ class Profile(models.Model):
         followers: users that following this one.
 
     """
-    
     user: AbstractUser = models.OneToOneField(
         settings.AUTH_USER_MODEL, related_name='profile', 
         on_delete=models.CASCADE, null=False

@@ -18,9 +18,9 @@ use `ruff check`, for see linting errors
 `ruff check --ignore E501`
 
 
-# documentation 
-`cd src`
-`uv run python django-pydoc.py -p 7000`
+# documentation
+
+[read here](./docs/README.md)
 
 # files and dir
 

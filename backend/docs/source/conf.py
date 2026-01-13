@@ -27,7 +27,13 @@ release = '0.0.4'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "sphinx.ext.autodoc",
+    "sphinx.ext.autodoc",               # auto documenting 
+    "sphinx.ext.napoleon",              # doctring google format
+    "sphinx.ext.intersphinx",           # links to an external libraries
+    "sphinx.ext.viewcode",
+    "sphinx.ext.todo",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.coverage" 
 ]
 
 templates_path = ['_templates']

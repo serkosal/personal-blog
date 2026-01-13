@@ -5,7 +5,5 @@ src
    :maxdepth: 4
 
    blog
-   django-pydoc
    main
-   manage
    users
