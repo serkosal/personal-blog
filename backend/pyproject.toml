@@ -20,6 +20,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "ruff>=0.14.11",
+    "sphinx>=9.1.0",
 ]
 
 [tool.ruff]
