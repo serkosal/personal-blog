@@ -36,7 +36,7 @@ def process_avatar(self: Task, profile_id: int) -> bool:
                     img_converted = img.convert('RGBA')
                     img_converted.thumbnail((size, size))
 
-                    path = profile.user_directory_path(f'{size}.webp')
+                    path = profile.user_avatar_path(f'{size}.webp')
                     buf = BytesIO()
                     img_converted.save(buf, format='WEBP', quality=80, method=6)
 
