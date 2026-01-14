@@ -1,6 +1,7 @@
 networks:
   appnet:
-    external: false
+    external: true
+    name: shared_appnet
 
 # base component for all services
 x-base: &base
