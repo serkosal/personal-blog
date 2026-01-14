@@ -32,10 +32,17 @@ class PostList(ListView):
         
         """
         user = self.request.user
+        self.posts = Post.posts.visible_to(user)
+        
+        tags = self.request.GET.get("tags", '')
+        if tags:
+            tags_list = [t.lower() for t in tags.split(',')]
+            self.posts = self.posts.filter(tags__name__in=tags_list)
 
-        posts = Post.posts.visible_to(user).order_by('-published_at')
+        
+        self.posts = self.posts.order_by('-published_at')
 
-        return posts
+        return self.posts
 
     def get_context_data(self, **kwargs):
         """Get the context data.
@@ -83,6 +90,7 @@ class PostDetail(DetailView):
 
         context = super().get_context_data(**kwargs)
         context['can_edit'] = post.can_edit(user)
+        context['tags'] = post.tags.all()
 
         return context
 

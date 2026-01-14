@@ -24,8 +24,13 @@
                     </div>
                     
                     {% include "users/partials/avatar.html" with user=post.author %}
+
                 </div>
             </div>
+
+            {% for tag in post.tags.all|slice:"5" %}
+                <a href="{% url 'blog:index' %}?tags={{tag}}">#{{tag}}</a>
+            {% endfor %}
                 
             <div>
                 {% if post.content.blocks %}

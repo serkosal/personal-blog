@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import Q
+from taggit.managers import TaggableManager
 
 
 class PostManager(models.Manager):
@@ -74,6 +75,8 @@ class Post(models.Model):
     title = models.CharField(
         max_length=100, null=False, blank=True, default='Title'
     )
+    
+    tags = TaggableManager()
 
     # rewrite to a custom json Field
     def content_default():

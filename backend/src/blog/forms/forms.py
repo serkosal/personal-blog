@@ -24,5 +24,5 @@ class PostEditForm(forms.ModelForm):
         """Metadata for ModelForm."""
         
         model = Post
-        fields = ['title', 'content', 'is_published']
+        fields = ['title', 'content', 'tags', 'is_published']
         widgets = {'content': PostContentWidget()}

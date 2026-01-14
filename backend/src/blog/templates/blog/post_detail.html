@@ -30,6 +30,10 @@
             </div>
         </div>
         
+        {% for tag in tags %}
+            <a href="{% url 'blog:index' %}?tags={{tag}}">#{{tag}}</a>
+        {% endfor %}
+
         <h1> {{ post.title }} </h1>
         <p>
             {% if post.content.blocks %}

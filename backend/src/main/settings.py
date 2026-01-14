@@ -49,6 +49,8 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
+    # 3rd-party apps
+    'taggit',
     # my own apps
     'users',
     'main',
