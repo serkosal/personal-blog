@@ -2,7 +2,6 @@
 
 # from celery.result import AsyncResult
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.http import Http404, HttpRequest, HttpResponse
@@ -150,10 +149,10 @@ def detail(req: HttpRequest, user_id: int) -> HttpResponse:
         'title': 'homepage',
         'render_user': other_user,
         'can_edit': False, 
-        'can_follow': False, #is_auth and req.user != other_user,
-        'is_followed': False, #is_auth and other_profile.is_followed(by=profile),
-        'followers': [], #other_profile.followers.all() if is_auth else [],
-        'following': [], #other_profile.following.all() if is_auth else [],
+        'can_follow': False,
+        'is_followed': False, 
+        'followers': [],
+        'following': [],
     }
     
     if req.user.is_authenticated and hasattr(req.user, 'profile'):

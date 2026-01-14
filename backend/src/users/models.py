@@ -7,7 +7,9 @@ from django.conf import settings
 # from django.core.files.storage import default_storage
 # from django.contrib.staticfiles.storage import staticfiles_storage
 from django.contrib.auth.models import (
-    AbstractUser, AbstractBaseUser, AnonymousUser
+    AbstractBaseUser,
+    AbstractUser,
+    AnonymousUser,
 )
 from django.db import models
 
@@ -132,7 +134,9 @@ class Profile(models.Model):
     def can_be_seen(
         self, by: AbstractBaseUser | Profile | AnonymousUser
     ) -> bool:
-        """Return True if `by` can see profile for which this method is 
+        """Return True if ``by`` can see this profile.
+        
+        Return True if ``by`` can see profile for which this method is
         called.
         
         Args:
@@ -145,7 +149,7 @@ class Profile(models.Model):
             by: is the user who is checked for an ability to see a profile for 
             which this method is called.
 
-        Raises: 
+        Raises:
           ValueError: is raised when: 
             - `by` is not a subclass of the `AbstractBaseUser` or 
             - `by` is not an instance of the `AnonymousUser` or the `Profile`.
@@ -157,7 +161,7 @@ class Profile(models.Model):
         """
         res = (not self.is_private) and self.user.is_active
         
-        if isinstance(by, AbstractBaseUser) or isinstance(by, Profile):
+        if isinstance(by, (AbstractBaseUser,  Profile)):
             by_user = by.user if isinstance(by, Profile) else by
             
             if not by_user.is_authenticated or not by_user.is_active:
@@ -166,7 +170,10 @@ class Profile(models.Model):
             if self.user.pk == by_user.pk:
                 return True
     
-            if isinstance(by_user, AbstractUser) and by_user.has_perm('users.see_private'): 
+            if (
+                isinstance(by_user, AbstractUser) 
+                and by_user.has_perm('users.see_private')
+            ):
                 return True
                 
         
@@ -178,10 +185,15 @@ class Profile(models.Model):
         
         return res
 
-    def can_be_edited(self, by: AbstractBaseUser | Profile | AnonymousUser) -> bool:
-        """Return `True` if `by` can edit profile for which this method is 
-        called.
+    def can_be_edited(
+        self, 
+        by: AbstractBaseUser | Profile | AnonymousUser
+    ) -> bool:
+        """Return `True` if `by` can edit this profile.
         
+        Returns `True` if ``by`` for which this method is
+        called.
+
         Args:
             self: is equal to the profile, for which this method is called. 
             i.e. for `profile1.can_be_edited(user2)` an argument `self` will be 
@@ -198,11 +210,11 @@ class Profile(models.Model):
             - `by` is not an instance of the `AnonymousUser` or the `Profile`.
 
         Returns:
-            bool: `True` if `by` can edit the profile, for which this method was 
-            called.
-
-        """        
-        if isinstance(by, AbstractBaseUser) or isinstance(by, Profile):
+            bool: `True` if `by` can edit the profile, for which this method 
+            was called.
+            
+        """
+        if isinstance(by, (AbstractBaseUser, Profile)):
             by_user = by.user if isinstance(by, Profile) else by
             
             if not by_user.is_authenticated or not by_user.is_active:
@@ -211,7 +223,9 @@ class Profile(models.Model):
             if self.user.pk == by_user.pk:
                 return True
     
-            if isinstance(by_user, AbstractUser) and by_user.has_perm('users.edit_others'): 
+            if (isinstance(by_user, AbstractUser) 
+                and by_user.has_perm('users.edit_others')
+            ): 
                 return True
                 
         

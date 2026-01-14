@@ -36,7 +36,7 @@ def create_profiles_for_existing_users(sender, **kwargs) -> None:
 
     Args:
         sender: Signal sender.
-        `**kwargs`: Arbitrary keyword arguments.
+        kwargs: Arbitrary keyword arguments.
 
     """
     User: AbstractUser = get_user_model()
