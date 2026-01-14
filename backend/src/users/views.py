@@ -158,7 +158,7 @@ def detail(req: HttpRequest, user_id: int) -> HttpResponse:
     
     if req.user.is_authenticated and hasattr(req.user, 'profile'):
         profile: Profile = req.user.profile
-        context['can_edit'] = profile.can_be_edited(req.user)
+        context['can_edit'] = other_profile.can_be_edited(req.user)
         context['can_follow'] = req.user != other_user
         context['is_followed'] = other_profile.is_followed(by=profile)
         context['followers'] = other_profile.followers.all()
