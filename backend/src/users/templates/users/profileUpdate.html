@@ -1,7 +1,7 @@
 {% extends "main/base.html" %}
 
 {% block content %}
-
+<div class="profile">
     <h1>User profile</h1>
     {% if form %}
     <form method="post" enctype="multipart/form-data">
@@ -12,5 +12,5 @@
         <button type="submit">Update</button>
     </form>    
     {% endif %}
-    
+</div>
 {% endblock %}

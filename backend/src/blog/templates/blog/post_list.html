@@ -12,7 +12,7 @@
 
     {% if posts_list %}
         {% for post in posts_list %}
-
+        <div class="post">
             {# post header #}
             <div class="flex-row justify-between">
                 <a href="{% url 'blog:detail' post.id %}">
@@ -34,7 +34,7 @@
                     {% endfor %}
                 {% endif %}
             </div>
-            <hr>
+        </div>
         {% endfor %}
     {% else %}
         <p>No posts are available.</p>

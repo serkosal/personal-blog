@@ -1,12 +1,6 @@
 blog package
 ============
 
-Subpackages
------------
-
-Submodules
-----------
-
 blog.admin module
 -----------------
 

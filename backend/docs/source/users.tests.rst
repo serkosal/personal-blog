@@ -1,21 +1,37 @@
 users.tests package
 ===================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   users.tests.models
+
 Submodules
 ----------
 
-users.tests.follow\_test module
--------------------------------
+users.tests.base module
+-----------------------
 
-.. automodule:: users.tests.follow_test
+.. automodule:: users.tests.base
    :members:
    :show-inheritance:
    :undoc-members:
 
-users.tests.test\_profile\_model module
----------------------------------------
+users.tests.test\_signals module
+--------------------------------
 
-.. automodule:: users.tests.test_profile_model
+.. automodule:: users.tests.test_signals
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+users.tests.test\_tasks module
+------------------------------
+
+.. automodule:: users.tests.test_tasks
    :members:
    :show-inheritance:
    :undoc-members:

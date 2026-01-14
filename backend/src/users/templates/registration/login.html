@@ -1,7 +1,7 @@
 {% extends "main/base.html" %}
 
 {% block content %}
-
+<div class="profile">
     {% if form.errors %}
         <p>Your username and password didn't match. Please try again.</p>
     {% endif %}
@@ -37,5 +37,5 @@
         <button type="submit">Log In</button>
         <input type="hidden" name="next" value="{{ next }}">
     </form>
-    
+</div>
 {% endblock %}

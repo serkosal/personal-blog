@@ -6,8 +6,7 @@
 
 {% block content %}
     {% if post %}
-        
-        <h1> {{ post.title }} </h1>
+    <div class="post">
 
         {# post header #}
         <div class="flex-row justify-between">
@@ -30,6 +29,8 @@
                 {% include "users/partials/avatar.html" with user=post.author %}
             </div>
         </div>
+        
+        <h1> {{ post.title }} </h1>
         <p>
             {% if post.content.blocks %}
 
@@ -39,6 +40,6 @@
 
             {% endif %}
         </p>
-        
+    </div>
     {% endif %}
 {% endblock %}

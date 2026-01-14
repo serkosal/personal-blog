@@ -3,17 +3,17 @@
 {% load static %}
 
 {% block content %}
+<div class="post">
+    <h1>Edit post</h1>
+    {{ form.errors}}
+    <form method="post">
+        {% csrf_token %}
 
-<h1>Edit post</h1>
-{{ form.errors}}
-<form method="post">
-    {% csrf_token %}
+        {{ form }}
 
-    {{ form }}
-
-    <button type="submit" id="editorjs-save">Edit</button>
-</form>
-
+        <button type="submit" id="editorjs-save">Edit</button>
+    </form>
+</div>
 {% endblock %}
 
 
