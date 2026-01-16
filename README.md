@@ -1,36 +1,83 @@
-# services
+# services | Сервисы
 
-1. db
-2. rabbitmq
-3. django
-4. celery
+1. frontend
+2. django
+3. nginx
+4. db 
+5. rabbitmq
+6. celery
 
-# launch
+# WARNING | ВНИМАНИЕ !
+[!WARNING]
+**All commands provided in README.md files must be executed from their directories!**
+**Все команды из README.md файлы должны выполняться из тех же директорий!** 
 
-using dev environment: 
-`docker compose -f docker-compose.dev.yml up`
+# Launch | Запуск
 
-# environment and configuration
-DJANGO_DEBUG_ENABLED=0
-DJANGO_SECRET_KEY='django-secret-key'
+using configuration for development | используя конфигурацию для разработки
+```shell
+docker compose -f docker-compose.dev.yml up
+```
 
-POSTGRES_DB="site"
-POSTGRES_USER="postgres-user"
-POSTGRES_PASSWORD='password'
-POSTGRES_HOST="db"
-POSTGRES_PORT='5432'
+using configuration for production | используя конфигурацию для продакшена
+```shell
+docker compose up
+```
 
-RABBITMQ_DEFAULT_USER=guest
-RABBITMQ_DEFAULT_PASS=guest
+## Standalone launch (without Docker) | Запуск бэкенда автономно (без Docker'а)
+
+1.  build frontend static files | собрать файлы фронта:
+    ```shell
+        cd frontend
+        npm install
+        npm run build
+    ```
+
+2.  download backend's dependencies | скачать зав-ти бэкенда:
+    ```shell
+        cd ../backend
+    ```
+
+    -   Using `pip` | Используя `pip`:
+        ```shell
+            ######################## FOR Windows | Для Windows #####################
+            python -m venv .venv                                                   #
+            .venv/bin/activate.bat                                                 #
+            ########################################################################
+
+            ############## FOR Linux, MacOs, WSL | Для Linux, MacOS, WSL  ##########
+            python3 -m venv .venv                                                  #
+            source .venv/bin/activate                                              #
+            ########################################################################
+        ```
+
+    -   Or using `uv` | Или используя `uv`
+        ```shell
+            uv sync
+        ```
+
+3.  Run development server | Запустить сервер для разработки python:
+    -   Using `uv` | Используя `uv`:
+        ```shell 
+            uv run python 
+        ```
+    -   Without `uv` | Без `uv`:
+        ```shell 
+            python manage.py runserver
+        ```
 
 
-# deployment
-1. set desired parameters in .env file and backend/src/main
-2. `docker compose -f docker-compose.yml up`
+# environment and configuration | Среда и конфигурация
+environment files stored in `secrets` folder | Файлы с переменными среды 
+расположены в папке `secrets`.
 
-## scaling challenges
+# deployment | Деплой
+1.  set desired parameters in .env file and backend/src/main/settings.py
+2.  `docker compose up`
+
+## scaling challenges | Сложности масштабирования
 
 [!WARNING]
-it's impossible to move workers to another server, because task process_avatar
-stores image on django's storage. Use NFS for temp files or 
-save entire image to the db 
+it's impossible to move workers to another server, because service `celery` 
+needs files from the same host machine as `django`. 
+Use `NFS` to share files across machines.

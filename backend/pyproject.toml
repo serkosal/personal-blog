@@ -5,6 +5,8 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.14"
 
+# dependencies which are required for launch backend.
+# зависимости, которые требуются для запуска бэкенда.
 dependencies = [
     "celery>=5.6.2",
     "django>=5.2.8",
@@ -20,6 +22,8 @@ dependencies = [
 ]
 
 [dependency-groups]
+# dependencies which are required only for development.
+# зависимости, которые требуются только для разработки.
 dev = [
     "coverage>=7.13.1",
     "ruff>=0.14.11",
@@ -27,6 +31,8 @@ dev = [
     "sphinx-rtd-theme>=3.1.0",
 ]
 
+# settings for auto-formatter and linting tool 'ruff' for python.
+# настройки для авто-форматера и линтовщика 'ruff' для python  
 [tool.ruff]
 line-length = 80
 lint.select = ["E", "F", "B", "I", "UP", "SIM", "PL", "D"]

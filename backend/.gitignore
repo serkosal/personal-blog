@@ -5,8 +5,9 @@ __pycache__/
 *$py.class
 
 # django static
-staticfiles/*
-src/media/*
+src/static
+src/staticfiles
+src/media
 
 # C extensions
 *.so
