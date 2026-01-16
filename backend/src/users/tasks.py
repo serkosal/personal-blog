@@ -36,6 +36,7 @@ def process_avatar(self: Task, profile_id: int) -> bool:
                     img_converted = img.convert('RGBA')
                     img_converted.thumbnail((size, size))
 
+                    # returns f'users/{self.user.pk}/avatars/{size}.webp'
                     path = profile.user_avatar_path(f'{size}.webp')
                     buf = BytesIO()
                     img_converted.save(buf, format='WEBP', quality=80, method=6)
@@ -52,7 +53,8 @@ def process_avatar(self: Task, profile_id: int) -> bool:
         profile.avatar_is_set = True
 
         profile.save(update_fields=['avatar', 'avatar_is_set'])
-        default_storage.delete(avatar_to_del)
+        if default_storage.exists(avatar_to_del):
+            default_storage.delete(avatar_to_del)
 
         return True
 

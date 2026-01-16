@@ -1,0 +1,81 @@
+# base component for all services
+x-base: &base
+  env_file: secrets/.pre-prod.env
+  restart: "on-failure:5"
+  networks: 
+    - appnet
+
+x-base-backend: &base-backend
+  <<: *base
+  build: ./backend
+  image: backend:latest
+      
+
+
+services:  
+  # db:
+  #   <<: *base
+  #   image: postgres:14
+
+  frontend:
+    command: sh -c "npm run build"
+    build: frontend
+    volumes:
+      - shared_static:/app/backend/src/static:rw
+
+  django:
+    <<: *base-backend
+    depends_on:
+      - frontend
+      - nginx
+      - rabbitmq
+    volumes:
+      - shared_staticfiles:/app/backend/src/staticfiles:rw
+      - shared_media:/app/backend/src/media:rw
+      - sqlitedb:/app/backend/src/db/sqlite:rw
+    entrypoint: /app/backend/entrypoint.sh
+    command: sh -c "uv run gunicorn main.asgi:application -b 0.0.0.0:8000 -k uvicorn_worker.UvicornWorker"
+    
+
+  rabbitmq:
+    <<: *base
+    image: "rabbitmq:4.2"
+
+  nginx:
+    <<: *base
+    image: nginx:alpine
+    volumes:
+      - ./nginx/pre-prod/:/etc/nginx/conf.d/:ro
+      - shared_staticfiles:/usr/share/nginx/html/static:ro
+      - shared_media:/usr/share/nginx/html/media:ro
+    networks:
+      - appnet
+    ports:
+      - "80:80"
+
+  celery:
+    <<: *base-backend
+    depends_on:
+      - django
+    volumes:
+      - shared_staticfiles:/app/backend/src/staticfiles:ro
+      - shared_media:/app/backend/src/media:rw
+      - sqlitedb:/app/backend/src/db/sqlite:rw
+    command: sh -c "cd src && uv run celery -A main worker --loglevel=info --concurrency 1 -E"
+
+
+networks:
+  appnet:
+    external: true
+    name: shared_appnet
+
+volumes:
+  shared_static:
+  shared_staticfiles:
+  shared_media:
+  sqlitedb:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./db/sqlite
+      o: bind

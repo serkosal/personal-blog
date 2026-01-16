@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 
+def bool_env(env, default='false'):
+    TRUE_VALUES = ('1', 'true')
+    
+    var = os.environ.get(env, default).lower()
+    return var in TRUE_VALUES
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,18 +26,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    'SECRET_KEY',
-    'django-insecure-6q1i4p+c!z^lrg_qh4hg%=c44m6_30xrz56bw8$)j!w*8rn7vo',
-)
+SECRET_KEY = os.environ.get('SECRET_KEY')
+DEBUG = bool_env('DEBUG')
+LOCALHOST_ALLOWED = bool_env('LOCALHOST_ALLOWED')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG_ENABLED', '1').lower() in ('1', 'true')
-DEBUG_USE_SQLITE = os.environ.get('DEBUG_USE_SQLITE', '1').lower() in (
-    '1',
-    'true',
-)
-
+ALLOWED_HOSTS = []
 if not DEBUG:
     ALLOWED_HOSTS = [
         'www.serkosal.org',
@@ -43,14 +42,15 @@ if not DEBUG:
         'https://serkosal.org',
         'https://www.serkosal.org',
     ]
-else:
-    ALLOWED_HOSTS = []
+
+if LOCALHOST_ALLOWED: ALLOWED_HOSTS.extend(['127.0.0.1', 'localhost'])
 
 # Application definition
 
 INSTALLED_APPS = [
     # 3rd-party apps
     'taggit',
+    'django_vite',
     # my own apps
     'users',
     'main',
@@ -120,11 +120,16 @@ LOGGING = {
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if DEBUG and DEBUG_USE_SQLITE:
+USE_SQLITE = bool_env('USE_SQLITE')
+if USE_SQLITE:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': BASE_DIR / 'db/sqlite/db.sqlite3',
+            'TEST': {
+                'NAME': 'testdb',
+                'ENGINE': 'django.db.backends.sqlite3'
+            }
         }
     }
 else:
@@ -192,9 +197,26 @@ CELERY_TIMEZONE = 'UTC'
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_URL = 'static/'
+
+
+# django vite
+FRONTEND_HMR = bool_env('FRONTEND_HMR')
+DJANGO_VITE = {
+    "default": {
+        "dev_mode": FRONTEND_HMR,
+        "dev_server_host": "localhost",
+        "dev_server_port": 5173,
+        "dev_server_protocol": "http",
+    }
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
