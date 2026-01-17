@@ -1,7 +1,23 @@
+networks:
+  appnet:
+    external: true
+    name: shared_appnet
+
+volumes:
+  shared_static:
+  shared_staticfiles:
+  shared_media:
+  sqlitedb:
+    # driver: local
+    # driver_opts:
+    #   type: none
+    #   device: ./db/sqlite
+    #   o: bind
+
 # base component for all services
 x-base: &base
   env_file: secrets/.pre-prod.env
-  restart: "on-failure:5"
+  restart: "on-failure:1"
   networks: 
     - appnet
 
@@ -9,7 +25,6 @@ x-base-backend: &base-backend
   <<: *base
   build: ./backend
   image: backend:latest
-      
 
 
 services:  
@@ -30,11 +45,15 @@ services:
       - nginx
       - rabbitmq
     volumes:
+      - shared_static:/app/backend/src/static:rw
       - shared_staticfiles:/app/backend/src/staticfiles:rw
       - shared_media:/app/backend/src/media:rw
       - sqlitedb:/app/backend/src/db/sqlite:rw
     entrypoint: /app/backend/entrypoint.sh
-    command: sh -c "uv run gunicorn main.asgi:application -b 0.0.0.0:8000 -k uvicorn_worker.UvicornWorker"
+    command: 
+      sh -c "/app/backend/.venv/bin/python -m 
+      gunicorn main.asgi:application -b 0.0.0.0:8000 
+      -k uvicorn_worker.UvicornWorker"
     
 
   rabbitmq:
@@ -61,21 +80,6 @@ services:
       - shared_staticfiles:/app/backend/src/staticfiles:ro
       - shared_media:/app/backend/src/media:rw
       - sqlitedb:/app/backend/src/db/sqlite:rw
-    command: sh -c "cd src && uv run celery -A main worker --loglevel=info --concurrency 1 -E"
-
-
-networks:
-  appnet:
-    external: true
-    name: shared_appnet
-
-volumes:
-  shared_static:
-  shared_staticfiles:
-  shared_media:
-  sqlitedb:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./db/sqlite
-      o: bind
+    command: 
+      sh -c "cd src && /app/backend/.venv/bin/python -m 
+      celery -A main worker --loglevel=info --concurrency 1 -E"

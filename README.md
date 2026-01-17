@@ -35,8 +35,8 @@ docker compose up
         npm install
         npm run build
     ```
-
-2.  download backend's dependencies<br>
+nd's depend
+2.  download backend dependencies<br>
     скачать зав-ти бэкенда:
     ```shell
         cd ../backend
@@ -45,15 +45,16 @@ docker compose up
     -   Using `pip`<br>
         Используя `pip`:
         ```shell
-            ######################## FOR Windows | Для Windows #####################
-            python -m venv .venv                                                   #
-            .venv/bin/activate.bat                                                 #
-            ########################################################################
+            ######################## FOR Windows | Для Windows #################
+            python -m venv .venv                                               #
+            .venv/bin/activate.bat                                             #
+            ####################################################################
 
-            ############## FOR Linux, MacOs, WSL | Для Linux, MacOS, WSL  ##########
-            python3 -m venv .venv                                                  #
-            source .venv/bin/activate                                              #
-            ########################################################################
+            ############## FOR Linux, MacOs, WSL | Для Linux, MacOS, WSL  ######
+            python3 -m venv .venv                                              #
+            source .venv/bin/activate                                          #
+            # If using fish shell: source .venv/bin/activate.fish              #
+            ####################################################################
         ```
 
     -   Or using `uv`<br>
@@ -62,15 +63,23 @@ docker compose up
             uv sync
         ```
 
-3.  Run development server<br>
-    Запустить сервер для разработки python:
+3. Set environment variables `DEBUG=1` and `USE_SQLITE=1`
+
+4.  Configure and run development server<br>
+    Настроить и запустить сервер для разработки python:
+
     -   Using `uv` <br> Используя `uv`:
-        ```shell 
-            uv run python 
+        ```shell
+            uv run python manage.py migrate
+            uv run python manage.py collectstatic
+            uv run python manage.py runserver
         ```
     -   Without `uv` <br> Без `uv`:
+        **Make sure that python venv is activated**
         ```shell 
             python manage.py runserver
+            python manage.py migrate
+            python manage.py collectstatic
         ```
 
 

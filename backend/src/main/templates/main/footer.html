@@ -1,10 +1,14 @@
-<footer class="flex-row">
-    <nav>
+<footer class="flex-row justify-around">
+    <div>
         <a href="{% url 'index' %}">About</a>
-        <a href="{% url 'blog:index' %}">Blog</a>
-    </nav>
-    2025(c)
+    </div>
 
-    Icons provided by <a href="https://www.flaticon.com">flaticon</a>. 
-    More details <a href="{% url 'attributions' %}">here</a>
+    <a href="{% url 'blog:index' %}">Blog</a>
+
+    <div>2026(c)</div>
+
+    <div class="flex-col justify-between">
+        <div>Icons provided by <a href="https://www.flaticon.com">flaticon</a>.</div>
+        <div>More details <a href="{% url 'attributions' %}">here</a></div>
+    </div>
 </footer>

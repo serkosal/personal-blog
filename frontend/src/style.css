@@ -28,13 +28,27 @@ body {
   display: flex;
   flex-direction: column;
   place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  /* min-width: 320px; */
+}
+
+header {
+  width: 100%;
+  min-height: 10vh;
+  padding: 1rem;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
 }
 
 main {
-  width: 50%;
+  width: 65%;
   min-height: 80vh;
+}
+
+footer {
+  width: 100%;
 }
 
 h1 {
@@ -42,20 +56,35 @@ h1 {
   line-height: 1.1;
 }
 
+
+
 h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 
+hr {
+  width: 100%;
+}
+
 .post, .profile {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   background-color: #313131;
-  padding: 15px;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  padding: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .profile {
   display: flex;
   flex-direction: column;
+  align-items: center;
+}
+
+.align-center {
   align-items: center;
 }
 
@@ -72,7 +101,7 @@ h1, h2, h3, h4, h5, h6 {
 .flex-row {
   display: flex;
   flex-direction: row;
-  gap: 4px;
+  gap: 1rem;
 }
 
 .flex-col {

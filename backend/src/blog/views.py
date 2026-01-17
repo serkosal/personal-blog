@@ -40,7 +40,9 @@ class PostList(ListView):
             self.posts = self.posts.filter(tags__name__in=tags_list)
 
         
-        self.posts = self.posts.order_by('-published_at')
+        self.posts = self.posts.order_by(
+            '-is_published', '-published_at', '-last_edited'
+        )
 
         return self.posts
 

@@ -122,10 +122,12 @@ LOGGING = {
 
 USE_SQLITE = bool_env('USE_SQLITE')
 if USE_SQLITE:
+    db_name = ('db.sqlite3' if DEBUG  else 'dev_db.sqlite3')
+    
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db/sqlite/db.sqlite3',
+            'NAME': BASE_DIR / f'db/sqlite/{db_name}',
             'TEST': {
                 'NAME': 'testdb',
                 'ENGINE': 'django.db.backends.sqlite3'

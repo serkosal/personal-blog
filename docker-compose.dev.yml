@@ -1,7 +1,15 @@
+networks:
+  appnet:
+    external: true
+    name: shared_appnet
+
+volumes:
+  shared_media:
+
 # base component for all services
 x-base: &base
   env_file: secrets/.dev.env
-  restart: "on-failure:5"
+  restart: "on-failure:1"
   networks: 
     - appnet
 
@@ -11,7 +19,7 @@ x-base-backend: &base-backend
   build: ./backend
   image: backend:latest
   volumes:
-    - backend_src:/app/backend/src:rw
+    - ./backend/src:/app/backend/src:rw
     - shared_media:/app/backend/src/media:rw
 
 services:
@@ -21,7 +29,7 @@ services:
     volumes:
       # gives an ability to the frontend to watch source files on host machine 
       # to perform hot reloading
-      - frontend_src:/app/frontend/src:ro
+      - ./frontend/src:/app/frontend/src:ro
     networks: 
       - appnet
     ports:
@@ -35,7 +43,7 @@ services:
       - frontend
       - nginx
     entrypoint: /app/backend/entrypoint.dev.sh
-    command: sh -c "uv run python manage.py runserver 0.0.0.0:8000"
+    command: sh -c "/app/backend/.venv/bin/python manage.py runserver 0.0.0.0:8000"
   
   nginx:
     <<: *base
@@ -52,29 +60,8 @@ services:
     <<: *base-backend
     depends_on:
       - django
-    command: sh -c "cd src && uv run celery -A main worker --loglevel=info --concurrency 1 -E"
+    command: sh -c "cd src && /app/backend/.venv/bin/python -m celery -A main worker --loglevel=info --concurrency 1 -E"
   
   rabbitmq:
     <<: *base
     image: "rabbitmq:4.2"
-
-networks:
-  appnet:
-    external: true
-    name: shared_appnet
-
-volumes:
-  shared_staticfiles:
-  shared_media:
-  backend_src:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./backend/src
-      o: bind
-  frontend_src:
-    driver: local
-    driver_opts:
-      type: none
-      device: ./frontend/src
-      o: bind

@@ -2,59 +2,81 @@
 
 {% block content %}
 <div class="profile">
-    <h1>User profile</h1>
-    {% if render_user %}
 
+    {% if render_user %}
         {% if render_user.is_authenticated %}
-            <div class="flex-row" style="align-items: center;">
-                {% include "users/partials/avatar.html" with user=render_user %}
-                <div>
-                    Username: {{ render_user.username }}
+            
+            
+
+            <h1>{{render_user.username}}'s profile</h1>
+
+            <div class="flex-row align-center justify-between" style="width: 100%;">
+
+                <div class="flex-row" style="align-items: center;">
+                    {% include "users/partials/avatar.html" with user=render_user size=256 %}
+                </div>
+
+                <div class="flex-col">
+                    <div>Is staff: {{ render_user.is_staff }}</div>
+                    <div>Date joined: {{render_user.date_joined}}</div>
+                    <div>Bio: {{render_user.profile.bio}}</div>
+
+                    {% if can_edit %}
+                    <div>
+                        <a href="{% url 'users:edit' render_user.pk%}">edit</a>
+                    </div>
+                    {% endif %}
+
+                    {% if can_follow %}
+                    <div>
+
+                        {% if is_followed %}
+                        <a href="{% url 'users:toggle_follow' render_user.pk %}">
+                            Unfollow
+                        </a>
+
+                        {% else %}
+                        <a href="{% url 'users:toggle_follow' render_user.pk %}">
+                            Follow
+                        </a>
+                        {% endif %}
+
+                    </div>
+                    {% endif %}
                 </div>
             </div>
 
-            {% if can_edit %}
-                <a href="{% url 'users:edit' render_user.pk%}">edit</a> <br>
-            {% endif %}
+            <div class="flex-row justify-around" style="width: 100%;">
+                
+                {% if followers %}
+                <div>
+                    <h2>{{render_user.username}}'s Followers:</h2>
 
-            {% if can_follow %}
-                {% if is_followed %}
-                    <a href="{% url 'users:toggle_follow' render_user.pk %}">
-                        Unfollow
-                    </a>
-                {% else %}
-                    <a href="{% url 'users:toggle_follow' render_user.pk %}">
-                        Follow
-                    </a>
+                    <div class="flex-col align-center">
+                    {% for follower in followers %}
+                        <div><a href="{% url 'users:detail' follower.user.pk %}">
+                            {{follower.user.username}}
+                        </a></div>
+                    {% endfor %}
+                    </div>
+
+                </div>
                 {% endif %}
-                <br>
-            {% endif %}
 
-            {% if followers %}
-                Followers:
-                <ul>
-                {% for follower in followers %}
-                    <li><a href="{% url 'users:detail' follower.user.pk %}">
-                        {{follower.user.username}}
-                    </a></li>
-                {% endfor %}
-                </ul>
-            {% endif %}
+                {% if following %}
+                <div>
+                    <h2>{{render_user.username}} is following:</h2>
+                    <div class="flex-col align-center">
+                    {% for followee in following %}
+                        <div><a href="{% url 'users:detail' followee.user.pk %}">
+                            {{followee.user.username}}
+                        </a></div>
+                    {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
 
-            {% if following %}
-                This user follows:
-                <ul>
-                {% for followee in following %}
-                    <li><a href="{% url 'users:detail' followee.user.pk %}">
-                        {{followee.user.username}}
-                    </a></li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-
-
-            Is staff: {{ render_user.is_staff }} <br>
-            Date joined: {{render_user.date_joined}} <br>
         {% else %}
             <h2>You are not logged into your account!</h2>
         {% endif %}

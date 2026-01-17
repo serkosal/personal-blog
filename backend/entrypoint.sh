@@ -11,7 +11,7 @@ python manage.py migrate
 
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
-RUN rm -rf static
+rm -rf ./static/*
 
 echo "Starting app..."
 exec "$@"

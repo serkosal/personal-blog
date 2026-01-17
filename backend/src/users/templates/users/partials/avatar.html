@@ -1,19 +1,25 @@
 {% if user and user.is_authenticated %}
-
-    {% load static %}
-
+{% load static %}
+<div>
+    
     {% if not no_userlink %}
         <a href="{% url 'users:detail' user.pk %}">
     {% endif %}
 
     <img
         {{user.profile.avatar_img_attrs|safe}}
-        width="64px"
-        height="64px"
+        {% if size %}
+            width="{{size}}px"
+            height="{{size}}px"
+        {% else %}
+            width="64px"
+            height="64px"
+        {% endif %}
     >
 
     {% if not no_userlink%}
         </a>
     {% endif %}
 
+</div>
 {% endif %}
