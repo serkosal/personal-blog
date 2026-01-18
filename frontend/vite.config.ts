@@ -1,7 +1,12 @@
 import { defineConfig } from 'vite'
 import path from 'path';
 
+import tailwindcss from '@tailwindcss/vite'
+
 export default defineConfig({
+
+  plugins: [tailwindcss()],
+
   base: '/static/',
 
   server: {
@@ -19,6 +24,7 @@ export default defineConfig({
     rollupOptions: {
       
       input: {
+        style: 'style.css',
         main:  'src/main.ts',
         editor: 'src/editor.ts',
       },

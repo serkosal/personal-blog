@@ -1,6 +1,8 @@
 <header>
 
-    <div class="flex-row" style="gap: 1rem;">
+    <button id="theme-toggler">toggle light/dark</button>
+
+    <div class="flex flex-row" style="gap: 1rem;">
         <a href="{% url 'blog:index' %}">Blog</a>
         <a href="{% url 'blog:index' %}?news">News</a>
         <a href="{% url 'blog:index' %}?tags=python">Python</a>
@@ -10,32 +12,30 @@
     </div>
 
     {% if user and user.is_authenticated %}
-    <div class="flex-row align-center">
+        <div class="flex flex-row align-center">
 
-        <div>
-            <a href="{% url 'users:profile'%}">{{ user.username }}</a>
+            <div>
+                <a href="{% url 'users:profile'%}">{{ user.username }}</a>
+            </div>
+
+            <div>
+                <form action="{% url 'users:logout' %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn-reset" type="submit"><a>Log Out</a></button>
+                </form>
+            </div>
+
+            {% include "users/partials/avatar.html" with user=user %}
         </div>
-
-        <div>
-            <form action="{% url 'users:logout' %}" method="post">
-                {% csrf_token %}
-                <button class="btn-reset" type="submit"><a>Log Out</a></button>
-            </form>
-        </div>
-
-        {% include "users/partials/avatar.html" with user=user %}
-    </div>
-
     {% else %}
-    <div class="flex-row align-center">
-        <div>
-            <a href="{% url 'users:login' %}">Log in</a>
+        <div class="flex flex-row align-center">
+            <div>
+                <a href="{% url 'users:login' %}">Log in</a>
+            </div>
+            <div>
+                <a href="{% url 'users:register' %}">Register</a>
+            </div>
         </div>
-        <div>
-            <a href="{% url 'users:register' %}">Register</a>
-        </div>
-    </div>
     {% endif %}
-
 
 </header>

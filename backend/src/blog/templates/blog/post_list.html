@@ -19,13 +19,13 @@
                <h2>{{ post.title }}</h2>
             </a>
             
-            <div class="flex-row justify-between align-center" style="width: 100%;">
+            <div class="flex flex-row justify-between align-center" style="width: 100%;">
                 <div>
                     {% for tag in post.tags.all|slice:"5" %}
                         <a href="{% url 'blog:index' %}?tags={{tag}}">#{{tag}}</a>
                     {% endfor %}
                 </div>
-                <div class="flex-row align-center">
+                <div class="flex flex-row align-center">
                     <div>
                         <a href="{% url 'users:detail' post.author.pk %}">{{ post.author }}</a>
                     </div>

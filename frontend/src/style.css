@@ -1,5 +1,29 @@
+@import "tailwindcss";
+@source "../../backend/src";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-main-dark: #242424;
+}
+
+
+@layer base {
+  html {
+    color: var(--text);
+    background: var(--bg);
+  }
+
+  html.dark {
+    --text: theme(--color-white);
+    --bg: theme(--color-main-dark);
+  }
+}
+
+
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -10,7 +34,7 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: grayscale; */
 }
 
 
@@ -84,10 +108,6 @@ hr {
   align-items: center;
 }
 
-.align-center {
-  align-items: center;
-}
-
 .btn-reset {
   background-color: transparent;
   border: none;
@@ -96,25 +116,6 @@ hr {
   padding: 0px;
   margin: 0px;
   cursor: pointer;
-}
-
-.flex-row {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-}
-
-.flex-col {
-  display: flex;
-  flex-direction: column;
-}
-
-.justify-around {
-  justify-content: space-around;
-}
-
-.justify-between {
-  justify-content: space-between;
 }
 
 .btn {

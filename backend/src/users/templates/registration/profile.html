@@ -10,13 +10,13 @@
 
             <h1>{{render_user.username}}'s profile</h1>
 
-            <div class="flex-row align-center justify-between" style="width: 100%;">
+            <div class="flex flex-row align-center justify-between" style="width: 100%;">
 
-                <div class="flex-row" style="align-items: center;">
+                <div class="flex flex-row" style="align-items: center;">
                     {% include "users/partials/avatar.html" with user=render_user size=256 %}
                 </div>
 
-                <div class="flex-col">
+                <div class="flex flex-col">
                     <div>Is staff: {{ render_user.is_staff }}</div>
                     <div>Date joined: {{render_user.date_joined}}</div>
                     <div>Bio: {{render_user.profile.bio}}</div>
@@ -46,13 +46,13 @@
                 </div>
             </div>
 
-            <div class="flex-row justify-around" style="width: 100%;">
+            <div class="flex flex-row justify-around" style="width: 100%;">
                 
                 {% if followers %}
                 <div>
                     <h2>{{render_user.username}}'s Followers:</h2>
 
-                    <div class="flex-col align-center">
+                    <div class="flex flex-col align-center">
                     {% for follower in followers %}
                         <div><a href="{% url 'users:detail' follower.user.pk %}">
                             {{follower.user.username}}
@@ -66,7 +66,7 @@
                 {% if following %}
                 <div>
                     <h2>{{render_user.username}} is following:</h2>
-                    <div class="flex-col align-center">
+                    <div class="flex flex-col align-center">
                     {% for followee in following %}
                         <div><a href="{% url 'users:detail' followee.user.pk %}">
                             {{followee.user.username}}

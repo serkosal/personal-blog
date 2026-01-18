@@ -30,6 +30,7 @@ services:
       # gives an ability to the frontend to watch source files on host machine 
       # to perform hot reloading
       - ./frontend/src:/app/frontend/src:ro
+      - ./backend/src:/app/backend/src/:ro
     networks: 
       - appnet
     ports:
