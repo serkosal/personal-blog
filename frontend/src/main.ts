@@ -8,7 +8,7 @@ document.body.onload = (_ev) => {
     htmlEL.classList.toggle('dark', localStorage.getItem('theme') === 'dark');
 }
 
-toggler?.addEventListener('click', (ev) => {
+toggler?.addEventListener('click', (_) => {
     htmlEL.classList.toggle('dark');
 
     let isDark = htmlEL.classList.contains('dark');

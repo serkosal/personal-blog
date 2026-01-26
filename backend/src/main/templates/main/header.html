@@ -1,6 +1,6 @@
 <header>
 
-    <button id="theme-toggler">toggle light/dark</button>
+    <button class="btn" id="theme-toggler">toggle light/dark</button>
 
     <div class="flex flex-row" style="gap: 1rem;">
         <a href="{% url 'blog:index' %}">Blog</a>
@@ -21,7 +21,7 @@
             <div>
                 <form action="{% url 'users:logout' %}" method="post">
                     {% csrf_token %}
-                    <button class="btn-reset" type="submit"><a>Log Out</a></button>
+                    <button type="submit"><a>Log Out</a></button>
                 </form>
             </div>
 
