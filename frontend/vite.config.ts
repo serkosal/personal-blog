@@ -18,13 +18,13 @@ export default defineConfig({
 
 
   build: {
-    outDir: path.resolve(__dirname, '../backend/src/static/'),
+    outDir: path.resolve(__dirname, '../backend/static'),
     emptyOutDir: false,
     manifest: "manifest.json",
     rollupOptions: {
       
       input: {
-        style: 'style.css',
+        style: './src/style.css',
         main:  'src/main.ts',
         editor: 'src/editor.ts',
       },

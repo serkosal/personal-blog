@@ -2,6 +2,8 @@ FROM ghcr.io/astral-sh/uv:alpine
 
 WORKDIR /app/backend
 
+RUN mkdir -p /app/backend/static
+
 RUN apk add --no-cache tzdata
 
 COPY pyproject.toml uv.lock .python-version ./

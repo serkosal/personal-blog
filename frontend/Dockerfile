@@ -2,7 +2,7 @@ FROM node:20
 
 WORKDIR /app/frontend
 
-RUN mkdir -p /app/backend
+RUN mkdir -p /app/backend/static
 
 COPY package*.json ./
 RUN npm install

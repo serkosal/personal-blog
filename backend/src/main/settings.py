@@ -127,7 +127,7 @@ if USE_SQLITE:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / f'db/sqlite/{db_name}',
+            'NAME': BASE_DIR / f'../db/sqlite/{db_name}',
             'TEST': {
                 'NAME': 'testdb',
                 'ENGINE': 'django.db.backends.sqlite3'
@@ -198,14 +198,16 @@ CELERY_TIMEZONE = 'UTC'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / '../staticfiles'
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'static',
+    BASE_DIR / '../static',
+    #'/app/backend/static', # when running inside docker
 ]
 
+MEDIA_ROOT = BASE_DIR / '../media'
+
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_URL = 'static/'
 
 

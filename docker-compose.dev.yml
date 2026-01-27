@@ -20,6 +20,7 @@ x-base-backend: &base-backend
   image: backend:latest
   volumes:
     - ./backend/src:/app/backend/src:rw
+    - ./backend/db:/app/backend/db:rw
     - shared_media:/app/backend/src/media:rw
 
 services:

@@ -33,10 +33,12 @@ services:
   #   image: postgres:14
 
   frontend:
-    command: sh -c "npm run build"
     build: frontend
     volumes:
-      - shared_static:/app/backend/src/static:rw
+      - ./backend/src:/app/backend/src:ro
+      - shared_static:/app/backend/static:rw
+      
+    command: sh -c "npm run build"
 
   django:
     <<: *base-backend
@@ -45,10 +47,10 @@ services:
       - nginx
       - rabbitmq
     volumes:
-      - shared_static:/app/backend/src/static:rw
-      - shared_staticfiles:/app/backend/src/staticfiles:rw
-      - shared_media:/app/backend/src/media:rw
-      - sqlitedb:/app/backend/src/db/sqlite:rw
+      - shared_static:/app/backend/static:rw
+      - shared_staticfiles:/app/backend/staticfiles:rw
+      - shared_media:/app/backend/media:rw
+      - sqlitedb:/app/backend/db/sqlite:rw
     entrypoint: /app/backend/entrypoint.sh
     command: 
       sh -c "/app/backend/.venv/bin/python -m 
@@ -77,9 +79,9 @@ services:
     depends_on:
       - django
     volumes:
-      - shared_staticfiles:/app/backend/src/staticfiles:ro
-      - shared_media:/app/backend/src/media:rw
-      - sqlitedb:/app/backend/src/db/sqlite:rw
+      - shared_staticfiles:/app/backend/staticfiles:ro
+      - shared_media:/app/backend/media:rw
+      - sqlitedb:/app/backend/db/sqlite:rw
     command: 
       sh -c "cd src && /app/backend/.venv/bin/python -m 
       celery -A main worker --loglevel=info --concurrency 1 -E"

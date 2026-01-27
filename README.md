@@ -1,97 +1,85 @@
-# services <br> Сервисы
+# other languages
+1. На русском [здесь](./README_RU.md)
 
-1. frontend
+
+# Features
+1.  Backend and frontend integration (Django + Tailwind) supporting: 
+    - either standalone or containerized environments.
+    - either development (supports HMR) or production stages.  
+
+2.  Deserialization and validation of the text rich data, and its rendering. 
+    
+3.  Asynchronous tasks runned by `Celery`. For this time point there is only 
+    tasks for avatar's processing - creation of differently sized thumbnails.
+    In the future there will be tasks for email, push and messengers 
+    notifications.
+
+4.  SEO optimisation using server side rendering. In the future this process 
+    will be analyzed further for optimisations using caching.
+
+5.  Keeping a reasonable size of the pages. I'm not a big fan of pointlessly 
+    moving electrons or photons around the globe.  
+
+# WARNING
+[! WARNING ]<br>
+**All provided commands must be executed relative to corresponding README.md files !** 
+
+# Developer Launch
+
+You could run run this project either using `docker-compose` (one liner) or as 
+standalone services:
+-   Use the [standalone](#as-standalone-without-docker-docker-compose) 
+    variant if you experienced enough to manage project 
+    dependencies for both JS and python django's projects, set environment 
+    variables and possibly to independently sort thing out.
+-   Or use [docker](#using-docker-compose-one-liner) variant otherwise.
+
+## using docker compose (one-liner).
+```shell
+docker compose -f docker-compose.dev.yml up
+```
+By default:
+-   `SQLite` is used as database 
+-   Django's `debug mode` is turned on 
+-   Frontend server is running and working in `hot module reload` mode 
+    (frontend sources could be modified and changes is visible in real time).
+
+These behaivour is specified in `environment variables` which docker gets from 
+[this](./secrets/.dev.env) file.
+
+## as standalone (without docker, docker compose).
+
+1.  Use [this](./frontend/README.md) instruction to either build or run frontend
+    server (*Recomended*) to provide backend with required styles, scripts, etc.
+
+2.  Set environment variables: 
+    -   You could just use predefined variables recommended to development from 
+        [there](./secrets/.dev.env).
+    -   or set everyting manually, as described [here](./secrets/README.md). 
+
+3.  Optionally run other services, which are described [there](#services).  <br>
+    Without other services some site's functionality won't work.
+
+# services
+
+1. frontend - could be run as server which supports `HMR`. 
 2. django
 3. nginx
 4. db 
 5. rabbitmq
 6. celery
 
-# WARNING<br>ВНИМАНИЕ !
-[!WARNING]<br>
-**All commands provided in README.md files must be executed from their directories!** <br>
-**Все команды из README.md файлы должны выполняться из тех же директорий!** 
-
-# Launch<br>Запуск
-
-using configuration for development<br>
-используя конфигурацию для разработки
-```shell
-docker compose -f docker-compose.dev.yml up
-```
-
-using configuration for production<br> 
-используя конфигурацию для продакшена
-```shell
-docker compose up
-```
-
-## Standalone launch (without Docker)<br>Запуск бэкенда автономно (без Docker'а)
-
-1.  build frontend static files<br>
-    собрать файлы фронта:
-    ```shell
-        cd frontend
-        npm install
-        npm run build
-    ```
-nd's depend
-2.  download backend dependencies<br>
-    скачать зав-ти бэкенда:
-    ```shell
-        cd ../backend
-    ```
-
-    -   Using `pip`<br>
-        Используя `pip`:
-        ```shell
-            ######################## FOR Windows | Для Windows #################
-            python -m venv .venv                                               #
-            .venv/bin/activate.bat                                             #
-            ####################################################################
-
-            ############## FOR Linux, MacOs, WSL | Для Linux, MacOS, WSL  ######
-            python3 -m venv .venv                                              #
-            source .venv/bin/activate                                          #
-            # If using fish shell: source .venv/bin/activate.fish              #
-            ####################################################################
-        ```
-
-    -   Or using `uv`<br>
-        Или используя `uv`
-        ```shell
-            uv sync
-        ```
-
-3. Set environment variables `DEBUG=1` and `USE_SQLITE=1`
-
-4.  Configure and run development server<br>
-    Настроить и запустить сервер для разработки python:
-
-    -   Using `uv` <br> Используя `uv`:
-        ```shell
-            uv run python manage.py migrate
-            uv run python manage.py collectstatic
-            uv run python manage.py runserver
-        ```
-    -   Without `uv` <br> Без `uv`:
-        **Make sure that python venv is activated**
-        ```shell 
-            python manage.py runserver
-            python manage.py migrate
-            python manage.py collectstatic
-        ```
-
-
-# environment and configuration<br>Среда и конфигурация
+# environment and configuration
 environment files stored in `secrets` folder<br> 
 Файлы с переменными среды расположены в папке `secrets`.
 
-# deployment <br> Деплой
+# deployment
 1.  set desired parameters in .env file and backend/src/main/settings.py
 2.  `docker compose up`
 
-## scaling challenges<br>Сложности масштабирования
+This section isn't done yet! 
+
+## scaling challenges
 
 [!WARNING]<br>
 it's impossible to move workers to another server, because service `celery` 
