@@ -1,8 +1,10 @@
-<header>
+<header class="w-full min-h-[10dvh] px-[4dvw] py-4 flex content-center items-center justify-between ">
 
-    <button class="btn" id="theme-toggler">toggle light/dark</button>
+    <div>
+        <button class="btn" id="theme-toggler">toggle light/dark</button>
+    </div>
 
-    <div class="flex flex-row" style="gap: 1rem;">
+    <div class="md:flex hidden" style="gap: 1rem;">
         <a href="{% url 'blog:index' %}">Blog</a>
         <a href="{% url 'blog:index' %}?news">News</a>
         <a href="{% url 'blog:index' %}?tags=python">Python</a>
@@ -11,9 +13,8 @@
         <a href="{% url 'blog:index' %}?tags=web-dev">Web-dev</a>
     </div>
 
-    {% if user and user.is_authenticated %}
-        <div class="flex flex-row align-center">
-
+    <div class="flex gap-2 items-center">
+        {% if user and user.is_authenticated %}
             <div>
                 <a href="{% url 'users:profile'%}">{{ user.username }}</a>
             </div>
@@ -26,16 +27,16 @@
             </div>
 
             {% include "users/partials/avatar.html" with user=user %}
-        </div>
-    {% else %}
-        <div class="flex flex-row align-center">
+
+        {% else %}
             <div>
                 <a href="{% url 'users:login' %}">Log in</a>
             </div>
             <div>
                 <a href="{% url 'users:register' %}">Register</a>
             </div>
-        </div>
-    {% endif %}
+
+        {% endif %}
+    </div>
 
 </header>

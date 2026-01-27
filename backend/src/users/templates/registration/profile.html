@@ -1,52 +1,50 @@
 {% extends "main/base.html" %}
 
 {% block content %}
-<div class="profile">
+<div class="profile justify-center center gap-4">
 
     {% if render_user %}
         {% if render_user.is_authenticated %}
             
-            
+            <div class="flex flex-col lg:flex-row lg:justify-around items-center  gap-4" style="width: 100%;">
+                
+                <div class="flex flex-col-reverse lg:flex-row lg:flex-wrap-reverse items-center lg:items-end justify-center gap-4">
+                    <div class="flex flex-col items-center gap-4">
+                        {% include "users/partials/avatar.html" with user=render_user size=256 %}
+                        {% if render_user.profile.bio %}
+                            <div>Bio: {{render_user.profile.bio}}</div>
+                        {% endif %}
+                        {% if can_edit %}
+                        <div>
+                            <a href="{% url 'users:edit' render_user.pk%}">edit</a>
+                        </div>
+                        {% endif %}
+                        {% if can_follow %}
+                        <div>
+                            <a href="{% url 'users:toggle_follow' render_user.pk %}">
+                                {% if is_followed %}
+                                    Unfollow
+                                {% else %}
+                                    Follow
+                                {% endif %}
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
 
-            <h1>{{render_user.username}}'s profile</h1>
 
-            <div class="flex flex-row align-center justify-between" style="width: 100%;">
-
-                <div class="flex flex-row" style="align-items: center;">
-                    {% include "users/partials/avatar.html" with user=render_user size=256 %}
+                    <h1>{{render_user.username}}'s profile</h1>
                 </div>
 
-                <div class="flex flex-col">
+                <div>
                     <div>Is staff: {{ render_user.is_staff }}</div>
                     <div>Date joined: {{render_user.date_joined}}</div>
-                    <div>Bio: {{render_user.profile.bio}}</div>
-
-                    {% if can_edit %}
-                    <div>
-                        <a href="{% url 'users:edit' render_user.pk%}">edit</a>
-                    </div>
-                    {% endif %}
-
-                    {% if can_follow %}
-                    <div>
-
-                        {% if is_followed %}
-                        <a href="{% url 'users:toggle_follow' render_user.pk %}">
-                            Unfollow
-                        </a>
-
-                        {% else %}
-                        <a href="{% url 'users:toggle_follow' render_user.pk %}">
-                            Follow
-                        </a>
-                        {% endif %}
-
-                    </div>
-                    {% endif %}
                 </div>
             </div>
 
-            <div class="flex flex-row justify-around" style="width: 100%;">
+            <hr>
+
+            <div class="flex justify-around" style="width: 100%;">
                 
                 {% if followers %}
                 <div>

@@ -1,14 +1,17 @@
-<footer class="flex flex-row justify-around">
-    <div>
+<footer class="w-full min-h-[10dvh] py-10 flex justify-around items-center bg-post-light dark:bg-post-dark">
+
+    <div class="flex gap-2">
         <a href="{% url 'index' %}">About</a>
+        <a href="{% url 'blog:index' %}">Blog</a>
     </div>
-
-    <a href="{% url 'blog:index' %}">Blog</a>
-
-    <div>2026(c)</div>
 
     <div class="flex flex-col justify-between">
         <div>Icons provided by <a href="https://www.flaticon.com">flaticon</a>.</div>
         <div>More details <a href="{% url 'attributions' %}">here</a></div>
     </div>
+    
+
+    <div>2026 &copy;</div>
+
+   
 </footer>

@@ -2,15 +2,13 @@
 
 {% block content %}
 <div class="post">
-    <form method="post">
-        
-        {% csrf_token %}
-    
-        <p>
-            Are you sure you want to delete "{{ post.title }}"?
-        </p>
+    <h1>
+        Are you sure you want to delete "{{ post.title }}"?
+    </h1>
 
-        <input type="submit" value="Confirm">
+    <form method="post">
+        {% csrf_token %}
+        <input class="btn" type="submit" value="Confirm">
     </form>
 </div>
 {% endblock %}
