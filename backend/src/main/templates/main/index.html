@@ -6,33 +6,62 @@
 
 {% block content %}
 
-    <h1>Welcome to the serkosal.org</h1>
+    <div class="cont">
+        <h1>Welcome to the serkosal.org</h1>
 
-    <h2>About me</h2>
-    <p>
-        Hello, My name is Sergey Kosykh a.k.a. Serkosal.<br>
-        I'm freelancer developer.<br>
-        I know python, django (this site is built upon these),
-        JavaScript, C++, OpenGL, Calculus, Psysics, etc.<br><br>
-        I'm emigrant, a political one, I was born in Russia, but was forced to leave country after
-        2022 invasion of Ukraine.<br>Currently living in Armenia.
-        <br><br>
-    </p>
+        <div class="w-full px-[10dvw]">
+        <h2>About me</h2>
+        <p>
+            Hello my name is Sergey Kosykh a.k.a. Serkosal.<br>
+            I’m programming in Python, C++, and JS.<br>
+            FOSS enthusiast. I've been a GNU/Linux user since 2018.<br>
 
-    <h2>My projects</h2>
-    <ol>
-        <li>This site :D and <a href="{% url 'blog:index' %}">blog</a></li>
-        <li>
-            OpenGL Ray-tracing lost code 
-            <a href="">but have a video of it :D</a>
-        </li>
-        <li><a href="https://github.com/serkosal/intfl">
-            INTeractive File Listing utitility
-        </a></li>
-        <li><a href="https://github.com/serkosal/react-task-manager">
-            React task manager
-        </a></li>
-        <li>My attempts of doing courses from learnopengl.com</li>
-    </ol>
+            I love IT in general in the wide variety of aspects from theoretical
+            comp. science to the actual hardware.<br>
+        </p>
+
+        <div class="w-full">
+        <h2>My projects</h2>
+        <ol class="flex flex-col gap-4 list-decimal list-inside">
+            <li>
+                Personal web blog <a href="{% url 'blog:index' %}">site</a>.
+                You're using it right know. 
+            </li>
+            <li>
+                OpenGL Ray-marching renderer based on SDF (signed distance 
+                functions).
+                <iframe class="w-full aspect-video"
+                   
+                    src="https://www.youtube.com/embed/MWxtFrY4ucQ?si=f74C8-hUpDm-0uLO" 
+                    title="OpenGL Ray-marching" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    referrerpolicy="strict-origin-when-cross-origin" 
+                    allowfullscreen>
+                </iframe>
+            </li>
+            <li class="w-fit">
+                C++
+                <a href="https://github.com/serkosal/intfl">
+                    INTeractive File Listing utitility
+                </a> 
+                - It's like the GNU tree but also is interactive.
+                <a href="https://github.com/serkosal/intfl">
+                    <img 
+                        src="https://github.com/serkosal/intfl/raw/main/demo.gif?raw=true" 
+                        alt="IntFL demo"
+                    >
+                </a>
+            </li>
+            <li>
+                C++ OpenGL boilerplate 
+                <a href="https://github.com/serkosal/skgl">project</a>
+                with build-in UI, with some OpenGL things were automated and 
+                with usefull examples.
+            </li>
+        </ol>
+        </div>
+
+    </div>
     
 {% endblock %}
