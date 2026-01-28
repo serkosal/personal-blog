@@ -8,6 +8,7 @@
 
     <img
         {{user.profile.avatar_img_attrs|safe}}
+        loading="lazy"
         {% if size %}
             width="{{size}}px"
             height="{{size}}px"

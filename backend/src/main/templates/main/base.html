@@ -2,12 +2,10 @@
 {% load django_vite %}
 
 <!doctype html>
-<html lang="en">
+<html lang="en" style="background-color: var(--bg); color: var(--text);">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    {% vite_asset 'src/main.ts' %}
 
     <title>
         {% if title %}
@@ -21,8 +19,28 @@
       <meta name="robots" content="noindex, nofollow">
     {% endblock %}
 
+    <script>
+      const isDark = localStorage.getItem('theme') === 'dark';
+        
+        document.documentElement.classList.toggle(
+          'dark',
+          isDark
+        );
+
+        document.documentElement.style.setProperty('--bg', 
+          isDark ? '#242424' : 'white'
+        );
+        document.documentElement.style.setProperty('--text', 
+          isDark ? 'white' : 'black'
+        );
+    </script>
+
+    {% vite_asset 'src/main.ts' %}
+
   </head>
-  <body class="min-h-dvh h-fit flex flex-col place-items-center">
+  <body 
+    class="min-h-dvh h-fit flex flex-col place-items-center" 
+  >
 
     {% include 'main/header.html' %}
 
@@ -37,5 +55,7 @@
 
     {% block bodyend %}
     {% endblock %}
+
+    
   </body>
 </html>

@@ -4,10 +4,6 @@ let toggler = document.getElementById('theme-toggler');
 let htmlEL = document.documentElement
 
 
-document.body.onload = (_ev) => {
-    htmlEL.classList.toggle('dark', localStorage.getItem('theme') === 'dark');
-}
-
 toggler?.addEventListener('click', (_) => {
     htmlEL.classList.toggle('dark');
 
