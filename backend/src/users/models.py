@@ -81,20 +81,19 @@ class Profile(models.Model):
             src = base_path + 'default_avatar_64.webp'
 
         srcset_list = [
-            base_path + f'{sz}.webp'
+            base_path + f'{sz}.webp {sz}w'
             if self.avatar_is_set
-            else base_path + f'default_avatar_{sz}.webp'
-            for sz in Profile.AVATAR_SIZES
+            else base_path + f'default_avatar_{sz}.webp {sz}w'
+            for sz in Profile.AVATAR_SIZES[::-1]
         ]
-
         srcset = ', '.join(srcset_list)
 
         return f'''
-            src="{src}" 
+            src="{src}"
             srcset="{srcset}"
-            alt="{alt}" 
-            style="border-radius: 100%;"
-        '''
+            sizes="auto"
+            alt="{alt}"
+        '''   
 
     avatar = models.ImageField(null=True, upload_to=user_avatar_path)
     # if avatar is set, then avatar should be null (file deleted),
