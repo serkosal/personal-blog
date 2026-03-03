@@ -1,6 +1,5 @@
 {% if user and user.is_authenticated %}
-{% load static %}
-<div>
+<div class="flex">
     
     {% if not no_userlink %}
         <a href="{% url 'users:detail' user.pk %}">
@@ -12,7 +11,7 @@
         {% if size %}
             width="{{size}}px"
             height="{{size}}px"
-            class="rounded-full w-[{{size}}px] h-[{{size}}px]"
+            class="rounded-full w-[{{size}}px] h-[{{size}}px] aspect-square"
         {% else %}
             width="64px"
             height="64px"

@@ -19,7 +19,7 @@
         <h2>{{ post.title }}</h2>
         </a>
                 
-        <div class="flex flex-row justify-between align-center" style="width: 100%;">
+        <div class="flex flex-row justify-between align-center items-center" style="width: 100%;">
 
             {# post tags #}
             <div>
@@ -29,12 +29,7 @@
             </div>
 
             {# post avatar and link #}
-            <div class="flex flex-row align-center">
-                <div>
-                    <a href="{% url 'users:detail' post.author.pk %}">{{ post.author }}</a>
-                </div>
-                {% include "users/partials/avatar.html" with user=post.author %}
-            </div>                
+            {% include "users/partials/avatar_link.html" with user=post.author %}
         </div>
 
         <hr>

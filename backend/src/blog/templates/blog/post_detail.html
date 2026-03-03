@@ -27,12 +27,7 @@
                     <a href="{% url 'blog:index' %}?tags={{tag}}">#{{tag}}</a>
                 {% endfor %}
             </div>
-            <div class="flex flex-row align-center">
-                <div>
-                    <a href="{% url 'users:detail' post.author.pk %}">{{ post.author }}</a>
-                </div>
-                {% include "users/partials/avatar.html" with user=post.author %}
-            </div>                
+            {% include "users/partials/avatar_link.html" with user=post.author %}           
         </div>
 
         <p>
