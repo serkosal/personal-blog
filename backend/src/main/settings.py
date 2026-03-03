@@ -25,10 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# region SECURITY
 SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = bool_env('DEBUG')
-LOCALHOST_ALLOWED = bool_env('LOCALHOST_ALLOWED')
 
 ALLOWED_HOSTS = []
 if not DEBUG:
@@ -43,9 +42,37 @@ if not DEBUG:
         'https://www.serkosal.org',
     ]
 
-if LOCALHOST_ALLOWED: ALLOWED_HOSTS.extend(['127.0.0.1', 'localhost'])
+if bool_env('LOCALHOST_ALLOWED'): 
+    ALLOWED_HOSTS.extend(['127.0.0.1', 'localhost'])
+    
+# Password validation
+# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
-# Application definition
+AUTH_PASSWORD_VALIDATORS = [
+    {
+     'NAME': 
+     'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+LOGOUT_REDIRECT_URL = '/blog/'
+    
+# endregion 
+    
+# region EMAIL
+
+# endregion  
+
+# region apps and middlewares
 
 INSTALLED_APPS = [
     # 3rd-party apps
@@ -73,6 +100,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+# endregion
 
 ROOT_URLCONF = 'main.urls'
 
@@ -94,8 +122,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
+# region email
 
-# logging
+if not DEBUG:
+    EMAIL_HOST = ''
+    EMAIL_PORT = ''
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_USE_TLS = ''
+    EMAIL_USE_SSL = ''
+    EMAIL_TIMEOUT = ''
+    EMAIL_SSL_KEYFILE = ''
+    EMAIL_SSL_CERTFILE = ''
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" 
+
+# endregion 
+
+# region logging
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -117,7 +161,9 @@ LOGGING = {
     },
 }
 
-# Database
+# endregion
+
+# region Databases
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 USE_SQLITE = bool_env('USE_SQLITE')
@@ -149,31 +195,15 @@ else:
             }
         }
     }
+    
+# Default primary key field type
+# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+# endregion
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-     'NAME': 
-     'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-LOGOUT_REDIRECT_URL = '/blog/'
-
-
-# Internationalization
+# region Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
@@ -184,8 +214,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+# endregion
 
-# CELERY
+# region CELERY
 CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
 CELERY_RESULT_BACKEND = 'rpc://'
 
@@ -194,8 +225,9 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 
+# endregion 
 
-# Static files (CSS, JavaScript, Images)
+# region static files
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_ROOT = BASE_DIR / '../staticfiles'
@@ -222,7 +254,4 @@ DJANGO_VITE = {
     }
 }
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# endregion

@@ -75,9 +75,14 @@ environment files stored in `secrets` folder<br>
 
 # deployment
 1.  set desired parameters in .env file and backend/src/main/settings.py
-2.  `docker compose up`
-
-This section isn't done yet! 
+2.  set up server, create git repository on the server then add to the local 
+    repository remote server's git:<br>
+    `git remote add remoteName ssh://server_username@server_url`
+3.  push to remote: `git push remoteName/main`
+4.  if ci/cd is configured the changes would be applied automatically, otherwise 
+    continue with the steps below:
+5.  `docker compose build && docker compose up -d`
+6.  see the logs: `docker compose logs -f`
 
 ## scaling challenges
 
