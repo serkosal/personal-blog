@@ -14,9 +14,8 @@ let defaultVal = document.getElementById("initial-id_content") as
 
 let initialContent;
 if (defaultVal) {
-    
-    initialContent = defaultVal.value;
-    console.log("Default value", defaultVal)
+    const obj: {content: string} = JSON.parse(defaultVal.value)
+    initialContent = obj.content; 
 }
 else {
     let el = new HTMLDivElement()
@@ -25,7 +24,6 @@ else {
         type: "html",
         dom: el
     } satisfies DefaultValue;
-    console.log("Default value", el);
 }
 
 const crepe = new Crepe({
@@ -33,8 +31,38 @@ const crepe = new Crepe({
   defaultValue: initialContent,
 });
 
+
 crepe.create().then(() => {
     console.log('Milfdown is ready to work!')
+
+    let submit_form  = <HTMLFormElement>document.getElementById("milkdown-save")?.parentElement;
+    submit_form?.addEventListener('submit', async function (ev) {
+
+        ev.preventDefault();
+
+        const contentMARKDOWN = crepe.getMarkdown();
+
+        // console.log(contentMARKDOWN);
+        const contentJSON = {"content": contentMARKDOWN};
+        
+
+        const formData = new FormData(submit_form);
+        formData.append('content', JSON.stringify(contentJSON));
+
+        const response = await fetch(submit_form.action, {
+            method: 'POST',
+            body: formData,
+        });
+
+
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else {
+            const result = await response.text();
+            console.log(result);
+        }
+    });
+
 }).catch(reason => {
     console.log(`Milfdown editor initialization failed because of ${reason}`)
 });
