@@ -1,16 +1,16 @@
 
-#editorjs {
+/* #editorjs {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
 
   border: 1px solid #213547;
   background-color: transparent;
-}
+} */
 
 /* https://github.com/codex-team/editor.js/issues/1537#issuecomment-912073080 */
 
-.ce-block--selected .ce-block__content,
+/* .ce-block--selected .ce-block__content,
 .ce-inline-toolbar,
 .codex-editor--narrow .ce-toolbox,
 .ce-conversion-toolbar,
@@ -56,4 +56,4 @@
 .cdx-notify__cross::after,
 .cdx-notify__cross::before {
   background: white;
-}
+} */

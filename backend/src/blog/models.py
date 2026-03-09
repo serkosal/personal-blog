@@ -59,7 +59,7 @@ class Post(models.Model):
     Attributes:
         author: user who wrote the post.
         title: title of the post.
-        content: JSON formated post content returned by EditorJs library.
+        content: JSON formated post content returned by Editor library.
         started_at: datetime when post was created. 
         last_edited: datetime when post was edited last time.
         published_at: datetime when post was first published.
