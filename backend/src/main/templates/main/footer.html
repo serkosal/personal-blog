@@ -1,22 +1,19 @@
-<footer class="w-full h-[10dvh] flex flex-wrap justify-around items-center bg-post-light dark:bg-black">
+<footer class="w-full min-h-[10dvh] flex flex-wrap justify-around items-center bg-post-light dark:bg-black">
 
-    <div class="flex gap-2 items-center self-stretch h-full">
+    <div class="flex gap-2 items-center justify-center">
         <a href="{% url 'index' %}">About</a>
         <a href="{% url 'blog:index' %}">Blog</a>
 
-        <a href="https://github.com/serkosal/personal-blog" target="_blank" class="h-1/2">
-            <img 
-                src="/static/main/GitHub_Black.svg"
-                class="dark:invert h-full hidden md:block"
-                loading="lazy"
-                alt="GitHub repository"
-            >
-            <img 
-                src="/static/main/GitHub_Invertocat_Black.svg"
-                class="dark:invert h-full block md:hidden"
-                loading="lazy"
-                alt="GitHub repository"
-            >
+        <a href="https://github.com/serkosal/personal-blog" target="_blank" class="dark:invert">
+            <picture>
+                <source srcset="/static/main/GitHub_Black.svg" media="(min-width: 768px)">
+
+                <img src="/static/main/GitHub_Invertocat_Black.svg" 
+                    alt="GitHub" 
+                    class="max-h-[5dvh] w-full object-cover">
+            </picture>
+            <!-- <div class="h-[5dvh] w-[448px] bg-[url('/static/main/GitHub_Invertocat_Black.svg')] md:bg-[url('/static/main/GitHub_Black.svg')] bg-cover bg-center bg-no-repeat"> -->
+
         </a>
     </div>
 
