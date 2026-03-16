@@ -1,5 +1,7 @@
 """file with Pydantic schemas to validate EditorJS JSON."""
 
+# legacy code for serializing editorJS json data 
+
 from datetime import datetime
 from typing import Literal
 

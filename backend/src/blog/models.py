@@ -78,12 +78,13 @@ class Post(models.Model):
     
     tags = TaggableManager()
 
-    # rewrite to a custom json Field
+    # keep for migrations from older versions
     def content_default():
         """Get post's default content data."""
         return {'content': {}}
 
-    content = models.JSONField(null=False, blank=False, default=content_default)
+    content = models.TextField(null=False, blank=True, default=lambda: "# header\n- list element 1\n- list element 2\n\n")
+    # content = models.JSONField(null=False, blank=False, default=content_default)
 
     started_at = models.DateTimeField(
         null=False, blank=False, auto_now_add=True

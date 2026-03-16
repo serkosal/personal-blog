@@ -1,5 +1,7 @@
 """File with postSerializer."""
 
+# legacy code for serializing editorJS json data 
+
 from pydantic import ValidationError
 from rest_framework import serializers
 

@@ -1,5 +1,7 @@
 """file with Pydantic schemas to validate EditorJS lists data."""
 
+# legacy code for serializing editorJS json data 
+
 from enum import StrEnum
 from typing import Self
 

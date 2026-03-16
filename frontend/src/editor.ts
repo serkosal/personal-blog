@@ -9,45 +9,31 @@ import "@milkdown/crepe/theme/common/style.css";
  * frame-dark, classic-dark, nord-dark
  */
 import "@milkdown/crepe/theme/nord-dark.css";
-let defaultVal = document.getElementById("initial-id_content") as 
-    (HTMLInputElement | null);
 
-let initialContent;
-if (defaultVal) {
-    const obj: {content: string} = JSON.parse(defaultVal.value)
-    initialContent = obj.content; 
-}
-else {
-    let el = new HTMLDivElement()
-    el.innerText = "Hello, from milfdown!"
-    initialContent = {
-        type: "html",
-        dom: el
-    } satisfies DefaultValue;
-}
+
+const contentEL = document.getElementById("initial-id_content") as
+    (HTMLInputElement | null);
+const initialContent = contentEL?.value || "Hello, from milfdown!";
+
 
 const crepe = new Crepe({
-  root: "#milkdownjs",
-  defaultValue: initialContent,
+    root: "#milkdownjs",
+    defaultValue: initialContent
 });
 
 
 crepe.create().then(() => {
     console.log('Milfdown is ready to work!')
 
-    let submit_form  = <HTMLFormElement>document.getElementById("milkdown-save")?.parentElement;
+    let submit_form = <HTMLFormElement>document.getElementById("milkdown-save")?.parentElement;
     submit_form?.addEventListener('submit', async function (ev) {
 
         ev.preventDefault();
 
         const contentMARKDOWN = crepe.getMarkdown();
 
-        // console.log(contentMARKDOWN);
-        const contentJSON = {"content": contentMARKDOWN};
-        
-
         const formData = new FormData(submit_form);
-        formData.append('content', JSON.stringify(contentJSON));
+        formData.append('content', contentMARKDOWN);
 
         const response = await fetch(submit_form.action, {
             method: 'POST',
