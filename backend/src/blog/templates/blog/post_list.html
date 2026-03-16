@@ -35,10 +35,16 @@
         <hr>
 
         <div>
-            {% if post.content.blocks %}
-                {% for block in post.content.blocks|slice:":3" %}
-                    {% include "blog/partials/block.html" with el=block.data %}
-                {% endfor %}
+            {% comment "EditorJS legacy" %}
+                {% if post.content.blocks %}
+                    {% for block in post.content.blocks|slice:":3" %}
+                        {% include "blog/partials/block.html" with el=block.data %}
+                    {% endfor %}
+                {% endif %}
+            {% endcomment %}
+
+            {% if post.content %}
+                {{post.content}}
             {% endif %}
         </div>
     </div>
