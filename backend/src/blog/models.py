@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from taggit.managers import TaggableManager
 
 
@@ -21,7 +21,7 @@ class PostManager(models.Manager):
             bool: True if user can see the post.
 
         """
-        posts = self.get_queryset()
+        posts: QuerySet["Post"] = self.get_queryset()
 
         if user.is_authenticated:
             if user.has_perm('blog.see_others_unpublished'):
@@ -59,7 +59,7 @@ class Post(models.Model):
     Attributes:
         author: user who wrote the post.
         title: title of the post.
-        content: JSON formated post content returned by Editor library.
+        content: markdown formated post content returned by Editor library (milkdown).
         started_at: datetime when post was created. 
         last_edited: datetime when post was edited last time.
         published_at: datetime when post was first published.

@@ -31,9 +31,9 @@
         </div>
 
         <div>
-            {% if post.content %}
+            {% if post_content %}
 
-                {{post.content}}
+                {{post_content|safe}}
 
                 {% comment "EditorJS Legacy" %}
                     {% for block in post.content.blocks %}

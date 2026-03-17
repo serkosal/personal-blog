@@ -11,7 +11,7 @@
         <a href="{% url 'blog:create' %}">Create new post</a>
     {% endif %}
 
-    {% for post in posts_list %}
+    {% for post_content, post in parsed_posts %}
         
     <div class="post flex flex-col">
         {# post header #}
@@ -44,7 +44,7 @@
             {% endcomment %}
 
             {% if post.content %}
-                {{post.content}}
+                {{ post_content | safe }}
             {% endif %}
         </div>
     </div>
