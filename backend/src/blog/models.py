@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from taggit.managers import TaggableManager
 
 
@@ -21,7 +21,7 @@ class PostManager(models.Manager):
             bool: True if user can see the post.
 
         """
-        posts = self.get_queryset()
+        posts: QuerySet["Post"] = self.get_queryset()
 
         if user.is_authenticated:
             if user.has_perm('blog.see_others_unpublished'):
@@ -59,7 +59,7 @@ class Post(models.Model):
     Attributes:
         author: user who wrote the post.
         title: title of the post.
-        content: JSON formated post content returned by EditorJs library.
+        content: markdown formated post content returned by Editor library (milkdown).
         started_at: datetime when post was created. 
         last_edited: datetime when post was edited last time.
         published_at: datetime when post was first published.
@@ -78,12 +78,13 @@ class Post(models.Model):
     
     tags = TaggableManager()
 
-    # rewrite to a custom json Field
+    # keep for migrations from older versions
     def content_default():
         """Get post's default content data."""
         return {'content': {}}
 
-    content = models.JSONField(null=False, blank=False, default=content_default)
+    content = models.TextField(null=False, blank=True, default=lambda: "# header\n- list element 1\n- list element 2\n\n")
+    # content = models.JSONField(null=False, blank=False, default=content_default)
 
     started_at = models.DateTimeField(
         null=False, blank=False, auto_now_add=True

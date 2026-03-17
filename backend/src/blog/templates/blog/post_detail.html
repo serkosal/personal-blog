@@ -30,15 +30,19 @@
             {% include "users/partials/avatar_link.html" with user=post.author %}           
         </div>
 
-        <p>
-            {% if post.content.blocks %}
+        <div>
+            {% if post_content %}
 
-                {% for block in post.content.blocks %}
-                    {% include "blog/partials/block.html" with el=block.data %}
-                {% endfor %}
+                {{post_content|safe}}
+
+                {% comment "EditorJS Legacy" %}
+                    {% for block in post.content.blocks %}
+                        {% include "blog/partials/block.html" with el=block.data %}
+                    {% endfor %}
+                {% endcomment %}
 
             {% endif %}
-        </p>
+        </div>
     </div>
     {% endif %}
 {% endblock %}

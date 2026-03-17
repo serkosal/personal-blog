@@ -1,93 +1,39 @@
 import './editor-style.css'
 
-import EditorJS from '@editorjs/editorjs';
+import { Crepe } from "@milkdown/crepe";
+import type { DefaultValue } from "@milkdown/core";
+import "@milkdown/crepe/theme/common/style.css";
+/**
+ * Available themes:
+ * frame, classic, nord
+ * frame-dark, classic-dark, nord-dark
+ */
+import "@milkdown/crepe/theme/nord-dark.css";
 
-import type { BlockToolConstructable, EditorConfig, OutputData } from '@editorjs/editorjs';
 
-import Paragraph from '@editorjs/paragraph';
-import Header from '@editorjs/header';
-import List from '@editorjs/list';
-import Quote from '@editorjs/quote';
-import Warning from '@editorjs/warning';
-import Table from '@editorjs/table'
+const contentEL = document.getElementById("initial-id_content") as
+    (HTMLInputElement | null);
+const initialContent = contentEL?.value || "Hello, from milfdown!";
 
 
-let editorConfig: EditorConfig = {
+const crepe = new Crepe({
+    root: "#milkdownjs",
+    defaultValue: initialContent
+});
 
-    /**
-     * Id of Element that should contain Editor instance
-     */
-    holder: 'editorjs',
-    autofocus: true,
-    placeholder: 'Let`s write an awesome story!',
 
-    tools: {
-        header: {
-            class: Header as unknown as BlockToolConstructable,
-            inlineToolbar: true
-        },
-        list: {
-            class: List,
-            inlineToolbar: true
-        },
-        quote: {
-            class: Quote,
-            inlineToolbar: true
-        },
-        warning: {
-            class: Warning,
-            inlineToolbar: true,
-            config: {
-                titlePlaceholder: 'Warning title',
-                messagePlaceholder: 'warning message warning',
-            },
-        },
-        paragraph: {
-            class: Paragraph as unknown as BlockToolConstructable,
-            inlineToolbar: true
-        },
-        table: {
-            class: Table as unknown as BlockToolConstructable,
-            inlineToolbar: true,
-            config: {
-                rows: 2,
-                cols: 3,
-                maxRows: 5,
-                maxCols: 5,
-            },
-        }
-    },
-};
+crepe.create().then(() => {
+    console.log('Milfdown is ready to work!')
 
-/*
- retrieve initial value from initial-id_content
-*/
-const initialContent = 
-    document.getElementById("initial-id_content") as (HTMLInputElement | null);
+    let submit_form = <HTMLFormElement>document.getElementById("milkdown-save")?.parentElement;
+    submit_form?.addEventListener('submit', async function (ev) {
 
-if (initialContent) {
-    try {
-        const initialData: OutputData = JSON.parse(initialContent.value);
-        editorConfig.data = initialData;
-    }
-    catch (error)
-    {
-        console.log(error)
-    }
-}
+        ev.preventDefault();
 
-const editor = new EditorJS(editorConfig);
-
-let submit_form  = <HTMLFormElement>document.getElementById("editorjs-save")?.parentElement;
-submit_form?.addEventListener('submit', async function (ev) {
-
-    ev.preventDefault();
-
-    editor.save().then(async (outputData) =>  {
-        const contentJSON = JSON.stringify(outputData);
+        const contentMARKDOWN = crepe.getMarkdown();
 
         const formData = new FormData(submit_form);
-        formData.append('content', contentJSON);
+        formData.append('content', contentMARKDOWN);
 
         const response = await fetch(submit_form.action, {
             method: 'POST',
@@ -101,15 +47,11 @@ submit_form?.addEventListener('submit', async function (ev) {
             const result = await response.text();
             console.log(result);
         }
-    }).catch((error) => {
-        console.log('Saving failed: ', error);
-    })
+    });
+
+}).catch(reason => {
+    console.log(`Milfdown editor initialization failed because of ${reason}`)
 });
 
-
-try {
-    await editor.isReady;
-    console.log('Editor.js is ready to work!')
-} catch (reason) {
-    console.log(`Editor.js initialization failed because of ${reason}`)
-}
+// To destroy the editor
+// crepe.destroy();

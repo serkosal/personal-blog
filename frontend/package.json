@@ -15,13 +15,7 @@
     "vite": "^7.2.4"
   },
   "dependencies": {
-    "@editorjs/editorjs": "^2.31.0",
-    "@editorjs/header": "^2.8.8",
-    "@editorjs/list": "^2.0.9",
-    "@editorjs/paragraph": "^2.11.7",
-    "@editorjs/quote": "^2.7.6",
-    "@editorjs/table": "^2.4.5",
-    "@editorjs/warning": "^1.4.1",
+    "@milkdown/crepe": "^7.19.0",
     "tailwindcss": "^4.1.18"
   }
 }

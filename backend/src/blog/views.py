@@ -11,18 +11,24 @@ from django.views.generic import (
     UpdateView,
 )
 from rest_framework.parsers import JSONParser
+from markdown_it import MarkdownIt
 
 from .forms.forms import PostCreateForm, PostEditForm
 from .models import Post
 from .serializers.post import PostSerializer
 from .serializers.post_content import PostContentSchema
 
+md = (
+    MarkdownIt('commonmark', {'breaks':True,'html':True})
+    .enable('table')
+)
 
 class PostList(ListView):
     """Render a page with the list of posts."""
     
     model = Post
     context_object_name = 'posts_list'
+    # paginate_by = 100
 
     def get_queryset(self):
         """Get the list of posts.
@@ -56,6 +62,11 @@ class PostList(ListView):
         """
         context = super().get_context_data(**kwargs)
         context['title'] = 'Latest posts'
+        
+        parsed_posts: list[tuple[str, Post]] = []
+        for post in self.posts:
+            parsed_posts.append((md.render(post.content), post))
+        context['parsed_posts'] = parsed_posts
 
         return context
 
@@ -93,6 +104,8 @@ class PostDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['can_edit'] = post.can_edit(user)
         context['tags'] = post.tags.all()
+        
+        context['post_content'] = md.render(post.content)
 
         return context
 
