@@ -1,37 +1,86 @@
 import './editor.css'
-import { Crepe } from "@milkdown/crepe";
-// import type { DefaultValue } from "@milkdown/core";
+import './post.css'
 
-// import "../node_modules/@milkdown/crepe/src/theme/common/style.css";
-// import "@milkdown/crepe/theme/common/style.css";
-/**
- * Available themes:
- * frame, classic, nord
- * frame-dark, classic-dark, nord-dark
- */
-// import "@milkdown/crepe/theme/nord-dark.css";
-// import "../node_modules/@milkdown/crepe/src/theme/nord-dark/style.css";
+import hljs from 'highlight.js/lib/core';
+import markdownit from 'markdown-it';
 
-const contentEL = document.getElementById("initial-id_content") as
-    (HTMLInputElement | null);
-const initialContent = contentEL?.value || "Hello, from milfdown!";
+import {registerLanguages} from './post.ts';
 
+registerLanguages();
+const md = markdownit('default', {
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, {language: lang}).value;
+      }
+      catch (__) {}
+    }
 
-const crepe = new Crepe({
-    root: "#milkdownjs",
-    defaultValue: initialContent
+    return '';
+  },
+  html: false,
+  breaks: true
 });
 
 
-crepe.create().then(() => {
-    console.log('Milfdown is ready to work!')
+const editorEL = document.getElementById("milkdownjs") as HTMLTextAreaElement | null;
+if (editorEL) {
 
-    let submit_form = <HTMLFormElement>document.getElementById("milkdown-save")?.parentElement;
+    // view mode radio buttons
+    const radioSwitchPreview = editorEL?.appendChild(document.createElement('fieldset'));
+    radioSwitchPreview.innerHTML = 
+        '<legend> View mode </legend>' +
+
+        '<label for="markdownView">Markdown view</label>\n' + 
+        '<input type="radio" name="viewMode" id="markdownView" value="markdownView" checked />\n' + 
+
+        '<label for="htmlPreview">HTML preview</label>\n' + 
+        '<input type="radio" name="viewMode" id="htmlPreview" value="htmlPreview" />'
+    ;
+
+    // on radio button change
+    radioSwitchPreview.onchange = (_) => {
+        const htmlPreviewRadioButton = radioSwitchPreview.querySelector<HTMLInputElement>('#htmlPreview');
+
+        if (htmlPreviewRadioButton && htmlPreviewRadioButton.checked) {
+            previewHtmlEl.removeAttribute('hidden');
+            textAreaEl.setAttribute('hidden', '');
+            previewHtmlEl.innerHTML = md.render(textAreaEl.value);
+        }
+        else {
+            previewHtmlEl.setAttribute('hidden', '');
+            textAreaEl.removeAttribute('hidden');
+
+            textAreaEl.innerHTML = hljs.highlight(textAreaEl.value, {language: 'markdown'}).value;
+        }
+    }
+
+    // textarea
+    const textAreaEl = editorEL.appendChild(document.createElement('textarea'));
+    textAreaEl.rows = 30;
+    textAreaEl.cols = 90;
+
+    const contentEL = document.getElementById("initial-id_content") as (HTMLInputElement | null);
+    const initialContent = contentEL?.value || "# header !";
+
+    textAreaEl.value = initialContent;
+
+    // textAreaEl.oninput = (_) => {
+    //     textAreaEl.innerHTML = hljs.highlight(textAreaEl.value, {language: 'markdown'}).value;
+    // }
+
+    // preview element
+    const previewHtmlEl = editorEL.appendChild(document.createElement('div'));
+    previewHtmlEl.setAttribute('hidden', '');
+
+    // submit button
+    const submit_form = <HTMLFormElement>document.getElementById("milkdown-save")?.parentElement;
+
     submit_form?.addEventListener('submit', async function (ev) {
 
         ev.preventDefault();
 
-        const contentMARKDOWN = crepe.getMarkdown();
+        const contentMARKDOWN = textAreaEl.value;
 
         const formData = new FormData(submit_form);
         formData.append('content', contentMARKDOWN);
@@ -49,10 +98,4 @@ crepe.create().then(() => {
             console.log(result);
         }
     });
-
-}).catch(reason => {
-    console.log(`Milfdown editor initialization failed because of ${reason}`)
-});
-
-// To destroy the editor
-// crepe.destroy();
+}
