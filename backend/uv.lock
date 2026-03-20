@@ -59,7 +59,6 @@ dependencies = [
     { name = "django" },
     { name = "django-taggit" },
     { name = "django-vite" },
-    { name = "djangorestframework" },
     { name = "gunicorn" },
     { name = "markdown-it-py", extra = ["linkify"] },
     { name = "pillow" },
@@ -83,7 +82,6 @@ requires-dist = [
     { name = "django", specifier = ">=5.2.8" },
     { name = "django-taggit", specifier = ">=6.1.0" },
     { name = "django-vite", specifier = ">=3.1.0" },
-    { name = "djangorestframework", specifier = ">=3.16.1" },
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "markdown-it-py", extras = ["linkify"], specifier = ">=4.0.0" },
     { name = "pillow", specifier = ">=12.0.0" },
@@ -293,18 +291,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/23/fe/4be07f538bbf9bf8bf73b045552ec2a1b4fba67e3176abb30490b643368e/django_vite-3.1.0.tar.gz", hash = "sha256:8b4ffe4a9fa81ff568bfb195e74dde8694aaf13fd4b656ae60bf59cce08b85e8", size = 25434, upload-time = "2025-02-23T15:32:07.914Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/30/59/7df4b1077fa41b43b4e542696d75138dbb86a65f44248c607b3e0f1014ce/django_vite-3.1.0-py3-none-any.whl", hash = "sha256:4e46572bd6b1ce70784be129205dc2ffcbc7a3c19fea50bebfb72b327bbde5fc", size = 23579, upload-time = "2025-02-23T15:32:06.603Z" },
-]
-
-[[package]]
-name = "djangorestframework"
-version = "3.16.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/8a/95/5376fe618646fde6899b3cdc85fd959716bb67542e273a76a80d9f326f27/djangorestframework-3.16.1.tar.gz", hash = "sha256:166809528b1aced0a17dc66c24492af18049f2c9420dbd0be29422029cfc3ff7", size = 1089735, upload-time = "2025-08-06T17:50:53.251Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b0/ce/bf8b9d3f415be4ac5588545b5fcdbbb841977db1c1d923f7568eeabe1689/djangorestframework-3.16.1-py3-none-any.whl", hash = "sha256:33a59f47fb9c85ede792cbf88bde71893bcda0667bc573f784649521f1102cec", size = 1080442, upload-time = "2025-08-06T17:50:50.667Z" },
 ]
 
 [[package]]

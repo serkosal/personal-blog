@@ -12,7 +12,7 @@ urlpatterns = [
     path('<int:pk>/del/', views.PostDelete.as_view(), name='delete'),
     path('<int:pk>/e/', views.PostUpdate.as_view(), name='edit'),
     # GET, POST
-    path('api/posts/', views.api_root, name='api-root'),
+    # path('api/posts/', views.api_root, name='api-root'),
     # GET POST DELETE PATCH
-    path('api/posts/<int:post_id>/', views.api_detail, name='api-detail'),
+    # path('api/posts/<int:post_id>/', views.api_detail, name='api-detail'),
 ]

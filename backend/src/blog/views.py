@@ -1,7 +1,6 @@
 """File with views for 'blog' Django app."""
 
 from django.contrib.auth.models import AbstractUser
-from django.http import HttpRequest, JsonResponse
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -10,17 +9,15 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
-from rest_framework.parsers import JSONParser
 from markdown_it import MarkdownIt
 from markdown_it.presets import gfm_like
-from markdown_it.token import Token
 from markdown_it.common.utils import escapeHtml
 from markdown_it.renderer import RendererHTML
 
 from .forms.forms import PostCreateForm, PostEditForm
 from .models import Post
-from .serializers.post import PostSerializer
-from .serializers.post_content import PostContentSchema
+# from .serializers.post import PostSerializer
+# from .serializers.post_content import PostContentSchema
 
 class MyRenderer(RendererHTML):
     
@@ -247,107 +244,107 @@ class PostUpdate(UpdateView):
         return reverse('blog:detail', kwargs={'pk': post.pk})
 
 
-def api_root(req: HttpRequest) -> JsonResponse:
-    """Get the posts list in JSON format.
+# def api_root(req: HttpRequest) -> JsonResponse:
+#     """Get the posts list in JSON format.
 
-    Args:
-        req (HttpRequest): HTTP request from the client.
+#     Args:
+#         req (HttpRequest): HTTP request from the client.
 
-    Returns:
-        JsonResponse: JSON response to the client.
+#     Returns:
+#         JsonResponse: JSON response to the client.
 
-    """
-    if req.method == 'GET':
-        user = req.user
+#     """
+#     if req.method == 'GET':
+#         user = req.user
 
-        posts = Post.posts.visible_to(user)
+#         posts = Post.posts.visible_to(user)
 
-        for post in posts:
-            PostContentSchema.model_validate(post.content)
+#         for post in posts:
+#             PostContentSchema.model_validate(post.content)
 
-        serializer = PostSerializer(posts, many=True, context={'request': req})
+#         serializer = PostSerializer(posts, many=True, context={'request': req})
 
-        return JsonResponse({'posts': serializer.data})
+#         return JsonResponse({'posts': serializer.data})
 
-    # add csrf token check
-    elif req.method == 'POST':
-        if not req.user.is_authenticated:
-            return JsonResponse(
-                {'error': 'you should be authorized before create any posts!'},
-                status=401,
-            )
+#     # add csrf token check
+#     elif req.method == 'POST':
+#         if not req.user.is_authenticated:
+#             return JsonResponse(
+#                 {'error': 'you should be authorized before create any posts!'},
+#                 status=401,
+#             )
 
-        data = JSONParser().parse(req)
+#         data = JSONParser().parse(req)
 
-        serializer = PostSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        else:
-            return JsonResponse(serializer.errors, status=400)
+#         serializer = PostSerializer(data=data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return JsonResponse(serializer.data, status=201)
+#         else:
+#             return JsonResponse(serializer.errors, status=400)
 
-    else:
-        return JsonResponse(
-            {'error': f'{req.method} is not allowed!'}, status=405
-        )
+#     else:
+#         return JsonResponse(
+#             {'error': f'{req.method} is not allowed!'}, status=405
+#         )
 
 
-def api_detail(req: HttpRequest, post_id: int) -> JsonResponse:  # noqa: PLR0911
-    """Get the posts list in JSON format.
+# def api_detail(req: HttpRequest, post_id: int) -> JsonResponse:  # noqa: PLR0911
+#     """Get the posts list in JSON format.
 
-    Args:
-        req (HttpRequest): HTTP request from the client.
-        post_id (int): Post's id.
+#     Args:
+#         req (HttpRequest): HTTP request from the client.
+#         post_id (int): Post's id.
 
-    Returns:
-        JsonResponse: JSON response to the client.
+#     Returns:
+#         JsonResponse: JSON response to the client.
     
-    """
-    post: Post
-    try:
-        post = Post.objects.get(pk=post_id)
-    except Post.DoesNotExist:
-        return JsonResponse(
-            {'error': f'Requested post with id={post_id} does not exist!'},
-            status=404,
-        )
+#     """
+#     post: Post
+#     try:
+#         post = Post.objects.get(pk=post_id)
+#     except Post.DoesNotExist:
+#         return JsonResponse(
+#             {'error': f'Requested post with id={post_id} does not exist!'},
+#             status=404,
+#         )
 
-    if req.method == 'GET':
-        if not post.can_see(req.user):
-            return JsonResponse(
-                {'error': 'You do not have permissions to see this post!'},
-                status=403,
-            )
+#     if req.method == 'GET':
+#         if not post.can_see(req.user):
+#             return JsonResponse(
+#                 {'error': 'You do not have permissions to see this post!'},
+#                 status=403,
+#             )
 
-        serializer = PostSerializer(post, context={'request': req})
-        return JsonResponse(serializer.data)
+#         serializer = PostSerializer(post, context={'request': req})
+#         return JsonResponse(serializer.data)
 
-    if not req.user.is_authenticated:
-        return JsonResponse(
-            {'error': 'You should be authorized before edit any posts!'},
-            status=401,
-        )
+#     if not req.user.is_authenticated:
+#         return JsonResponse(
+#             {'error': 'You should be authorized before edit any posts!'},
+#             status=401,
+#         )
 
-    if not post.can_edit(req.user):
-        return JsonResponse(
-            {'error': 'You do not have permissions to edit this post!'},
-            status=403,
-        )
+#     if not post.can_edit(req.user):
+#         return JsonResponse(
+#             {'error': 'You do not have permissions to edit this post!'},
+#             status=403,
+#         )
 
-    if req.method == 'DELETE':
-        res = post.delete()
-        return JsonResponse({'deleted': res[0]}, status=200)
+#     if req.method == 'DELETE':
+#         res = post.delete()
+#         return JsonResponse({'deleted': res[0]}, status=200)
 
-    elif req.method == 'PATCH':
-        data = JSONParser().parse(req)
+#     elif req.method == 'PATCH':
+#         data = JSONParser().parse(req)
 
-        serializer = PostSerializer(post, data=data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=200)
-        return JsonResponse(serializer.errors, status=400)
+#         serializer = PostSerializer(post, data=data, partial=True)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return JsonResponse(serializer.data, status=200)
+#         return JsonResponse(serializer.errors, status=400)
 
-    else:
-        return JsonResponse(
-            {'error': f'{req.method} is not allowed!'}, status=405
-        )
+#     else:
+#         return JsonResponse(
+#             {'error': f'{req.method} is not allowed!'}, status=405
+#         )
