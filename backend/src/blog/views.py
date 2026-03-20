@@ -12,14 +12,46 @@ from django.views.generic import (
 )
 from rest_framework.parsers import JSONParser
 from markdown_it import MarkdownIt
+from markdown_it.presets import gfm_like
+from markdown_it.token import Token
+from markdown_it.common.utils import escapeHtml
+from markdown_it.renderer import RendererHTML
 
 from .forms.forms import PostCreateForm, PostEditForm
 from .models import Post
 from .serializers.post import PostSerializer
 from .serializers.post_content import PostContentSchema
 
+class MyRenderer(RendererHTML):
+    
+    def fence(self, tokens, idx, options, env):
+        token = tokens[idx] 
+        
+        # token.attrJoin('class', 'milkdown milkdown-code-block')
+        # return super().fence(tokens, idx, options, env)
+        return  (
+            '<pre>' + 
+              '<code class="milkdown-code-block"' + self.renderAttrs(token) + ">" + 
+
+                escapeHtml(token.content) + 
+            "</code></pre>\n"
+        )
+    
+    def code_block(self, tokens, idx, options, env):
+        # tokens[idx].attrJoin('class', 'milkdown milkdown-code-block')
+        # # print(tokens[idx])
+        # return super().code_block(tokens, idx, options, env) + "test"
+        token = tokens[idx] 
+        return  (
+            '<pre class="milkdown">' '<codes class="milkdown-code-block"'
+            + self.renderAttrs(token)
+            + ">" + escapeHtml(token.content)
+            + "</code></pre>\n"
+        )
+    
+md_preset = gfm_like.make()
 md = (
-    MarkdownIt('commonmark', {'breaks':True,'html':True})
+    MarkdownIt('gfm-like', md_preset['options'], renderer_cls=MyRenderer)
     .enable('table')
 )
 

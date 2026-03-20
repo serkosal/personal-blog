@@ -1,15 +1,16 @@
-import './editor-style.css'
-
+import './editor.css'
 import { Crepe } from "@milkdown/crepe";
-import type { DefaultValue } from "@milkdown/core";
-import "@milkdown/crepe/theme/common/style.css";
+// import type { DefaultValue } from "@milkdown/core";
+
+// import "../node_modules/@milkdown/crepe/src/theme/common/style.css";
+// import "@milkdown/crepe/theme/common/style.css";
 /**
  * Available themes:
  * frame, classic, nord
  * frame-dark, classic-dark, nord-dark
  */
-import "@milkdown/crepe/theme/nord-dark.css";
-
+// import "@milkdown/crepe/theme/nord-dark.css";
+// import "../node_modules/@milkdown/crepe/src/theme/nord-dark/style.css";
 
 const contentEL = document.getElementById("initial-id_content") as
     (HTMLInputElement | null);
