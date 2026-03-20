@@ -1,3 +1,5 @@
+import './post.css'
+
 import hljs from 'highlight.js/lib/core';
 
 import bash from 'highlight.js/lib/languages/bash';
@@ -41,4 +43,5 @@ export function registerLanguages() {
     hljs.registerLanguage('typescript', typescript);
     hljs.registerLanguage('yaml', yaml);
 }
-registerLanguages()
+registerLanguages();
+hljs.highlightAll();

@@ -24,9 +24,10 @@ export default defineConfig({
     rollupOptions: {
       
       input: {
-        style: './src/style.css',
+        style: 'src/style.css',
         main:  'src/main.ts',
         editor: 'src/editor.ts',
+        post: 'src/post.ts'
       },
       output: {
         entryFileNames: '[name]-[hash].js',

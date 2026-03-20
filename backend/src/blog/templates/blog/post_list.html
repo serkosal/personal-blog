@@ -1,5 +1,8 @@
 {% extends "main/base.html" %}
 
+{% load static %}
+{% load django_vite %}
+
 {% block head %}
     <meta name="robots" content="index">
 {% endblock %}
@@ -55,4 +58,8 @@
     {% endfor %}
 
     
+{% endblock %}
+
+{% block bodyend %}
+    {% vite_asset 'src/post.ts' %}
 {% endblock %}
