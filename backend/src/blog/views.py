@@ -2,6 +2,7 @@
 
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -9,6 +10,7 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
+from allauth.account.decorators import verified_email_required
 from markdown_it import MarkdownIt
 from markdown_it.presets import gfm_like
 from markdown_it.common.utils import escapeHtml
@@ -139,6 +141,7 @@ class PostDetail(DetailView):
         return context
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class PostDelete(DeleteView):
     """Deletes the required post."""
     
@@ -158,6 +161,7 @@ class PostDelete(DeleteView):
         return Post.posts.editable_to(user)
 
 
+@method_decorator(verified_email_required, name='dispatch')
 class PostCreate(CreateView):
     """Creates a new post."""
     
@@ -196,6 +200,7 @@ class PostCreate(CreateView):
 
 # renders title, is_published fields through standart django forms
 # renders content field through editor.js plugin
+@method_decorator(verified_email_required, name='dispatch')
 class PostUpdate(UpdateView):
     """Updates the required post."""
     
