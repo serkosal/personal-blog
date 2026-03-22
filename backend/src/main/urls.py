@@ -40,6 +40,7 @@ urlpatterns = [
         ),
     ),
     path('attributions/', attributions, name='attributions'),
+    path('accounts/', include('allauth.urls')),
     path('accounts/', include('users.urls')),
     path('blog/', include('blog.urls')),
     path('', index, name='index'),

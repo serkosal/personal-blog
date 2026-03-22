@@ -16,19 +16,19 @@ from .tasks import process_avatar
 # Create your views here.
 
 
-class RegisterView(CreateView):
-    """Class is being responsible for user registration.
+# class RegisterView(CreateView):
+#     """Class is being responsible for user registration.
     
-    Attributes:
-        form_class: Django form is displayed on the page.
-        success_url: Page's URL where the client will be redirected on success.
-        template_name: Django template is used for rendering page.
+#     Attributes:
+#         form_class: Django form is displayed on the page.
+#         success_url: Page's URL where the client will be redirected on success.
+#         template_name: Django template is used for rendering page.
 
-    """
+#     """
     
-    form_class = UserCreationForm
-    success_url = reverse_lazy('users:login')
-    template_name = 'registration/register.html'
+#     form_class = UserCreationForm
+#     success_url = reverse_lazy('account_login')
+#     template_name = 'registration/register.html'
 
 
 def profile(req: HttpRequest) -> HttpResponse:

@@ -4,7 +4,7 @@ from django.urls import include, path
 
 from .views import (
     ProfileUpdate,
-    RegisterView,
+    # RegisterView,
     detail,
     profile,
     toggle_follow,
@@ -12,8 +12,8 @@ from .views import (
 
 app_name = 'users'
 urlpatterns = [
-    path('', include('django.contrib.auth.urls')),
-    path('register/', RegisterView.as_view(), name='register'),
+    # path('', include('django.contrib.auth.urls')),
+    # path('register/', RegisterView.as_view(), name='register'),
     path('profile/', profile, name='profile'),
     path('profile/<int:user_id>/', detail, name='detail'),
     path('profile/<int:user_id>/e/', ProfileUpdate.as_view(), name='edit'),

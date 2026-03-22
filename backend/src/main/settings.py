@@ -25,7 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# region SECURITY
+ROOT_URLCONF = 'main.urls'
+WSGI_APPLICATION = 'main.wsgi.application'
+
+# region security
 SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = bool_env('DEBUG')
 
@@ -44,33 +47,8 @@ if not DEBUG:
 
 if bool_env('LOCALHOST_ALLOWED'): 
     ALLOWED_HOSTS.extend(['127.0.0.1', 'localhost'])
-    
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-     'NAME': 
-     'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-
-LOGOUT_REDIRECT_URL = '/blog/'
-    
-# endregion 
-    
-# region EMAIL
-
-# endregion  
+# endregion
 
 # region apps and middlewares
 
@@ -78,6 +56,8 @@ INSTALLED_APPS = [
     # 3rd-party apps
     'taggit',
     'django_vite',
+    "allauth",
+    "allauth.account",
     # my own apps
     'users',
     'main',
@@ -98,11 +78,59 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    "allauth.account.middleware.AccountMiddleware", #allauth
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 # endregion
 
-ROOT_URLCONF = 'main.urls'
+# region AUTH
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+# Password validation
+# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+     'NAME': 
+     'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+LOGOUT_REDIRECT_URL = '/blog/'
+LOGIN_REDIRECT_URL = "/"
+
+# email
+if not DEBUG:
+    EMAIL_HOST = ''
+    EMAIL_PORT = ''
+    EMAIL_HOST_USER = ''
+    EMAIL_HOST_PASSWORD = ''
+    EMAIL_USE_TLS = ''
+    EMAIL_USE_SSL = ''
+    EMAIL_TIMEOUT = ''
+    EMAIL_SSL_KEYFILE = ''
+    EMAIL_SSL_CERTFILE = ''
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+ACCOUNT_EMAIL_VERIFICATION = "optional"
+    
+# endregion
+
 
 TEMPLATES = [
     {
@@ -120,24 +148,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'main.wsgi.application'
-
-# region email
-
-if not DEBUG:
-    EMAIL_HOST = ''
-    EMAIL_PORT = ''
-    EMAIL_HOST_USER = ''
-    EMAIL_HOST_PASSWORD = ''
-    EMAIL_USE_TLS = ''
-    EMAIL_USE_SSL = ''
-    EMAIL_TIMEOUT = ''
-    EMAIL_SSL_KEYFILE = ''
-    EMAIL_SSL_CERTFILE = ''
-else:
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend" 
-
-# endregion 
 
 # region logging
 LOGGING = {
