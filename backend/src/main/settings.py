@@ -161,12 +161,25 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
         },
+        
+        # to disable DisallowedHost
+        'file_disallowed': {
+            'class': 'logging.NullHandler',
+        },
+
+        
     },
     'root': {
         'handlers': ['console'],
         'level': 'INFO',
     },
     'loggers': {
+        # disabling DisallowedHost error
+        'django.security.DisallowedHost': {
+            'handlers': ['file_disallowed'],
+            'propagate': False,
+            'level': 'ERROR',
+        },
         'django': {
             'handlers': ['console'],
             'level': 'ERROR',
