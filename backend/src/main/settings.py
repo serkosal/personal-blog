@@ -37,6 +37,7 @@ if not DEBUG:
     ALLOWED_HOSTS = [
         'www.serkosal.org',
         'serkosal.org',
+        'mail.serkosal.org',
         '63.250.47.103',
     ]
 
@@ -119,15 +120,14 @@ LOGIN_REDIRECT_URL = "/"
 # email
 DEFAULT_FROM_EMAIL = 'admin@serkosal.org'
 if not DEBUG:
-    EMAIL_HOST = 'mailserver'
-    EMAIL_PORT = '587'
-    EMAIL_HOST_USER = 'admin'
-    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') or ''
+    EMAIL_HOST = 'mail.serkosal.org'
+    EMAIL_PORT = 587
     EMAIL_USE_TLS = True
-    EMAIL_USE_SSL = True
-    EMAIL_TIMEOUT = ''
-    # EMAIL_SSL_KEYFILE = ''
-    # EMAIL_SSL_CERTFILE = ''
+    EMAIL_TIMEOUT = 30
+    
+    EMAIL_HOST_USER = 'admin@serkosal.org'
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') or ''
+
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 

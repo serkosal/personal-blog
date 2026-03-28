@@ -1,3 +1,8 @@
+networks:
+  appnet:
+    external: true
+    name: shared_appnet
+
 services:
   mailserver:
     image: ghcr.io/docker-mailserver/docker-mailserver:latest
@@ -13,6 +18,8 @@ services:
       - "465:465"  # ESMTP (implicit TLS)
       - "587:587"  # ESMTP (explicit TLS => STARTTLS)
       - "993:993"  # IMAP4 (implicit TLS)
+    networks:
+      - appnet
     volumes:
       - ./email/data/dms/mail-data/:/var/mail/
       - ./email/data/dms/mail-state/:/var/mail-state/
