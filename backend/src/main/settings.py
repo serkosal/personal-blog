@@ -117,16 +117,17 @@ LOGOUT_REDIRECT_URL = '/blog/'
 LOGIN_REDIRECT_URL = "/"
 
 # email
+DEFAULT_FROM_EMAIL = 'admin@serkosal.org'
 if not DEBUG:
-    EMAIL_HOST = ''
-    EMAIL_PORT = ''
-    EMAIL_HOST_USER = ''
-    EMAIL_HOST_PASSWORD = ''
-    EMAIL_USE_TLS = ''
-    EMAIL_USE_SSL = ''
+    EMAIL_HOST = 'mailserver'
+    EMAIL_PORT = '587'
+    EMAIL_HOST_USER = 'admin'
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') or ''
+    EMAIL_USE_TLS = True
+    EMAIL_USE_SSL = True
     EMAIL_TIMEOUT = ''
-    EMAIL_SSL_KEYFILE = ''
-    EMAIL_SSL_CERTFILE = ''
+    # EMAIL_SSL_KEYFILE = ''
+    # EMAIL_SSL_CERTFILE = ''
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
