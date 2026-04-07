@@ -16,7 +16,8 @@
                         {% endif %}
                         {% if can_edit %}
                         <div>
-                            <a href="{% url 'users:edit' render_user.pk%}">edit</a>
+                            <a href="{% url 'users:edit' render_user.pk%}">edit</a><br>
+                            <a href="{% url 'account_email'%}">manage emails</a>
                         </div>
                         {% endif %}
                         {% if can_follow %}
