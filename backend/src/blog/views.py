@@ -59,7 +59,8 @@ class PostList(ListView):
     
     model = Post
     context_object_name = 'posts_list'
-    # paginate_by = 100
+    paginate_by = 2
+    page_kwarg = 'page'
 
     def get_queryset(self):
         """Get the list of posts.
@@ -93,6 +94,12 @@ class PostList(ListView):
         """
         context = super().get_context_data(**kwargs)
         context['title'] = 'Latest posts'
+        paginator, page_obj, self.posts, self.is_paginated = self.paginate_queryset(
+            self.posts, self.paginate_by
+        )
+        context['page_obj'] = page_obj
+        
+        context['pages_links'] = [i for i in range( max(2, page_obj.number - 5), min(page_obj.paginator.num_pages, page_obj.number + 5) ) ]
         
         parsed_posts: list[tuple[str, Post]] = []
         for post in self.posts:

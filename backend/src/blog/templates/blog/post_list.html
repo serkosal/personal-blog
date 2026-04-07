@@ -10,13 +10,13 @@
 {% block content %}
 
     <h1>Posts list</h1>
-    {% if user.is_authenticated %}
-        <a href="{% url 'blog:create' %}">Create new post</a>
-    {% endif %}
+    <a href="{% url 'blog:create' %}">Create new post</a>
+
 
     {% for post_content, post in parsed_posts %}
         
     <div class="post flex flex-col">
+        
         {# post header #}
         <a href="{% url 'blog:detail' post.id %}">
         <h2>{{ post.title }}</h2>
@@ -38,25 +38,63 @@
         <hr>
 
         <div class="milkdown">
-            {% comment "EditorJS legacy" %}
-                {% if post.content.blocks %}
-                    {% for block in post.content.blocks|slice:":3" %}
-                        {% include "blog/partials/block.html" with el=block.data %}
-                    {% endfor %}
-                {% endif %}
-            {% endcomment %}
-
             {% if post.content %}
                 {{ post_content | safe }}
             {% endif %}
         </div>
     </div>
+    
     {% empty %}
     <div class="post">
         <p>No posts are available.</p>
     </div>
+
     {% endfor %}
 
+    {% if page_obj.paginator.num_pages > 1 %}
+    <div class="pagination self-center w-full">
+        <h6>pages</h6>
+        <span class="step-links flex justify-between">
+            {% if page_obj.has_previous %}
+            <div class="pagination-prev">
+                <a href="?page=1">1</a>
+            </div>
+            {% else %}
+                <span>1</span>
+            {% endif %}
+
+            <span class="current">
+                <div class="pagination-center">    
+                {% if page_obj.has_previous %}
+                    <a href="?{{page_obj.previous_page_number}}">&lt;</a>
+                {% endif%}
+
+                {% for i in pages_links %}
+                    {% if i != page_obj.number %}
+                        <a href="?page={{i}}">{{i}}</a>
+                    {% else %}
+                        {{i}}
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{page_obj.next_page_number}}">&gt;</a>
+                {% endif%}
+                
+                </div>
+            </span>
+
+            {% if page_obj.has_next %}
+            <div class="pagination-next">
+                <a href="?page={{ page_obj.paginator.num_pages }}">{{page_obj.paginator.num_pages}}</a>
+            </div>
+            {% else %}
+                <span>{{page_obj.paginator.num_pages}}</span>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
+   
     
 {% endblock %}
 
