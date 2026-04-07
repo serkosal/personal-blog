@@ -59,7 +59,7 @@ class PostList(ListView):
     
     model = Post
     context_object_name = 'posts_list'
-    paginate_by = 2
+    paginate_by = 10
     page_kwarg = 'page'
 
     def get_queryset(self):
