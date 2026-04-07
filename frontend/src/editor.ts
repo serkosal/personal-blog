@@ -27,7 +27,7 @@ const editorEL = document.getElementById("milkdownjs") as HTMLTextAreaElement | 
 if (editorEL) {
 
     // view mode radio buttons
-    const radioSwitchPreview = editorEL?.appendChild(document.createElement('fieldset'));
+    const radioSwitchPreview = editorEL.appendChild(document.createElement('fieldset'));
     radioSwitchPreview.innerHTML = 
         '<legend> View mode </legend>' +
 

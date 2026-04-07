@@ -5,4 +5,9 @@
     >
     </div>
 
+    <input type="hidden"
+       name="initial-content"
+       id="initial-id_content"
+       value="{{ widget.value|default_if_none:'' }}">
+
 {% endblock %}
