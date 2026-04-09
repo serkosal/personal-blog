@@ -21,8 +21,7 @@ msgstr ""
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: blog/templates/blog/post_confirm_delete.html:8
-#, fuzzy, python-format
-#| msgid "Are you sure you want to delete \"%(post.title)\"?"
+#, python-format
 msgid ""
 "\n"
 "            Are you sure you want to delete \"%(post.title)s\"?\n"
@@ -33,7 +32,6 @@ msgstr ""
 "        "
 
 #: blog/templates/blog/post_create.html:8
-#, fuzzy
 #| msgid "Create new post"
 msgid "Create post"
 msgstr "Создать новый пост"

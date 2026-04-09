@@ -26,8 +26,11 @@
 
 # translation
 
-python manage.py makemessages -l ru -l en
-python manage.py compilemessages
+1.  python manage.py makemessages -l ru -l en
+2.  look at the generated .po files and write translation inside quotation marks
+    in msgstr.
+    1. pay attention to `#, fuzzy` gettext flags
+3.  python manage.py compilemessages
 
 # code linting and formating | линтовка и авто-форматирование кода.
 
