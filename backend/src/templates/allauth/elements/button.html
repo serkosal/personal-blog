@@ -1,5 +1,20 @@
 {% load allauth %}
-<button class="btn">
+
+{% comment %}
+  stolen from here: https://codeberg.org/allauth/django-allauth/src/branch/main/examples/regular-django/example/templates/allauth/elements/button.html
+  commit hash: a65f86103adb4198c40d8022e6bcf488b41ec090
+{% endcomment %}
+
+<{% if attrs.href %}a href="{{ attrs.href }}"{% else %}button{% endif %}
+    {% if attrs.form %}form="{{ attrs.form }}"{% endif %}
+    {% if attrs.id %}id="{{ attrs.id }}"{% endif %}
+    {% if attrs.name %}name="{{ attrs.name }}"{% endif %}
+    {% if attrs.type %}type="{{ attrs.type }}"{% endif %}
+    {% if attrs.value %}value="{{ attrs.value }}"{% endif %}
+    class="btn"
+>
+
     {% slot %}
     {% endslot %}
-</button>
+      
+</{% if attrs.href %}a{% else %}button{% endif %}>
