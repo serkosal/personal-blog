@@ -22,7 +22,12 @@
     утилита для генерации документации
 4.  `sphinx-rtd-theme` -
     `Read the docs` theme for doc generator `Spinx`<br> 
-    тема `Read the docs` для генератора документации `Spinx` 
+    тема `Read the docs` для генератора документации `Spinx`
+
+# translation
+
+python manage.py makemessages -l ru -l en
+python manage.py compilemessages
 
 # code linting and formating | линтовка и авто-форматирование кода.
 

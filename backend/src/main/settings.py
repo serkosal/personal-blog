@@ -81,6 +81,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     "allauth.account.middleware.AccountMiddleware", #allauth
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware'
 ]
 
 # endregion
@@ -117,7 +118,9 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGOUT_REDIRECT_URL = '/blog/'
 LOGIN_REDIRECT_URL = "/"
 
-# email
+# endregion
+
+# region email
 DEFAULT_FROM_EMAIL = 'admin@serkosal.org'
 if not DEBUG:
     EMAIL_HOST = 'mail.serkosal.org'
@@ -236,6 +239,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+LANGUAGES = [
+    ('en', 'English'),
+    ('ru', 'Russian')
+]
+LOCALE_PATHS = [
+    BASE_DIR / "main/locale",
+]
 
 TIME_ZONE = 'UTC'
 

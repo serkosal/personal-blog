@@ -17,6 +17,7 @@ Examples:
 """
 
 from django.conf import settings
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
@@ -39,13 +40,16 @@ urlpatterns = [
             content_type='text/plain',
         ),
     ),
+]
+
+urlpatterns += i18n_patterns(
     path('attributions/', attributions, name='attributions'),
     path('accounts/', include('users.urls')),
     path('accounts/', include('allauth.urls')),
     path('blog/', include('blog.urls')),
     path('', index, name='index'),
     path('admin/', admin.site.urls),
-]
+)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

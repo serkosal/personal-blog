@@ -2,6 +2,7 @@
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.utils.translation import gettext
 
 
 def index(req: HttpRequest) -> HttpResponse:
@@ -14,7 +15,7 @@ def index(req: HttpRequest) -> HttpResponse:
         HttpResponse: HTTP response to the client with rendered HTML page.
 
     """
-    return render(req, 'main/index.html', {'title': 'Main page'})
+    return render(req, 'main/index.html', {'title': gettext('Main page')})
 
 
 def attributions(req: HttpRequest):
