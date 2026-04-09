@@ -46,6 +46,11 @@
   h6 {
     @apply text-xl mt-4 mb-2;
   }
+
+  p {
+    @apply py-1;
+  }
+
 }
 
 
@@ -64,10 +69,6 @@ hr {
 
 input, textarea {
   @apply border border-main-dark dark:border-main-light;
-}
-
-p {
-  @apply py-1;
 }
 
 .post, .profile, .cont {
