@@ -1,9 +1,13 @@
 {% extends "main/base.html" %}
 
+{% load i18n %}
+
 {% block content %}
 <div class="post">
     <h1>
-        Are you sure you want to delete "{{ post.title }}"?
+        {% blocktranslate %}
+            Are you sure you want to delete "{{ post.title }}"?
+        {% endblocktranslate %}
     </h1>
 
     <form method="post">

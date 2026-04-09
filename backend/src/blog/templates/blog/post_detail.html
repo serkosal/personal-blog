@@ -1,5 +1,7 @@
 {% extends "main/base.html" %}
 
+{% load i18n %}
+
 {% load static %}
 {% load django_vite %}
 
@@ -19,8 +21,12 @@
 
         {% if can_edit %}
             <div>
-                <a href="{% url 'blog:edit' pk=post.id %}">Edit post</a>
-                <a href="{% url 'blog:delete' pk=post.id %}">Delete post</a>
+                <a href="{% url 'blog:edit' pk=post.id %}">
+                    {% translate "Edit post" %}
+                </a>
+                <a href="{% url 'blog:delete' pk=post.id %}">
+                    {% translate "Delete post" %}
+                </a>
             </div>
         {% endif %}
             
@@ -37,12 +43,6 @@
             {% if post_content %}
 
                 {{post_content|safe}}
-
-                {% comment "EditorJS Legacy" %}
-                    {% for block in post.content.blocks %}
-                        {% include "blog/partials/block.html" with el=block.data %}
-                    {% endfor %}
-                {% endcomment %}
 
             {% endif %}
         </div>

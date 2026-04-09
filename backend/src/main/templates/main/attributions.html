@@ -1,16 +1,22 @@
 {% extends "main/base.html" %}
 
+{% load i18n %}
+
 {% block head %}
     <meta name="robots" content="no-index">
 {% endblock %}
 
 {% block content %}
 
-    <h1>Attributions:</h1>
+    <h1>
+        {% translate "Attributions:" %}
+    </h1>
 
     <ul>
         <li>
-            <a href="https://www.flaticon.com/free-icon/user_3177440">Default user's icons: </a>
+            <a href="https://www.flaticon.com/free-icon/user_3177440">
+                {% translate "Default user's icons:" %} 
+            </a>
         </li>
     </ul>
     

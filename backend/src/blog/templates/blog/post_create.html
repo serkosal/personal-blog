@@ -1,14 +1,20 @@
 {% extends "main/base.html" %}
 
+{% load i18n %}
+
 {% block content %}
 <div class="post">
-    <h1>Create post</h1>
+    <h1>
+        {% translate "Create post"}
+    </h1>
     <form method="post">
         {% csrf_token %}
 
         {{ form.as_div }}
 
-        <button class="btn" type="submit">Create</button>
+        <button class="btn" type="submit">
+            {% translate "Create"}
+        </button>
     </form>
 </div>
 {% endblock %}

@@ -1,61 +1,74 @@
 {% extends "main/base.html" %}
 
+{% load i18n %}
+
 {% block head %}
-    <meta name="robots" content="index">
+<meta name="robots" content="index">
 {% endblock %}
 
 {% block content %}
 
-    <div class="cont">
-        <h1>Welcome to the serkosal.org</h1>
+<div class="cont">
+    <h1>{% translate "Welcome to the serkosal.org" %}</h1>
 
-        <div class="w-full px-[10dvw]">
-        <h2>About me</h2>
+    <div class="w-full px-[10dvw]">
+        <h2>{% translate "About me" %}</h2>
+
         <p>
+        {% blocktranslate %}
             Hello my name is Sergey Kosykh a.k.a. Serkosal.<br>
             I’m programming in Python, C++, and JS.<br>
             FOSS enthusiast. I've been a GNU/Linux user since 2018.<br>
 
             I love IT in general in the wide variety of aspects from theoretical
             comp. science to the actual hardware.<br>
+        {% endblocktranslate %}
         </p>
 
         <div class="w-full">
-        <h2>My projects</h2>
-        <ol class="flex flex-col gap-4 list-decimal list-inside">
-            <li>
-                Personal web blog <a href="{% url 'blog:index' %}">site</a>.
-                You're using it right know. 
-            </li>
-            <li>
-                OpenGL Ray-marching renderer based on SDF (signed distance 
-                functions)
-                <a href="https://www.youtube.com/embed/MWxtFrY4ucQ?si=f74C8-hUpDm-0uLO">
-                    video link</a>.
-            </li>
-            <li class="w-fit">
-                C++
-                <a href="https://github.com/serkosal/intfl">
-                    INTeractive File Listing utitility
-                </a> 
-                - It's like the GNU tree but also is interactive.
-                <a href="https://github.com/serkosal/intfl">
-                    <img 
-                        src="/static/main/intfl-demo.gif"
-                        loading="lazy"
-                        alt="IntFL demo"
-                    >
-                </a>
-            </li>
-            <li>
-                C++ OpenGL boilerplate 
-                <a href="https://github.com/serkosal/skgl">project</a>
-                with build-in UI, with some OpenGL things were automated and 
-                with usefull examples.
-            </li>
-        </ol>
+            <h2>{% translate "My projects" %}</h2>
+
+            <ol class="flex flex-col gap-4 list-decimal list-inside">
+
+                <li>
+                {% url 'blog:index' as blog_index_url %}
+                {% blocktranslate %}
+                    Personal web blog <a href="{{blog_index_url}}">site</a>.
+                    You're using it right know.
+                {% endblocktranslate %}
+                </li>
+
+                <li>
+                {% blocktranslate %}
+                    OpenGL Ray-marching renderer based on SDF (signed distance
+                    functions)
+                    <a href="https://www.youtube.com/embed/MWxtFrY4ucQ?si=f74C8-hUpDm-0uLO">
+                        video link</a>.
+                {% endblocktranslate %}
+                </li>
+
+                <li class="w-fit">
+                    C++
+                    <a href="https://github.com/serkosal/intfl">
+                        INTeractive File Listing utitility
+                    </a>
+                    - 
+                    {% translate "It's like the GNU tree but also is interactive." %}
+                    <a href="https://github.com/serkosal/intfl">
+                        <img src="/static/main/intfl-demo.gif" loading="lazy" alt="IntFL demo">
+                    </a>
+                </li>
+                <li>
+                    {% blocktranslate %}
+                        C++ OpenGL boilerplate
+                        <a href="https://github.com/serkosal/skgl">project</a>
+                        with build-in UI, with some OpenGL things were automated and
+                        with usefull examples.
+                    {% endblocktranslate %}
+                </li>
+            </ol>
         </div>
 
     </div>
-    
-{% endblock %}
+
+    {% endblock %}

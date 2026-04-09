@@ -1,18 +1,24 @@
 {% extends "main/base.html" %}
 
+{% load i18n %}
 {% load static %}
 {% load django_vite %}
 
 {% block content %}
 <div class="post">
-    <h1>Edit post</h1>
+    <h1>
+        {% translate "Edit post"%}
+    </h1>
+
     {{ form.errors}}
     <form class="" method="post">
         {% csrf_token %}
 
         {{ form }}
 
-        <button class="btn" type="submit" id="milkdown-save">Edit</button>
+        <button class="btn" type="submit" id="milkdown-save">
+            {% translate "Save"%}
+        </button>
     </form>
 </div>
 {% endblock %}

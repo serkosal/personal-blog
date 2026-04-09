@@ -1,8 +1,14 @@
+{% load i18n %}
+
 <footer class="w-full min-h-[10dvh] flex flex-wrap justify-around items-center bg-post-light dark:bg-black">
 
     <div class="flex gap-2 items-center justify-center">
-        <a href="{% url 'index' %}">About</a>
-        <a href="{% url 'blog:index' %}">Blog</a>
+        <a href="{% url 'index' %}">
+            {% translate "About" %}
+        </a>
+        <a href="{% url 'blog:index' %}">
+            {% translate "Blog" %}
+        </a>
 
         <a href="https://github.com/serkosal/personal-blog" target="_blank" class="dark:invert">
             <picture>
@@ -12,14 +18,23 @@
                     alt="GitHub" 
                     class="max-h-[5dvh] w-full object-cover">
             </picture>
-            <!-- <div class="h-[5dvh] w-[448px] bg-[url('/static/main/GitHub_Invertocat_Black.svg')] md:bg-[url('/static/main/GitHub_Black.svg')] bg-cover bg-center bg-no-repeat"> -->
-
         </a>
     </div>
 
     <div class="flex flex-col justify-between">
-        <div>Icons provided by <a href="https://www.flaticon.com">flaticon</a>.</div>
-        <div>More details <a href="{% url 'attributions' %}">here</a></div>
+        <div>
+            {% blocktranslate %}
+                Icons provided by 
+                <a href="https://www.flaticon.com">flaticon</a>.
+            {% endblocktranslate %}
+        </div>
+        <div>
+            {% url 'attributions' as attributions_url %}
+            {% blocktranslate %}
+                More details 
+                <a href="{{attributions_url}}">here</a>
+            {% endblocktranslate %}
+        </div>
     </div>
     
 

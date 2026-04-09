@@ -1,15 +1,21 @@
 {% extends "main/base.html" %}
 
+{% load i18n %}
+
 {% block content %}
 <div class="profile">
-    <h1>User profile</h1>
+    <h1>
+        {% translate "User profile"%}
+    </h1>
     {% if form %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
         {{ form.as_div }}
 
-        <button class="btn" type="submit">Update</button>
+        <button class="btn" type="submit">
+            {% translate "Update"%}
+        </button>
     </form>    
     {% endif %}
 </div>

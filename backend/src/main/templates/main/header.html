@@ -1,41 +1,53 @@
+{% load i18n %}
+
 <header class="w-full min-h-[10dvh] px-[4dvw] py-4 flex content-center items-center justify-between ">
 
     <div>
-        <button class="btn" id="theme-toggler">toggle light/dark</button>
+        <button class="btn" id="theme-toggler">
+            {% translate "toggle light/dark" %}
+        </button>
     </div>
 
     <div class="md:flex hidden" style="gap: 1rem;">
-        <a href="{% url 'blog:index' %}">Blog</a>
-        <a href="{% url 'blog:index' %}?news">News</a>
+        <a href="{% url 'blog:index' %}">
+            {% translate "Blog" %}
+        </a>
+
+        <a href="{% url 'blog:index' %}?news">
+            {% translate "News" %}
+        </a>
         <a href="{% url 'blog:index' %}?tags=python">Python</a>
         <a href="{% url 'blog:index' %}?tags=js">JS</a>
         <a href="{% url 'blog:index' %}?tags=cpp">C++</a>
-        <a href="{% url 'blog:index' %}?tags=web-dev">Web-dev</a>
+        <a href="{% url 'blog:index' %}?tags=web-dev">
+            {% translate "Web-dev" %}
+        </a>
     </div>
 
     <div class="flex gap-2 items-center">
         {% if user and user.is_authenticated %}
-            <div>
-                <a href="{% url 'users:profile'%}">{{ user.username }}</a>
-            </div>
+            <div><a href="{% url 'users:profile'%}">
+                {{ user.username }}
+            </a></div>
 
             <div>
                 <form action="{% url 'account_logout' %}" method="post">
                     {% csrf_token %}
-                    <button type="submit"><a>Log Out</a></button>
+                    <button type="submit"><a>
+                        {% translate "Log Out" %}
+                    </a></button>
                 </form>
             </div>
 
             {% include "users/partials/avatar.html" with user=user %}
 
         {% else %}
-            <div>
-                <a href="{% url 'account_login' %}">Log in</a>
-            </div>
-            <div>
-                <a href="{% url 'account_signup' %}">Register</a>
-            </div>
-
+            <div><a href="{% url 'account_login' %}">
+                {% translate "Log in" %}
+            </a></div>
+            <div><a href="{% url 'account_signup' %}">
+                    {% translate "Register" %}
+            </a></div>
         {% endif %}
     </div>
 

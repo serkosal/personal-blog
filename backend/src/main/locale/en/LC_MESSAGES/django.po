@@ -1,0 +1,236 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-09 00:34+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: blog/templates/blog/post_confirm_delete.html:8
+#, python-format
+msgid ""
+"\n"
+"            Are you sure you want to delete \"%(post.title)s\"?\n"
+"        "
+msgstr ""
+
+#: blog/templates/blog/post_detail.html:25
+#: blog/templates/blog/post_update.html:10
+msgid "Edit post"
+msgstr ""
+
+#: blog/templates/blog/post_detail.html:28
+msgid "Delete post"
+msgstr ""
+
+#: blog/templates/blog/post_list.html:14
+msgid "Posts list"
+msgstr ""
+
+#: blog/templates/blog/post_list.html:17
+msgid "Create new post"
+msgstr ""
+
+#: blog/templates/blog/post_list.html:55
+msgid "No posts are available."
+msgstr ""
+
+#: blog/templates/blog/post_list.html:63
+msgid "pages"
+msgstr ""
+
+#: blog/templates/blog/post_update.html:20
+msgid "Save"
+msgstr ""
+
+#: users/templates/registration/profile.html:18
+msgid "Bio:"
+msgstr ""
+
+#: users/templates/registration/profile.html:24
+msgid "edit"
+msgstr ""
+
+#: users/templates/registration/profile.html:27
+msgid "manage emails"
+msgstr ""
+
+#: users/templates/registration/profile.html:35
+msgid "Unfollow"
+msgstr ""
+
+#: users/templates/registration/profile.html:37
+msgid "Follow"
+msgstr ""
+
+#: users/templates/registration/profile.html:50
+msgid "Is staff:"
+msgstr ""
+
+#: users/templates/registration/profile.html:53
+msgid "Date joined:"
+msgstr ""
+
+#: users/templates/registration/profile.html:65
+#, python-format
+msgid ""
+"\n"
+"                        %(render_user.username)s's Followers:\n"
+"                    "
+msgstr ""
+
+#: users/templates/registration/profile.html:84
+#, python-format
+msgid ""
+"\n"
+"                        %(render_user.username)s is following:</h2>\n"
+"                    "
+msgstr ""
+
+#: users/templates/registration/profile.html:99
+msgid "You are not logged into your account!"
+msgstr ""
+
+#: users/templates/users/profileUpdate.html:8
+msgid "User profile"
+msgstr ""
+
+#: users/templates/users/profileUpdate.html:17
+msgid "Update"
+msgstr ""
+
+#: main/templates/main/attributions.html:12
+msgid "Attributions:"
+msgstr ""
+
+#: main/templates/main/attributions.html:18
+msgid "Default user's icons:"
+msgstr ""
+
+#: main/templates/main/footer.html:7
+msgid "About"
+msgstr ""
+
+#: main/templates/main/footer.html:10 main/templates/main/header.html:13
+msgid "Blog"
+msgstr ""
+
+#: main/templates/main/footer.html:26
+msgid ""
+"\n"
+"                Icons provided by \n"
+"                <a href=\"https://www.flaticon.com\">flaticon</a>.\n"
+"            "
+msgstr ""
+
+#: main/templates/main/footer.html:33
+#, python-format
+msgid ""
+"\n"
+"                More details \n"
+"                <a href=\"%(attributions_url)s\">here</a>\n"
+"            "
+msgstr ""
+
+#: main/templates/main/header.html:7
+msgid "toggle light/dark"
+msgstr ""
+
+#: main/templates/main/header.html:17
+msgid "News"
+msgstr ""
+
+#: main/templates/main/header.html:23
+msgid "Web-dev"
+msgstr ""
+
+#: main/templates/main/header.html:37
+msgid "Log Out"
+msgstr ""
+
+#: main/templates/main/header.html:46
+msgid "Log in"
+msgstr ""
+
+#: main/templates/main/header.html:49
+msgid "Register"
+msgstr ""
+
+#: main/templates/main/index.html:12
+msgid "Welcome to the serkosal.org"
+msgstr ""
+
+#: main/templates/main/index.html:15
+msgid "About me"
+msgstr ""
+
+#: main/templates/main/index.html:18
+msgid ""
+"\n"
+"            Hello my name is Sergey Kosykh a.k.a. Serkosal.<br>\n"
+"            I’m programming in Python, C++, and JS.<br>\n"
+"            FOSS enthusiast. I've been a GNU/Linux user since 2018.<br>\n"
+"\n"
+"            I love IT in general in the wide variety of aspects from "
+"theoretical\n"
+"            comp. science to the actual hardware.<br>\n"
+"        "
+msgstr ""
+
+#: main/templates/main/index.html:29
+msgid "My projects"
+msgstr ""
+
+#: main/templates/main/index.html:35
+#, python-format
+msgid ""
+"\n"
+"                    Personal web blog <a href=\"%(blog_index_url)s\">site</"
+"a>.\n"
+"                    You're using it right know.\n"
+"                "
+msgstr ""
+
+#: main/templates/main/index.html:42
+msgid ""
+"\n"
+"                    OpenGL Ray-marching renderer based on SDF (signed "
+"distance\n"
+"                    functions)\n"
+"                    <a href=\"https://www.youtube.com/embed/MWxtFrY4ucQ?"
+"si=f74C8-hUpDm-0uLO\">\n"
+"                        video link</a>.\n"
+"                "
+msgstr ""
+
+#: main/templates/main/index.html:56
+msgid "It's like the GNU tree but also is interactive."
+msgstr ""
+
+#: main/templates/main/index.html:62
+msgid ""
+"\n"
+"                        C++ OpenGL boilerplate\n"
+"                        <a href=\"https://github.com/serkosal/"
+"skgl\">project</a>\n"
+"                        with build-in UI, with some OpenGL things were "
+"automated and\n"
+"                        with usefull examples.\n"
+"                    "
+msgstr ""
+
+#: main/views.py:18
+msgid "Main page"
+msgstr ""

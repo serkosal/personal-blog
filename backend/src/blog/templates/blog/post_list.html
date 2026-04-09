@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 
+{% load i18n %}
 {% load static %}
 {% load django_vite %}
 
@@ -9,8 +10,12 @@
 
 {% block content %}
 
-    <h1>Posts list</h1>
-    <a href="{% url 'blog:create' %}">Create new post</a>
+    <h1>
+        {% translate "Posts list" %}
+    </h1>
+    <a href="{% url 'blog:create' %}">
+        {% translate "Create new post" %}
+    </a>
 
 
     {% for post_content, post in parsed_posts %}
@@ -46,14 +51,16 @@
     
     {% empty %}
     <div class="post">
-        <p>No posts are available.</p>
+        <p>
+            {% translate "No posts are available." %}
+        </p>
     </div>
 
     {% endfor %}
 
     {% if page_obj.paginator.num_pages > 1 %}
     <div class="pagination self-center w-full">
-        <h6>pages</h6>
+        <h6>{% translate "pages" %}</h6>
         <span class="step-links flex justify-between">
             {% if page_obj.has_previous %}
             <div class="pagination-prev">
