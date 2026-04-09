@@ -5,7 +5,7 @@
 {% block content %}
 <div class="profile">
     <h1>
-        {% translate "User profile"%}
+        {% translate "User profile" %}
     </h1>
     {% if form %}
     <form method="post" enctype="multipart/form-data">
@@ -14,7 +14,7 @@
         {{ form.as_div }}
 
         <button class="btn" type="submit">
-            {% translate "Update"%}
+            {% translate "Update" %}
         </button>
     </form>    
     {% endif %}

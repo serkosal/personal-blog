@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-09 00:34+0000\n"
+"POT-Creation-Date: 2026-04-09 19:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,6 +31,16 @@ msgstr ""
 "\n"
 "            Вы уверены, что хотите удалить \"%(post.title)s\"?\n"
 "        "
+
+#: blog/templates/blog/post_create.html:8
+#, fuzzy
+#| msgid "Create new post"
+msgid "Create post"
+msgstr "Создать новый пост"
+
+#: blog/templates/blog/post_create.html:16
+msgid "Create"
+msgstr "Создать"
 
 #: blog/templates/blog/post_detail.html:25
 #: blog/templates/blog/post_update.html:10
