@@ -66,6 +66,10 @@ input, textarea {
   @apply border border-main-dark dark:border-main-light;
 }
 
+p {
+  @apply py-1;
+}
+
 .post, .profile, .cont {
   @apply 
   p-[2%] my-1

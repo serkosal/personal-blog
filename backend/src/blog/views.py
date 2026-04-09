@@ -49,6 +49,7 @@ class MyRenderer(RendererHTML):
         )
     
 md_preset = gfm_like.make()
+md_preset['options']['breaks'] = True
 md = (
     MarkdownIt('gfm-like', md_preset['options'], renderer_cls=MyRenderer)
     .enable('table')
