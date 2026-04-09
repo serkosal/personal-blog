@@ -121,15 +121,16 @@ LOGIN_REDIRECT_URL = "/"
 # endregion
 
 # region email
-DEFAULT_FROM_EMAIL = 'admin@serkosal.org'
-if not DEBUG:
-    EMAIL_HOST = 'mail.serkosal.org'
-    EMAIL_PORT = 587
-    EMAIL_USE_TLS = True
+if not DEBUG and not bool_env('USE_MOCK_EMAIL'):
+    EMAIL_HOST = os.environ.get('EMAIL_HOST')
+    EMAIL_PORT = os.environ.get('EMAIL_PORT') or 587
+    EMAIL_USE_TLS = bool_env('EMAIL_USE_TLS')
     EMAIL_TIMEOUT = 30
     
-    EMAIL_HOST_USER = 'admin@serkosal.org'
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') or 'user@example.com'
     EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') or ''
+    
+    DEFAULT_FROM_EMAIL = 'admin' + EMAIL_HOST_USER[EMAIL_HOST_USER.find('@'):]
 
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
