@@ -19,36 +19,7 @@
 
 
     {% for post_content, post in parsed_posts %}
-        
-    <div class="post flex flex-col">
-        
-        {# post header #}
-        <a href="{% url 'blog:detail' post.id %}">
-        <h2>{{ post.title }}</h2>
-        </a>
-                
-        <div class="flex flex-row justify-between align-center items-center" style="width: 100%;">
-
-            {# post tags #}
-            <div>
-                {% for tag in post.tags.all|slice:"5" %}
-                    <a href="{% url 'blog:index' %}?tags={{tag}}">#{{tag}}</a>
-                {% endfor %}
-            </div>
-
-            {# post avatar and link #}
-            {% include "users/partials/avatar_link.html" with user=post.author %}
-        </div>
-
-        <hr>
-
-        <div class="milkdown">
-            {% if post.content %}
-                {{ post_content | safe }}
-            {% endif %}
-        </div>
-    </div>
-    
+        {% include "blog/partials/post.html" with post=post content=post_content %}
     {% empty %}
     <div class="post">
         <p>

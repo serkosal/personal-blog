@@ -1,0 +1,48 @@
+{% load i18n %}
+
+<div class="post flex flex-col">
+
+    {# post header #}
+
+    <a href="{% url 'blog:detail' post.id %}">
+        <h1>{{ post.title }}</h1>
+    </a>
+
+    {% if can_edit %}
+    <div>
+        <a href="{% url 'blog:edit' pk=post.id %}">
+            {% translate "Edit post" %}
+        </a>
+        <a href="{% url 'blog:delete' pk=post.id %}">
+            {% translate "Delete post" %}
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="w-full flex flex-row justify-between align-center items-center" style="width: 100%;">
+        <div>
+            {% for tag in post.tags.all|slice:"5" %}
+            <a href="{% url 'blog:index' %}?tags={{tag}}">#{{tag}}</a>
+            {% endfor %}
+        </div>
+
+        <div class="flex flex-row align-center items-center gap-4">
+            <div class="flex flex-col">
+                last edited: {{post.last_edited}}
+                {% if post.published_at %}
+                    published at: {{post.published_at}}
+                {% endif %}
+            </div>
+            {# post avatar and link #}
+            {% include "users/partials/avatar_link.html" with user=post.author %}
+        </div>
+    </div>
+
+    {# post content #}
+
+    <div class="milkdown">
+        {% if content %}
+            {{content|safe}}
+        {% endif %}
+    </div>
+</div>
