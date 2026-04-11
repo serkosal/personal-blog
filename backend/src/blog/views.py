@@ -1,7 +1,5 @@
 """File with views for 'blog' Django app."""
 
-from datetime import datetime
-
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator

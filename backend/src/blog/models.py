@@ -1,11 +1,10 @@
 """file with URL patterns for 'blog' Django app."""
 
-from datetime import datetime
-
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import Q, QuerySet
+from django.utils import timezone
 from taggit.managers import TaggableManager
 
 
@@ -29,9 +28,9 @@ class PostManager(models.Manager):
             if user.has_perm('blog.see_others_unpublished'):
                 return posts
             else:
-                return posts.filter(Q(author=user) | Q(published_at__lte=datetime.now()))
+                return posts.filter(Q(author=user) | Q(published_at__lte=timezone.now()))
 
-        return posts.filter(published_at__lte=datetime.now())
+        return posts.filter(published_at__lte=timezone.now())
 
     def editable_to(self, user: AbstractUser):
         """Check if user can edit the post.
@@ -52,7 +51,7 @@ class PostManager(models.Manager):
         if user.has_perm('blog.edit_others'):
             return posts
 
-        return posts.filter(Q(author=user) | Q(published_at__lte=datetime.now()))
+        return posts.filter(Q(author=user) | Q(published_at__lte=timezone.now()))
 
 
 class Post(models.Model):
