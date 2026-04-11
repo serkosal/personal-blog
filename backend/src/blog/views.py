@@ -128,6 +128,16 @@ class PostDetail(DetailView):
         self.posts = Post.posts.visible_to(user)
 
         return self.posts
+    
+    def get_object(self):
+        post: Post = super().get_object()
+        
+        if self.request.user != post.author:
+            post.views_num += 1
+            post.save(force_update=True)
+        
+        return post
+        
 
     def get_context_data(self, **kwargs):
         """Get the context data.
@@ -137,10 +147,12 @@ class PostDetail(DetailView):
             kwargs: Arbitrary keyword arguments.
 
         """
-        post: Post = self.get_object()
+        
+        context = super().get_context_data(**kwargs)
+        post: Post = context['post']
+        
         user = self.request.user
 
-        context = super().get_context_data(**kwargs)
         context['can_edit'] = post.can_edit(user)
         context['tags'] = post.tags.all()
         

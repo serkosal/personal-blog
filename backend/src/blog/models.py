@@ -85,6 +85,7 @@ class Post(models.Model):
 
     content = models.TextField(null=False, blank=True)
     # content = models.JSONField(null=False, blank=False, default=content_default)
+    views_num = models.BigIntegerField(default=0, blank=False, null=False)
 
     started_at = models.DateTimeField(
         null=False, blank=False, auto_now_add=True
