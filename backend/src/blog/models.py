@@ -1,5 +1,7 @@
 """file with URL patterns for 'blog' Django app."""
 
+from datetime import datetime
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -27,9 +29,9 @@ class PostManager(models.Manager):
             if user.has_perm('blog.see_others_unpublished'):
                 return posts
             else:
-                return posts.filter(Q(author=user) | Q(is_published=True))
+                return posts.filter(Q(author=user) | Q(published_at__lte=datetime.now()))
 
-        return posts.filter(is_published=True)
+        return posts.filter(published_at__lte=datetime.now())
 
     def editable_to(self, user: AbstractUser):
         """Check if user can edit the post.
@@ -50,7 +52,7 @@ class PostManager(models.Manager):
         if user.has_perm('blog.edit_others'):
             return posts
 
-        return posts.filter(Q(author=user) | Q(is_published=True))
+        return posts.filter(Q(author=user) | Q(published_at__lte=datetime.now()))
 
 
 class Post(models.Model):
@@ -63,7 +65,6 @@ class Post(models.Model):
         started_at: datetime when post was created. 
         last_edited: datetime when post was edited last time.
         published_at: datetime when post was first published.
-        is_published: Has post been published?
         posts: PostManager acts like objects, but also has additional methods.
 
     """
@@ -91,8 +92,6 @@ class Post(models.Model):
     )
     last_edited = models.DateTimeField(null=True, blank=False, auto_now=True)
     published_at = models.DateTimeField(null=True, blank=False)
-
-    is_published = models.BooleanField(default=False)
 
     posts = PostManager()
 

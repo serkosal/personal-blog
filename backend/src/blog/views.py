@@ -1,5 +1,7 @@
 """File with views for 'blog' Django app."""
 
+from datetime import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
@@ -80,7 +82,7 @@ class PostList(ListView):
 
         
         self.posts = self.posts.order_by(
-            '-is_published', '-published_at', '-last_edited'
+            '-published_at', '-last_edited'
         )
 
         return self.posts
@@ -193,6 +195,7 @@ class PostCreate(CreateView):
             return False
 
         post.author = user
+        
         return super().form_valid(form)
 
 
@@ -229,7 +232,7 @@ class PostUpdate(UpdateView):
 
         return self.posts
 
-    def form_valid(self, form):
+    def form_valid(self, form: PostEditForm):
         """Execute after successfully validate form.
 
         Args:
