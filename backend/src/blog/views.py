@@ -132,7 +132,10 @@ class PostDetail(DetailView):
     def get_object(self):
         post: Post = super().get_object()
         
-        if self.request.user != post.author:
+        # other staff members couldn't increase view count 
+        if (self.request.user != post.author and not self.request.user.is_staff 
+            and post.is_published()
+        ):
             post.views_num += 1
             post.save(force_update=True)
         

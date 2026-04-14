@@ -128,3 +128,7 @@ class Post(models.Model):
             and user.is_active
             and (user == self.author or user.has_perm('blog.edit_others'))
         )
+
+    def is_published(self):
+        
+        return self.published_at and self.published_at <= timezone.now()
