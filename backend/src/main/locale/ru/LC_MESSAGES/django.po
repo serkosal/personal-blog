@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-09 19:58+0000\n"
+"POT-Creation-Date: 2026-04-19 17:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,27 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: blog/templates/blog/partials/post.html:14
+#: blog/templates/blog/post_update.html:10
+msgid "Edit post"
+msgstr "Изменить пост"
+
+#: blog/templates/blog/partials/post.html:17
+msgid "Delete post"
+msgstr "Удалить пост"
+
+#: blog/templates/blog/partials/post.html:25
+msgid "Views:"
+msgstr "Кол-во просмотров:"
+
+#: blog/templates/blog/partials/post.html:35
+msgid "last edited:"
+msgstr "Последние изменения:"
+
+#: blog/templates/blog/partials/post.html:38
+msgid "published at:"
+msgstr "Опубликовано:"
 
 #: blog/templates/blog/post_confirm_delete.html:8
 #, python-format
@@ -32,22 +53,12 @@ msgstr ""
 "        "
 
 #: blog/templates/blog/post_create.html:8
-#| msgid "Create new post"
 msgid "Create post"
 msgstr "Создать новый пост"
 
 #: blog/templates/blog/post_create.html:16
 msgid "Create"
 msgstr "Создать"
-
-#: blog/templates/blog/post_detail.html:25
-#: blog/templates/blog/post_update.html:10
-msgid "Edit post"
-msgstr "Изменить пост"
-
-#: blog/templates/blog/post_detail.html:28
-msgid "Delete post"
-msgstr "Удалить пост"
 
 #: blog/templates/blog/post_list.html:14
 msgid "Posts list"
@@ -57,11 +68,11 @@ msgstr "Список постов"
 msgid "Create new post"
 msgstr "Создать новый пост"
 
-#: blog/templates/blog/post_list.html:55
+#: blog/templates/blog/post_list.html:26
 msgid "No posts are available."
 msgstr "Нет доступных постов."
 
-#: blog/templates/blog/post_list.html:63
+#: blog/templates/blog/post_list.html:34
 msgid "pages"
 msgstr "страницы"
 
