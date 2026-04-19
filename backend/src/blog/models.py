@@ -88,10 +88,10 @@ class Post(models.Model):
     views_num = models.BigIntegerField(default=0, blank=False, null=False)
 
     started_at = models.DateTimeField(
-        null=False, blank=False, auto_now_add=True
+        null=False, blank=True, auto_now_add=True
     )
-    last_edited = models.DateTimeField(null=True, blank=False, auto_now=True)
-    published_at = models.DateTimeField(null=True, blank=False)
+    last_edited = models.DateTimeField(null=True, blank=True, auto_now=True)
+    published_at = models.DateTimeField(null=True, blank=True)
 
     posts = PostManager()
 
