@@ -55,6 +55,7 @@ if bool_env('LOCALHOST_ALLOWED'):
 
 INSTALLED_APPS = [
     # 3rd-party apps
+    'modeltranslation',
     'taggit',
     'django_vite',
     "allauth",
