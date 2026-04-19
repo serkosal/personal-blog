@@ -5,6 +5,7 @@ WORKDIR /app/backend
 RUN mkdir -p /app/backend/static
 
 RUN apk add --no-cache tzdata
+RUN apk add --no-cache gettext
 
 COPY pyproject.toml uv.lock .python-version ./
 RUN uv sync --no-dev

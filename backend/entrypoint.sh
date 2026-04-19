@@ -13,5 +13,8 @@ echo "Collecting static files..."
 python manage.py collectstatic --noinput
 rm -rf ./static/*
 
+echo "Compiling translations..."
+python manage.py compilemessages
+
 echo "Starting app..."
 exec "$@"
