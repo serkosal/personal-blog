@@ -16,5 +16,9 @@ rm -rf ./static/*
 echo "Compiling translations..."
 python manage.py compilemessages
 
+echo "Updating model translations..."
+python manage.py update_translation_fields
+
+
 echo "Starting app..."
 exec "$@"
