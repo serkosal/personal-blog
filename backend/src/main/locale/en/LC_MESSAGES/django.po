@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-19 17:10+0000\n"
+"POT-Creation-Date: 2026-04-24 23:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -147,7 +147,15 @@ msgstr ""
 msgid "Blog"
 msgstr ""
 
-#: main/templates/main/footer.html:26
+#: main/templates/main/footer.html:28
+msgid "Choose your language"
+msgstr ""
+
+#: main/templates/main/footer.html:44
+msgid "Switch"
+msgstr ""
+
+#: main/templates/main/footer.html:51
 msgid ""
 "\n"
 "                Icons provided by \n"
@@ -155,7 +163,7 @@ msgid ""
 "            "
 msgstr ""
 
-#: main/templates/main/footer.html:33
+#: main/templates/main/footer.html:58
 #, python-format
 msgid ""
 "\n"

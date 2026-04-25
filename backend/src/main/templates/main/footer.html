@@ -21,6 +21,31 @@
         </a>
     </div>
 
+    <div>
+        <form method="post" action="{% url 'set_language' %}">
+            {% csrf_token %}
+            <label for="language-select">
+                {% translate "Choose your language" %}
+            </label>
+            <select id="language-select" name="language">
+                {% get_available_languages as LANGUAGES %}
+                {% get_current_language as current_language %}
+
+                {% for lang_code, lang_name in LANGUAGES %}
+                    <option 
+                        value="{{lang_code}}" 
+                        {% if current_language == lang_code %}disabled{% endif %}
+                    >
+                        {{lang_name}}
+                    </option>
+                {% endfor %}
+            </select>
+            <button class="btn" type="submit">
+                {% translate "Switch" %}
+            </button>
+        </form>
+    </div>
+
     <div class="flex flex-col justify-between">
         <div>
             {% blocktranslate %}

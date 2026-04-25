@@ -40,6 +40,7 @@ urlpatterns = [
             content_type='text/plain',
         ),
     ),
+    path("i18n/", include("django.conf.urls.i18n"))
 ]
 
 urlpatterns += i18n_patterns(
