@@ -53,10 +53,12 @@
 
   ul, menu {
     list-style: disc inside;
+    padding-left: 1rem;
   }
 
   ol {
     list-style: decimal inside;
+    padding-left: 1rem;
   }
 
 }
