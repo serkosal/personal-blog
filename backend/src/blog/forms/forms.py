@@ -17,7 +17,7 @@ class PostCreateForm(forms.ModelForm):
         """Metadata for ModelForm."""
         
         model = Post
-        fields = ['title']
+        fields = ['title', 'slug']
 
 
 class PostEditForm(forms.ModelForm):
@@ -29,7 +29,7 @@ class PostEditForm(forms.ModelForm):
         """Metadata for ModelForm."""
         
         model = Post
-        fields = ['title', 'content', 'tags']
+        fields = ['title', 'slug', 'content', 'tags']
         widgets = {'content': PostContentWidget()}
 
     def __init__(self, *args, **kwargs):

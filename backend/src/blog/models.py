@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db.models import Q, QuerySet
 from django.utils import timezone
+from django.urls import reverse
 from taggit.managers import TaggableManager
 
 
@@ -76,6 +77,8 @@ class Post(models.Model):
         max_length=100, null=False, blank=True, default='Title'
     )
     
+    slug = models.SlugField(null=True, blank=True, unique=True, max_length=120)
+    
     tags = TaggableManager()
 
     # keep for migrations from older versions
@@ -114,6 +117,11 @@ class Post(models.Model):
 
         """
         return f'Post author: {self.author} title: {self.title}'
+
+    def get_absolute_url(self) -> str:
+        def get_absolute_url(self):
+            return reverse('blog:detail', kwargs={'pk': self.pk})
+
 
     def can_edit(self, user: AbstractUser) -> bool:
         """Check if user can edit the post.
