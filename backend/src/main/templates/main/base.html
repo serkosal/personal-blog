@@ -1,8 +1,10 @@
 {% load static %}
 {% load django_vite %}
+{% load i18n %}
 
 <!doctype html>
-<html lang="en" style="background-color: var(--bg); color: var(--text);">
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{LANGUAGE_CODE}}" style="background-color: var(--bg); color: var(--text);">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
