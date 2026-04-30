@@ -119,7 +119,9 @@ class Post(models.Model):
         return f'Post author: {self.author} title: {self.title}'
 
     def get_absolute_url(self) -> str:
-        def get_absolute_url(self):
+        if self.slug:
+            return reverse('blog:detail', kwargs={'slug': self.slug})
+        else:
             return reverse('blog:detail', kwargs={'pk': self.pk})
 
 

@@ -4,11 +4,7 @@
 
     {# post header #}
 
-    <a {% if post.slug %}
-        href="{% url 'blog:detail' post.slug %}"
-    {% else %}
-        href="{% url 'blog:detail' post.id %}"
-    {% endif %} >
+    <a href="{{ post.get_absolute_url }}">
         <h1>{{ post.title }}</h1>
     </a>
 
