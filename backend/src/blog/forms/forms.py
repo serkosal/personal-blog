@@ -3,6 +3,7 @@
 from django import forms
 from django.forms.fields import BooleanField
 from django.utils import timezone
+from taggit.forms import TagField
 
 from blog.models import Post
 from .widgets import PostContentWidget
@@ -24,6 +25,7 @@ class PostEditForm(forms.ModelForm):
     """Form for post editing."""
     
     is_published = BooleanField(required=False)
+    tags = TagField(required=True)
     
     class Meta:
         """Metadata for ModelForm."""

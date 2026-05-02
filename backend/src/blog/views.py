@@ -250,22 +250,18 @@ class PostUpdate(UpdateView):
             form (BaseModelForm): instance of a validated form.
 
         """
-        post: Post = form.instance
-        user: AbstractUser = self.request.user
-
-        if not post.can_edit(user):
+        response = super().form_valid(form) 
+        post = form.instance
+        if not post.can_edit(self.request.user):
             form.add_error(None, "You don't have permission to edit this post.")
             return self.form_invalid(form)
-        
-        self.object: Post = form.save(commit=False)
-        self.object.save()
         
         # saving tags
         tags = form.cleaned_data.get('tags')
         if tags is not None:
             self.object.tags.set(tags)
         
-        return super().form_valid(form)
+        return response
     
     def form_invalid(self, form):
         """Sends A JSON Payload with form errors."""
