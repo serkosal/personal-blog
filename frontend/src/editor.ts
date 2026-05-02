@@ -22,23 +22,25 @@ const md = markdownit('default', {
   breaks: true
 });
 
+function initEditor(editor: HTMLTextAreaElement) {
+    if (!editor) return;
 
-const editorEL = document.getElementById("milkdownjs") as HTMLTextAreaElement | null;
-if (editorEL) {
+    // textarea
+    const textAreaEl = editor.querySelector('textarea') as HTMLTextAreaElement | null;
+    if (!textAreaEl) return;
+    textAreaEl.rows = 30;
+    textAreaEl.cols = 90;
 
-    // view mode radio buttons
-    const radioSwitchPreview = editorEL.appendChild(document.createElement('fieldset'));
-    radioSwitchPreview.innerHTML = 
-        '<legend> View mode </legend>' +
+    // initial value
+    const initialContentEL = editor.querySelector("#initial-id_content") as HTMLInputElement | null;
+    const initialContent = initialContentEL?.value || "# header !";
+    textAreaEl.value = initialContent;
 
-        '<label for="markdownView">Markdown view</label>\n' + 
-        '<input type="radio" name="viewMode" id="markdownView" value="markdownView" checked />\n' + 
+    const radioSwitchPreview = editor.querySelector('fieldset');
+    const previewHtmlEl = editor.querySelector('#HTMLPreview');
 
-        '<label for="htmlPreview">HTML preview</label>\n' + 
-        '<input type="radio" name="viewMode" id="htmlPreview" value="htmlPreview" />'
-    ;
+    if (!radioSwitchPreview || !previewHtmlEl) return;
 
-    // on radio button change
     radioSwitchPreview.onchange = (_) => {
         const htmlPreviewRadioButton = radioSwitchPreview.querySelector<HTMLInputElement>('#htmlPreview');
 
@@ -50,46 +52,29 @@ if (editorEL) {
         else {
             previewHtmlEl.setAttribute('hidden', '');
             textAreaEl.removeAttribute('hidden');
-
             textAreaEl.innerHTML = hljs.highlight(textAreaEl.value, {language: 'markdown'}).value;
         }
     }
+}
 
-    // textarea
-    const textAreaEl = editorEL.appendChild(document.createElement('textarea'));
-    textAreaEl.rows = 30;
-    textAreaEl.cols = 90;
+function handleSave(editor: HTMLTextAreaElement) {
 
-    const contentEL = document.getElementById("initial-id_content") as (HTMLInputElement | null);
-    const initialContent = contentEL?.value || "# header !";
-
-    textAreaEl.value = initialContent;
-
-    // textAreaEl.oninput = (_) => {
-    //     textAreaEl.innerHTML = hljs.highlight(textAreaEl.value, {language: 'markdown'}).value;
-    // }
-
-    // preview element
-    const previewHtmlEl = editorEL.appendChild(document.createElement('div'));
-    previewHtmlEl.setAttribute('hidden', '');
-
-    // submit button
-    const submit_form = <HTMLFormElement>document.getElementById("milkdown-save")?.parentElement;
+    const submit_form = <HTMLFormElement>editorEL?.parentElement?.parentElement;
+    const textAreaEl = editor.querySelector('textarea') as HTMLTextAreaElement | null;
 
     submit_form?.addEventListener('submit', async function (ev) {
 
         ev.preventDefault();
 
-        const contentMARKDOWN = textAreaEl.value;
+        const contentMARKDOWN = textAreaEl?.value;
 
         const formData = new FormData(submit_form);
-        formData.append('content', contentMARKDOWN);
+        formData.append('content', contentMARKDOWN ?? "");
 
         const response = await fetch(submit_form.action, {
             method: 'POST',
             body: formData,
         });
-
 
         if (response.redirected) {
             window.location.href = response.url;
@@ -98,4 +83,19 @@ if (editorEL) {
             console.log(result);
         }
     });
+
+}
+
+
+const editorEL = document.getElementById("GFM-Editor") as HTMLTextAreaElement | null;
+if (editorEL) {
+
+    initEditor(editorEL);
+    handleSave(editorEL);
+
+    // doesn't work on textarea thus it escapes html
+    // textAreaEl.oninput = (_) => {
+    //     textAreaEl.innerHTML = hljs.highlight(textAreaEl.value, {language: 'markdown'}).value;
+    // }
+    
 }

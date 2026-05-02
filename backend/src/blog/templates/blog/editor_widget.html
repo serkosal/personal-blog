@@ -1,8 +1,20 @@
 {% block editor_widget %}
+<div {% include "django/forms/widgets/attrs.html" %} >
 
-    <div type="text" 
-        {% include "django/forms/widgets/attrs.html" %}
-    >
+    <fieldset>
+        <legend> View mode </legend>
+
+        <label for="markdownView">Markdown view</label>
+        <input type="radio" name="viewMode" id="markdownView" value="markdownView" checked /> 
+
+        <label for="htmlPreview">HTML preview</label>
+        <input type="radio" name="viewMode" id="htmlPreview" value="htmlPreview" />
+    </fieldset>
+
+    <textarea name="GFM-Editor-textarea" id="GFM-Editor-textarea"> 
+    </textarea>
+
+    <div hidden id="HTMLPreview">
     </div>
 
     <input type="hidden"
@@ -10,4 +22,5 @@
        id="initial-id_content"
        value="{{ widget.value|default_if_none:'' }}">
 
+</div>
 {% endblock %}

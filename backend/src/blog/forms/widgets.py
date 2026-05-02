@@ -16,7 +16,7 @@ class PostContentWidget(widgets.Textarea):
             attrs: html attributes.
         
         """
-        default_attrs = {'id': 'milkdownjs'}
+        default_attrs = {'id': 'GFM-Editor'}
 
         if attrs:
             default_attrs.update(attrs)
