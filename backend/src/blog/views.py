@@ -257,6 +257,14 @@ class PostUpdate(UpdateView):
             form.add_error(None, "You don't have permission to edit this post.")
             return self.form_invalid(form)
         
+        self.object: Post = form.save(commit=False)
+        self.object.save()
+        
+        # saving tags
+        tags = form.cleaned_data.get('tags')
+        if tags is not None:
+            self.object.tags.set(tags)
+        
         return super().form_valid(form)
     
     def form_invalid(self, form):
