@@ -57,6 +57,40 @@ function initEditor(editor: HTMLTextAreaElement) {
     }
 }
 
+interface IFormErrors {
+    "title": Array<string>,
+    "slug": Array<string>,
+    "id_tags": Array<string>
+};
+interface IFormResponse {
+    "success": "true" | "false",
+    "errors": IFormErrors
+};
+
+function handleErrors(form: HTMLFormElement, errors: IFormErrors) {
+    // fields: 'title', 'slug', 'tags'
+
+    for (let key in errors) {
+        const typedKey = key as keyof IFormErrors;
+
+        const el = form.querySelector(`#id_${key}`)?.parentElement;
+        const errorsSelector = `id_${key}_errors`;
+
+        if (el && el.querySelector('#' + errorsSelector) === null) {
+            const errors_el = document.createElement('div');
+            errors_el.id = errorsSelector;
+            errors_el.style = 'color: red;';
+            el.appendChild(errors_el);
+        }
+
+        let errors_el = <HTMLDivElement>el?.querySelector('#' + errorsSelector);
+        if (errors_el) {
+            
+            errors_el.innerText = errors[typedKey][0];
+        }
+    }
+}
+
 function handleSave(editor: HTMLTextAreaElement) {
 
     const submit_form = <HTMLFormElement>editorEL?.parentElement?.parentElement;
@@ -79,8 +113,10 @@ function handleSave(editor: HTMLTextAreaElement) {
         if (response.redirected) {
             window.location.href = response.url;
         } else {
-            const result = await response.text();
-            console.log(result);
+            const result: IFormResponse = await response.json();
+            if (result.success == "false") {
+                handleErrors(submit_form, result.errors);
+            }
         }
     });
 

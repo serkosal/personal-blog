@@ -3,6 +3,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
+from django.http import JsonResponse
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -26,23 +27,19 @@ class MyRenderer(RendererHTML):
     def fence(self, tokens, idx, options, env):
         token = tokens[idx] 
         
-        # token.attrJoin('class', 'milkdown milkdown-code-block')
-        # return super().fence(tokens, idx, options, env)
         return  (
             '<pre>' + 
-              '<code class="milkdown-code-block"' + self.renderAttrs(token) + ">" + 
+              '<code class="GFM-editor-code-block"' + self.renderAttrs(token) + ">" + 
 
                 escapeHtml(token.content) + 
             "</code></pre>\n"
         )
     
     def code_block(self, tokens, idx, options, env):
-        # tokens[idx].attrJoin('class', 'milkdown milkdown-code-block')
-        # # print(tokens[idx])
-        # return super().code_block(tokens, idx, options, env) + "test"
+
         token = tokens[idx] 
         return  (
-            '<pre class="milkdown">' '<codes class="milkdown-code-block"'
+            '<pre class="GFM-editor">' '<codes class="GFM-editor-code-block"'
             + self.renderAttrs(token)
             + ">" + escapeHtml(token.content)
             + "</code></pre>\n"
@@ -261,6 +258,14 @@ class PostUpdate(UpdateView):
             return self.form_invalid(form)
         
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        """Sends A JSON Payload with form errors."""
+        
+        return JsonResponse({
+            "success": "false", "errors": form.errors, 
+            "non_field_errors": form.non_field_errors()
+        })
 
     def get_success_url(self):
         """Get the link to a newly created post.
